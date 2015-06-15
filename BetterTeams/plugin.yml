@@ -1,0 +1,29 @@
+name: BetterTeams
+main: co.lotc.betterteams.BetterTeams
+description: Integrates all possible team functionality in a sensible way.
+version: 1.30
+depend: [ProtocolLib, ArcheCore]
+authors: [Arche, Kowaman]
+
+commands:
+  showhealth:
+    description: Shows the health of each player below their name.
+    permission: betterteams.showhealth
+    usage: Invalid usage. Use /showhealth
+  showmcnames:
+    description: Toggle between the showing of MC Names or RP names
+    permission: betterteams.showmcnames
+    usage: Invalid usage. Use /showmcnames
+    aliases: [usernames, showusernames, showminecraftnames, toggleusernames, togglemcnames, mcnames, mcn]
+  status:
+    description: Update your status icon
+    permission: betterteams.status
+    usage: Invalid usage. For assistance, use '/status help'
+  appearto:
+    description: Haunt your fellow players
+    permission: betterteams.appearto
+    usage: Use '/appearto [player]', or '/appearto' to disappear to all.
+  tagcolor:
+    description: Updates the your nametag in accordance with your VIP status
+    permission: betterteams.tagcolor
+    usage: Invalid usage. Accepted arguments are 'on', 'off' or '[groupname]'.
