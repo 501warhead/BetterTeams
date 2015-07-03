@@ -20,7 +20,7 @@ import java.util.*;
 import org.bukkit.*;
 import org.bukkit.event.*;
 
-import net.minecraft.server.v1_8_R1.PacketPlayOutScoreboardTeam;
+import net.minecraft.server.v1_8_R3.PacketPlayOutScoreboardTeam;
 
 import org.bukkit.entity.*;
 

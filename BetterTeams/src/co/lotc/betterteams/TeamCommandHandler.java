@@ -2,7 +2,7 @@ package co.lotc.betterteams;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.command.*;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.potion.*;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.*;
