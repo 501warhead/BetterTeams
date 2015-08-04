@@ -83,7 +83,7 @@ public class TeamPlayerListener implements Listener {
 		this.boards.close(e.getPlayer());
 	}
 
-	@EventHandler (priority = EventPriority.HIGHEST)
+	@EventHandler (priority = EventPriority.LOW)
 	public void onDamage(EntityDamageByEntityEvent e) {
 		Player p = null;
 		Player t = null;
