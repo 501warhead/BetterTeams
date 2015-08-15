@@ -108,7 +108,7 @@ public class TeamCommandHandler implements CommandExecutor
 				}
 				else {
 					Player t = null;
-					if (args.length > 1 && p.isOp()){
+					if (args.length > 1 && p.hasPermission("nexus.moderator")){
 						t = Bukkit.getPlayer(args[1]);
 						if (t == null) {
 							p.sendMessage("Player not found.");
