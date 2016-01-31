@@ -4,6 +4,9 @@ import net.lordofthecraft.arche.*;
 import org.bukkit.entity.*;
 import net.lordofthecraft.arche.interfaces.*;
 import org.bukkit.scoreboard.*;
+
+import com.google.common.collect.Lists;
+
 import org.bukkit.*;
 import java.util.*;
 import org.apache.commons.lang.*;
@@ -39,6 +42,20 @@ public class BoardManager
         }
     }
     
+    public List<Player> getStatusedPlayers(Status st) {
+    	List<Player> players = Lists.newArrayList();
+    	Affixes status;
+    	for (Player pl : Bukkit.getOnlinePlayers()) {
+    		status = new Affixes(pl);
+    		if (status != null) {
+        		if (status.getStatus() == st) {
+        			players.add(pl);
+        		}
+    		}
+    	}
+    	return players;
+    }
+    
     public void close(final Player p) {
         if (this.isGhosting(p)) {
             this.removeGhost(p);
@@ -67,12 +84,14 @@ public class BoardManager
         return p.getScoreboard().getTeam(p.getName()) != null;
     }
     
-    public boolean isGhosting(final Player p) {
+    @SuppressWarnings("deprecation")
+	public boolean isGhosting(final Player p) {
         final Team t = p.getScoreboard().getPlayerTeam((OfflinePlayer)p);
         return t != null && (t.getSize() > 1 && !t.getName().equals(p.getName()));
     }
     
-    public boolean isGhosted(final Player p) {
+    @SuppressWarnings("deprecation")
+	public boolean isGhosted(final Player p) {
         final Team t = p.getScoreboard().getPlayerTeam((OfflinePlayer)p);
         return t != null && (t.getSize() > 1 && t.getName().equals(p.getName()));
     }
@@ -119,7 +138,8 @@ public class BoardManager
         return b == this.boards[2] || b == this.boards[3];
     }
     
-    public void setSuffix(final Player p) {
+    @SuppressWarnings("deprecation")
+	public void setSuffix(final Player p) {
         final Persona ps = ArcheCore.getControls().getPersonaHandler().getPersona(p);
         String suffix;
         if (ps != null && /*ps.getName()*/p.getName().length() > 16) {
@@ -170,7 +190,8 @@ public class BoardManager
         }
     }
     
-    void createTeams(final Player p, String prefix, String suffix) {
+    @SuppressWarnings("deprecation")
+	void createTeams(final Player p, String prefix, String suffix) {
         final String name = p.getName();
         if (suffix == null) {
             suffix = "";
@@ -204,7 +225,8 @@ public class BoardManager
         }
     }
     
-    public void addGhost(final Player c, final Player o) {
+    @SuppressWarnings("deprecation")
+	public void addGhost(final Player c, final Player o) {
         Scoreboard[] boards;
         for (int length = (boards = this.boards).length, i = 0; i < length; ++i) {
             final Scoreboard s = boards[i];
@@ -218,7 +240,8 @@ public class BoardManager
         }
     }
     
-    public void removeGhost(final Player p) {
+    @SuppressWarnings("deprecation")
+	public void removeGhost(final Player p) {
         Scoreboard[] boards;
         for (int length = (boards = this.boards).length, i = 0; i < length; ++i) {
             final Scoreboard s = boards[i];

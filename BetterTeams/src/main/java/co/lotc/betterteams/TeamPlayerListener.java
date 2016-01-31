@@ -1,9 +1,6 @@
 package co.lotc.betterteams;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 import net.lordofthecraft.arche.event.PersonaCreateEvent;
@@ -12,8 +9,6 @@ import net.lordofthecraft.arche.event.PersonaSwitchEvent;
 import net.md_5.bungee.api.ChatColor;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,30 +21,18 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.comphenix.packetwrapper.WrapperPlayServerNamedEntitySpawn;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.PlayerInfoData;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.comphenix.protocol.wrappers.WrappedDataWatcher;
-import com.comphenix.protocol.wrappers.WrappedGameProfile;
-import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
-import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class TeamPlayerListener implements Listener {
 
 	private final BoardManager boards;
-	private final Plugin plugin;
+	//private final Plugin plugin;
 	private HashMap<UUID, Status> statusCache;
 
 	public TeamPlayerListener(final BoardManager sboards) {
 		super();
 		this.boards = sboards;
-		this.plugin = (Plugin)BetterTeams.Main;
+		//this.plugin = (Plugin)BetterTeams.Main;
 		this.statusCache = Maps.newHashMap();
 	}
 

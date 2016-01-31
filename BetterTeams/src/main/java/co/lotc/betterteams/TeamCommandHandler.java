@@ -1,27 +1,10 @@
 package co.lotc.betterteams;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.command.*;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.potion.*;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 
-import com.comphenix.packetwrapper.WrapperPlayServerNamedEntitySpawn;
-import com.comphenix.packetwrapper.WrapperPlayServerPlayerInfo;
-import com.comphenix.protocol.*;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.PlayerInfoData;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.comphenix.protocol.wrappers.WrappedDataWatcher;
-import com.comphenix.protocol.wrappers.WrappedGameProfile;
-import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
-import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -103,8 +86,45 @@ public class TeamCommandHandler implements CommandExecutor
 						final Status s = values2[j];
 						names.append(String.valueOf(s.getName()) + " ");
 					}
+					if (p.hasPermission("nexus.moderator")) {
+						p.sendMessage(ChatColor.AQUA+"Type /status list to see a totals list, or /status list [status] to see the players with that status.");
+					}
 					p.sendMessage(ChatColor.AQUA + "Usage: Type '/status [status]' to set a status, or '/status off' to clear your status.");
 					p.sendMessage(ChatColor.AQUA + "Available Statuses: " + ChatColor.RESET + (Object)names);
+				}
+				else if (args[0].equalsIgnoreCase("list") && p.hasPermission("nexus.moderator")) {
+					if (args.length > 1) {
+						Status stat = Status.valueOf(args[1].toUpperCase());
+						if (stat != null) {
+							List<Player> pl = boards.getStatusedPlayers(stat);
+							String pr = "";
+							StringBuilder sb = new StringBuilder();
+							p.sendMessage(ChatColor.AQUA+"Players with the status of "+stat.getName()+": ");
+							for (Player pp : pl) {
+								sb.append(pr);
+								sb.append(pp.getName());
+								pr = ", ";
+							}
+							p.sendMessage(sb.toString());
+							return true;
+						} else {
+							p.sendMessage(ChatColor.RED+"We couldn't tell which status you wanted from "+args[1]);
+						}
+					}
+					p.sendMessage(ChatColor.AQUA+"Listing all players with statuses...");
+					boolean one = false;
+					int count = 0;
+					for (Status st : Status.values()) {
+						count = boards.getStatusedPlayers(st).size();
+						if (count > 0) {
+							p.sendMessage(st.getName()+": "+count+" players.");
+							one = true;
+						}
+					}
+					if (!one) {
+						p.sendMessage(ChatColor.RED+"No one is statused.");
+					}
+					return true;
 				}
 				else {
 					Player t = null;
@@ -268,9 +288,6 @@ public class TeamCommandHandler implements CommandExecutor
 		return(sb.toString());
 	}
 
-
-
-	@SuppressWarnings("deprecation")
 	private boolean toggleShowMcNames(final Player p, final Affixes a) {
 		return true;
 		/*

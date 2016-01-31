@@ -1,45 +1,21 @@
 package co.lotc.betterteams;
 
-import net.lordofthecraft.arche.persona.*;
-
-import org.bukkit.plugin.*;
-
-import net.lordofthecraft.arche.*;
-
-import com.comphenix.protocol.wrappers.*;
-import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
-import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
-
-import net.lordofthecraft.arche.interfaces.*;
-
-import com.comphenix.protocol.events.*;
-
-import java.lang.reflect.Field;
-import java.util.*;
-
-import org.bukkit.*;
-import org.bukkit.event.*;
-
-import net.minecraft.server.v1_8_R3.PacketPlayOutScoreboardTeam;
-
-import org.bukkit.entity.*;
-
-import com.comphenix.protocol.*;
-import com.google.common.collect.Lists;
+import org.bukkit.event.Listener;
 
 public class TeamPacketListener implements Listener
 {
-	private final BoardManager boards;
-	private final ArchePersonaHandler handler;
-	private final Plugin plugin;
-	private Field LIST_FIELD;
+	//private final BoardManager boards;
+	//private final ArchePersonaHandler handler;
+	//private final Plugin plugin;
+	//private Field LIST_FIELD;
 
 	public TeamPacketListener(final BoardManager sboards) {
 		
 		super();
-		this.boards = sboards;
-		this.handler = ArcheCore.getPlugin().getPersonaHandler();
-		this.plugin = (Plugin)BetterTeams.Main;/*
+		//this.boards = sboards;
+		//this.handler = ArcheCore.getPlugin().getPersonaHandler();
+		//this.plugin = (Plugin)BetterTeams.Main;
+		/*
 		final Set<PacketType> packets = new HashSet<PacketType>();
 		packets.add(PacketType.Play.Server.PLAYER_INFO);
 		packets.add(PacketType.Play.Server.SCOREBOARD_SCORE);
@@ -126,7 +102,7 @@ public class TeamPacketListener implements Listener
 		});*/
 	}
 
-	private String getPersonaName(final String playerName) {
+	/*private String getPersonaName(final String playerName) {
 		final Player p = Bukkit.getPlayerExact(playerName);
 		if (p == null) {
 			return null;
@@ -140,5 +116,5 @@ public class TeamPacketListener implements Listener
 			return personaName.substring(0, 16);
 		}
 		return personaName;
-	}
+	}*/
 }

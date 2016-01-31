@@ -16,7 +16,8 @@ class GhostRunnable extends BukkitRunnable
         this.board = board;
     }
     
-    public void run() {
+    @SuppressWarnings("deprecation")
+	public void run() {
         final Set<Team> teams = (Set<Team>)this.board.getTeams();
         if (this.board.getTeams().isEmpty()) {
             final int id = BetterTeams.ghostTaskId;
