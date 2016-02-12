@@ -1,13 +1,10 @@
 package co.lotc.betterteams;
 
-import java.util.HashMap;
-import java.util.UUID;
-
+import com.google.common.collect.Maps;
 import net.lordofthecraft.arche.event.PersonaCreateEvent;
 import net.lordofthecraft.arche.event.PersonaRenameEvent;
 import net.lordofthecraft.arche.event.PersonaSwitchEvent;
 import net.md_5.bungee.api.ChatColor;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -21,7 +18,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.google.common.collect.Maps;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class TeamPlayerListener implements Listener {
 
@@ -98,8 +96,8 @@ public class TeamPlayerListener implements Listener {
 		if (a.getStatus() != null) {
 			a.setStatus(null);
 			this.boards.apply(a);
-			e.getEntity().sendMessage(ChatColor.AQUA + "Cleared your status due to death, you may not set a status for 30 minutes.");
-			BetterTeams.Main.statusCooldown.put(e.getEntity().getUniqueId(), System.currentTimeMillis());
+			e.getEntity().sendMessage(ChatColor.AQUA + "Cleared your status due to death.");
+			//BetterTeams.Main.statusCooldown.put(e.getEntity().getUniqueId(), System.currentTimeMillis());
 		}
 	}
 
