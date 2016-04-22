@@ -1,2 +1,7 @@
+/.settings
+/.idea
+/.project
+/.classpath
+/BetterTeams.iml
 /bin/
 /target/

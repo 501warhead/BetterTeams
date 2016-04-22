@@ -1,7 +1,7 @@
 name: BetterTeams
 main: co.lotc.betterteams.BetterTeams
 description: Integrates all possible team functionality in a sensible way.
-version: 1.30
+version: ${project.version}
 depend: [ProtocolLib, ArcheCore]
 authors: [Arche, Kowaman]
 

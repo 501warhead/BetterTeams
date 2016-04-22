@@ -84,7 +84,7 @@ public class TeamCommandHandler implements CommandExecutor
 					Status[] values2;
 					for (int length2 = (values2 = Status.values()).length, j = 0; j < length2; ++j) {
 						final Status s = values2[j];
-						names.append(String.valueOf(s.getName()) + " ");
+						names.append(String.valueOf(s.getName())).append(" ");
 					}
 					if (p.hasPermission("nexus.moderator")) {
 						p.sendMessage(ChatColor.AQUA+"Type /status list to see a totals list, or /status list [status] to see the players with that status.");
@@ -95,21 +95,17 @@ public class TeamCommandHandler implements CommandExecutor
 				else if (args[0].equalsIgnoreCase("list") && p.hasPermission("nexus.moderator")) {
 					if (args.length > 1) {
 						Status stat = Status.valueOf(args[1].toUpperCase());
-						if (stat != null) {
-							List<Player> pl = boards.getStatusedPlayers(stat);
-							String pr = "";
-							StringBuilder sb = new StringBuilder();
-							p.sendMessage(ChatColor.AQUA+"Players with the status of "+stat.getName()+": ");
-							for (Player pp : pl) {
-								sb.append(pr);
-								sb.append(pp.getName());
-								pr = ", ";
-							}
-							p.sendMessage(sb.toString());
-							return true;
-						} else {
-							p.sendMessage(ChatColor.RED+"We couldn't tell which status you wanted from "+args[1]);
-						}
+						List<Player> pl = boards.getStatusedPlayers(stat);
+						String pr = "";
+						StringBuilder sb = new StringBuilder();
+						p.sendMessage(ChatColor.AQUA+"Players with the status of "+stat.getName()+": ");
+						for (Player pp : pl) {
+                            sb.append(pr);
+                            sb.append(pp.getName());
+                            pr = ", ";
+                        }
+						p.sendMessage(sb.toString());
+						return true;
 					}
 					p.sendMessage(ChatColor.AQUA+"Listing all players with statuses...");
 					boolean one = false;
@@ -209,16 +205,12 @@ public class TeamCommandHandler implements CommandExecutor
 						}
 						this.boards.deleteTeams(p);
 						this.boards.addGhost(p, target);
-						p.sendMessage(new StringBuilder().append(ChatColor.AQUA).append(ChatColor.ITALIC).append("wooohoooohooo!").toString());
+						p.sendMessage(String.valueOf(ChatColor.AQUA) + ChatColor.ITALIC + "wooohoooohooo!");
 					}
 					else {
 						p.sendMessage(ChatColor.DARK_AQUA + "That player is not in reach!");
 					}
 				}
-				return true;
-			}
-			if (args.length == 0) {
-				p.sendMessage(ChatColor.DARK_AQUA + "You have no need to do this.");
 				return true;
 			}
 		}

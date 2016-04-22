@@ -41,13 +41,11 @@ public class BetterTeams extends JavaPlugin
         this.getCommand("appearto").setExecutor((CommandExecutor)handler);
         this.getCommand("tagcolor").setExecutor((CommandExecutor)handler);
         this.getCommand("showmcnames").setExecutor((CommandExecutor)handler);
-        Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin)this, (Runnable)new BukkitRunnable() {
-            public void run() {
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    BetterTeams.this.boards.init(p);
-                    final double h = Math.min(p.getHealth(), p.getMaxHealth());
-                    p.setHealth(h);
-                }
+        Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin)this, () -> {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                BetterTeams.this.boards.init(p);
+                final double h = Math.min(p.getHealth(), p.getMaxHealth());
+                p.setHealth(h);
             }
         });
     }

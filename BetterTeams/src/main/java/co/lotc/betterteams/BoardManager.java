@@ -47,12 +47,10 @@ public class BoardManager
     	Affixes status;
     	for (Player pl : Bukkit.getOnlinePlayers()) {
     		status = new Affixes(pl);
-    		if (status != null) {
-        		if (status.getStatus() == st) {
-        			players.add(pl);
-        		}
-    		}
-    	}
+            if (status.getStatus() == st) {
+                players.add(pl);
+            }
+        }
     	return players;
     }
     
@@ -62,8 +60,8 @@ public class BoardManager
             return;
         }
         final String name = p.getName();
-        for (int i = 0; i < this.boards.length; ++i) {
-            final Team t = this.boards[i].getTeam(name);
+        for (Scoreboard board : this.boards) {
+            final Team t = board.getTeam(name);
             if (t != null) {
                 t.unregister();
             }
