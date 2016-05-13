@@ -1,9 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>co.lotc</groupId>
 	<artifactId>BetterTeams</artifactId>
-	<version>1.9</version>
+	<version>1.94</version>
 	<name>BetterTeams</name>
 	<description>All together now!</description>
 	<properties>
@@ -13,13 +13,13 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
-			<version>1.9.2-R0.1-SNAPSHOT</version>
+			<version>1.9.4-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.9.2-R0.1-SNAPSHOT</version>
+			<version>1.9.4-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -31,12 +31,12 @@
 		<dependency>
 			<groupId>net.lordofthecraft.arche</groupId>
 			<artifactId>ArcheCore</artifactId>
-			<version>1.9</version>
+			<version>1.94</version>
 		</dependency>
 		<dependency>
 			<groupId>com.comphenix.packetwrapper</groupId>
 			<artifactId>PacketWrapper</artifactId>
-			<version>1.7.2-R0.5</version>
+			<version>1.9-R0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.comphenix.protocol</groupId>
@@ -77,10 +77,6 @@
 		<repository>
 			<id>dmulloy2-repo</id>
 			<url>http://repo.dmulloy2.net/content/groups/public</url>
-		</repository>
-		<repository>
-			<id>comphenix-releases</id>
-			<url>http://repo.comphenix.net/content/repositories/releases/</url>
 		</repository>
 	</repositories>
 </project>
