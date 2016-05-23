@@ -24,6 +24,10 @@ public class BetterTeams extends JavaPlugin
     //public HashMap<UUID, Boolean> toggling;
     public HashMap<UUID, Long> statusCooldown;
     private BoardManager boards;
+
+    public static BetterTeams getMain() {
+        return Main;
+    }
     
     public void onEnable() {
         BetterTeams.Main = this;
@@ -51,7 +55,7 @@ public class BetterTeams extends JavaPlugin
     public void onDisable() {
         this.boards.unregister();
     }
-    
+
     public BoardManager getBoardManager() {
         return this.boards;
     }

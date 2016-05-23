@@ -15,7 +15,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -37,11 +36,11 @@ public class TeamPlayerListener implements Listener {
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent e) {
 		final Player p = e.getPlayer();
-		Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin)BetterTeams.Main, (Runnable)new BukkitRunnable() {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(BetterTeams.Main, (Runnable) new BukkitRunnable() {
 			public void run() {
 				TeamPlayerListener.this.boards.init(p);
 				if (statusCache.containsKey(p.getUniqueId())) {
-					Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin)BetterTeams.Main, (Runnable)new BukkitRunnable() {
+					Bukkit.getScheduler().scheduleSyncDelayedTask(BetterTeams.Main, (Runnable) new BukkitRunnable() {
 						public void run() {
 							Affixes a = new Affixes(p);
 							a.setStatus(statusCache.get(p.getUniqueId()));
@@ -99,6 +98,7 @@ public class TeamPlayerListener implements Listener {
 			e.getEntity().sendMessage(ChatColor.AQUA + "Cleared your status due to death.");
 			//BetterTeams.Main.statusCooldown.put(e.getEntity().getUniqueId(), System.currentTimeMillis());
 		}
+		BetterTeams.Main.statusCooldown.remove(e.getEntity().getUniqueId());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
