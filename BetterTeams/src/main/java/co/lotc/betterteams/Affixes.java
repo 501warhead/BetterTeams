@@ -1,27 +1,29 @@
 package co.lotc.betterteams;
 
-import org.bukkit.entity.*;
-import net.lordofthecraft.arche.*;
-import org.apache.commons.lang.*;
-import net.lordofthecraft.arche.interfaces.*;
-import org.bukkit.scoreboard.*;
-import org.bukkit.*;
+import net.lordofthecraft.arche.ArcheCore;
+import net.lordofthecraft.arche.interfaces.Persona;
+import net.lordofthecraft.arche.interfaces.PersonaHandler;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Team;
 
 public class Affixes
 {
     private static BoardManager boards;
     private static PersonaHandler handler;
+
+    static {
+        Affixes.boards = null;
+        Affixes.handler = null;
+    }
+
     private final Player player;
     private final String suffix;
     private Status status;
     private GroupColor color;
     private boolean showHealth;
     private boolean mcNames;
-    
-    static {
-        Affixes.boards = null;
-        Affixes.handler = null;
-    }
     
     public Affixes(final Player p) {
         super();
@@ -121,7 +123,7 @@ public class Affixes
     public String getPrefix() {
         final StringBuilder prefix = new StringBuilder(16);
         if (this.status != null) {
-            prefix.append("[" + this.status + ChatColor.RESET + "] ");
+            prefix.append("[").append(this.status).append(ChatColor.RESET).append("] ");
         }
         if (this.color != null) {
             prefix.append(this.color.toString());

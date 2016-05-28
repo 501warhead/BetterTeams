@@ -1,17 +1,14 @@
 package co.lotc.betterteams;
 
+import com.google.common.collect.Maps;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Scoreboard;
+
 import java.util.HashMap;
 import java.util.UUID;
-
-import org.bukkit.plugin.java.*;
-import org.bukkit.scoreboard.*;
-import org.bukkit.*;
-import org.bukkit.command.*;
-import org.bukkit.scheduler.*;
-import org.bukkit.entity.*;
-import org.bukkit.plugin.*;
-
-import com.google.common.collect.Maps;
 
 public class BetterTeams extends JavaPlugin
 {
@@ -19,12 +16,17 @@ public class BetterTeams extends JavaPlugin
     static int ghostTaskId;
     static BetterTeams Main;
     static Scoreboard ghostBoard;
-    private BoardManager boards;
-    //public HashMap<UUID, Boolean> toggling;
-	public HashMap<UUID, Long> statusCooldown;
-    
+
     static {
         BetterTeams.ghostTaskId = -1;
+    }
+
+    //public HashMap<UUID, Boolean> toggling;
+    public HashMap<UUID, Long> statusCooldown;
+    private BoardManager boards;
+
+    public static BetterTeams getMain() {
+        return Main;
     }
     
     public void onEnable() {
@@ -36,18 +38,16 @@ public class BetterTeams extends JavaPlugin
         man.registerEvents(new TeamPacketListener(this.boards), this);
         man.registerEvents(new TeamPlayerListener(this.boards), this);
         final TeamCommandHandler handler = new TeamCommandHandler();
-        this.getCommand("showhealth").setExecutor((CommandExecutor)handler);
-        this.getCommand("status").setExecutor((CommandExecutor)handler);
-        this.getCommand("appearto").setExecutor((CommandExecutor)handler);
-        this.getCommand("tagcolor").setExecutor((CommandExecutor)handler);
-        this.getCommand("showmcnames").setExecutor((CommandExecutor)handler);
-        Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin)this, (Runnable)new BukkitRunnable() {
-            public void run() {
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    BetterTeams.this.boards.init(p);
-                    final double h = Math.min(p.getHealth(), p.getMaxHealth());
-                    p.setHealth(h);
-                }
+        this.getCommand("showhealth").setExecutor(handler);
+        this.getCommand("status").setExecutor(handler);
+        this.getCommand("appearto").setExecutor(handler);
+        this.getCommand("tagcolor").setExecutor(handler);
+        this.getCommand("showmcnames").setExecutor(handler);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                BetterTeams.this.boards.init(p);
+                final double h = Math.min(p.getHealth(), p.getMaxHealth());
+                p.setHealth(h);
             }
         });
     }
@@ -55,7 +55,7 @@ public class BetterTeams extends JavaPlugin
     public void onDisable() {
         this.boards.unregister();
     }
-    
+
     public BoardManager getBoardManager() {
         return this.boards;
     }
