@@ -1,12 +1,11 @@
 package co.lotc.betterteams;
 
-import com.comphenix.protocol.wrappers.*;
+import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.PropertyMap;
-
-import java.util.*;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.util.UUID;
 
 public class ArcheGameProfile extends WrappedGameProfile
 {
@@ -17,7 +16,7 @@ public class ArcheGameProfile extends WrappedGameProfile
     
     public static WrappedGameProfile rewrap(final WrappedGameProfile profile, final String name, final UUID uuid) {
         final BetterGameProfile better = new BetterGameProfile((GameProfile)profile.getHandle(), name, uuid);
-        return WrappedGameProfile.fromHandle((Object)better);
+        return WrappedGameProfile.fromHandle(better);
     }
     
     private static class BetterGameProfile extends GameProfile
@@ -34,7 +33,7 @@ public class ArcheGameProfile extends WrappedGameProfile
         }
         
         public String toString() {
-            return new ToStringBuilder((Object)this).append("id", (Object)this.getId()).append("name", (Object)this.getName()).append("properties", (Object)this.parent.getProperties()).append("legacy", this.parent.isLegacy()).toString();
+            return new ToStringBuilder(this).append("id", this.getId()).append("name", this.getName()).append("properties", this.parent.getProperties()).append("legacy", this.parent.isLegacy()).toString();
         }
     }
 }

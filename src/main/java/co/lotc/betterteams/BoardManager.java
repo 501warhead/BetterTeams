@@ -1,15 +1,18 @@
 package co.lotc.betterteams;
 
-import net.lordofthecraft.arche.*;
-import org.bukkit.entity.*;
-import net.lordofthecraft.arche.interfaces.*;
+import com.google.common.collect.Lists;
+import net.lordofthecraft.arche.ArcheCore;
+import net.lordofthecraft.arche.interfaces.Persona;
+import net.lordofthecraft.arche.interfaces.PersonaHandler;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
-import com.google.common.collect.Lists;
-
-import org.bukkit.*;
-import java.util.*;
-import org.apache.commons.lang.*;
+import java.util.List;
+import java.util.Set;
 
 public class BoardManager
 {
@@ -86,13 +89,13 @@ public class BoardManager
     
     @SuppressWarnings("deprecation")
 	public boolean isGhosting(final Player p) {
-        final Team t = p.getScoreboard().getPlayerTeam((OfflinePlayer)p);
+        final Team t = p.getScoreboard().getPlayerTeam(p);
         return t != null && (t.getSize() > 1 && !t.getName().equals(p.getName()));
     }
     
     @SuppressWarnings("deprecation")
 	public boolean isGhosted(final Player p) {
-        final Team t = p.getScoreboard().getPlayerTeam((OfflinePlayer)p);
+        final Team t = p.getScoreboard().getPlayerTeam(p);
         return t != null && (t.getSize() > 1 && t.getName().equals(p.getName()));
     }
     
@@ -154,11 +157,11 @@ public class BoardManager
             Team t = this.boards[i].getTeam(name);
             if (t == null) {
                 t = this.boards[i].registerNewTeam(name);
-                t.addPlayer((OfflinePlayer)p);
+                t.addPlayer(p);
             }
             else {
                 if (plays == null) {
-                    plays = (Set<OfflinePlayer>)t.getPlayers();
+                    plays = t.getPlayers();
                 }
                 final String prefix = t.getPrefix();
                 t.unregister();
@@ -203,7 +206,7 @@ public class BoardManager
             Team t = this.boards[i].getTeam(name);
             if (t == null) {
                 t = this.boards[i].registerNewTeam(name);
-                t.addPlayer((OfflinePlayer)p);
+                t.addPlayer(p);
             }
             if (i > 1) {
                 t.setPrefix(String.valueOf(prefix) + ChatColor.ITALIC);
@@ -233,9 +236,9 @@ public class BoardManager
             Team t = s.getTeam(o.getName());
             if (t == null) {
                 t = s.registerNewTeam(o.getName());
-                t.addPlayer((OfflinePlayer)o);
+                t.addPlayer(o);
             }
-            t.addPlayer((OfflinePlayer)c);
+            t.addPlayer(c);
             t.setCanSeeFriendlyInvisibles(true);
         }
     }
@@ -245,9 +248,9 @@ public class BoardManager
         Scoreboard[] boards;
         for (int length = (boards = this.boards).length, i = 0; i < length; ++i) {
             final Scoreboard s = boards[i];
-            final Team t = s.getPlayerTeam((OfflinePlayer)p);
+            final Team t = s.getPlayerTeam(p);
             if (t != null) {
-                t.removePlayer((OfflinePlayer)p);
+                t.removePlayer(p);
                 if (t.getSize() == 0) {
                     t.unregister();
                 }

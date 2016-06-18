@@ -1,6 +1,6 @@
 package co.lotc.betterteams;
 
-import org.bukkit.*;
+import org.bukkit.ChatColor;
 
 public enum Status
 {
@@ -21,8 +21,8 @@ public enum Status
     
     private final String icon;
     private final String name;
-    
-    private Status(final String s, final int n, final String icon, final String name) {
+
+    Status(final String s, final int n, final String icon, final String name) {
         this.icon = icon;
         this.name = name;
     }

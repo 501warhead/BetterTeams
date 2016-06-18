@@ -1,11 +1,15 @@
 package co.lotc.betterteams;
 
-import org.bukkit.command.*;
-import org.bukkit.potion.*;
-import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class TeamCommandHandler implements CommandExecutor
@@ -17,6 +21,39 @@ public class TeamCommandHandler implements CommandExecutor
 	public TeamCommandHandler() {
 		super();
 		this.boards = BetterTeams.Main.getBoardManager();
+	}
+
+	public static String getDurationBreakdown(long millis) {
+		if (millis < 0) {
+			throw new IllegalArgumentException("Duration must be greater than zero!");
+		}
+
+		long days = TimeUnit.MILLISECONDS.toDays(millis);
+		millis -= TimeUnit.DAYS.toMillis(days);
+		long hours = TimeUnit.MILLISECONDS.toHours(millis);
+		millis -= TimeUnit.HOURS.toMillis(hours);
+		long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+		millis -= TimeUnit.MINUTES.toMillis(minutes);
+		long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(" ");
+		if (days > 0) {
+			sb.append(days);
+			sb.append(" days, ");
+		}
+		if (hours > 0) {
+			sb.append(hours);
+			sb.append(" hours, ");
+		}
+		if (minutes > 0) {
+			sb.append(minutes);
+			sb.append(" minutes and ");
+		}
+		sb.append(seconds);
+		sb.append(" seconds ");
+
+		return (sb.toString());
 	}
 
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
@@ -90,7 +127,7 @@ public class TeamCommandHandler implements CommandExecutor
 						p.sendMessage(ChatColor.AQUA+"Type /status list to see a totals list, or /status list [status] to see the players with that status.");
 					}
 					p.sendMessage(ChatColor.AQUA + "Usage: Type '/status [status]' to set a status, or '/status off' to clear your status.");
-					p.sendMessage(ChatColor.AQUA + "Available Statuses: " + ChatColor.RESET + (Object)names);
+					p.sendMessage(ChatColor.AQUA + "Available Statuses: " + ChatColor.RESET + names);
 				}
 				else if (args[0].equalsIgnoreCase("list") && p.hasPermission("nexus.moderator")) {
 					if (args.length > 1) {
@@ -149,7 +186,7 @@ public class TeamCommandHandler implements CommandExecutor
 						}
 						return true;
 					}
-					
+
 					if ((t == null) && BetterTeams.Main.statusCooldown.containsKey(p.getUniqueId())) {
 						if ((System.currentTimeMillis() - BetterTeams.Main.statusCooldown.get(p.getUniqueId())) > COOLDOWN) {
 							BetterTeams.Main.statusCooldown.remove(p.getUniqueId());
@@ -257,35 +294,6 @@ public class TeamCommandHandler implements CommandExecutor
 			}
 		}
 		return false;
-	}
-
-	public static String getDurationBreakdown(long millis)
-	{
-		if(millis < 0)
-		{
-			throw new IllegalArgumentException("Duration must be greater than zero!");
-		}
-
-		long days = TimeUnit.MILLISECONDS.toDays(millis);
-		millis -= TimeUnit.DAYS.toMillis(days);
-		long hours = TimeUnit.MILLISECONDS.toHours(millis);
-		millis -= TimeUnit.HOURS.toMillis(hours);
-		long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
-		millis -= TimeUnit.MINUTES.toMillis(minutes);
-		long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
-
-		StringBuilder sb = new StringBuilder();
-		sb.append(" ");
-		if (days > 0){ sb.append(days);
-		sb.append(" days, ");}
-		if (hours > 0) {sb.append(hours);
-		sb.append(" hours, ");}
-		if (minutes > 0){ sb.append(minutes);
-		sb.append(" minutes and ");}
-		sb.append(seconds);
-		sb.append(" seconds ");
-
-		return(sb.toString());
 	}
 
 	private boolean toggleShowMcNames(final Player p, final Affixes a) {

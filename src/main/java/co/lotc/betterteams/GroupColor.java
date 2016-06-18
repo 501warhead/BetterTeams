@@ -1,7 +1,7 @@
 package co.lotc.betterteams;
 
-import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 public enum GroupColor
 {
@@ -21,6 +21,11 @@ public enum GroupColor
     
     private final String color;
     private final String group;
+
+    GroupColor(final String s, final int n, final String color, final String group) {
+        this.color = color;
+        this.group = group;
+    }
     
     public static GroupColor getHighest(final Player p) {
         GroupColor[] values;
@@ -31,11 +36,6 @@ public enum GroupColor
             }
         }
         return null;
-    }
-    
-    private GroupColor(final String s, final int n, final String color, final String group) {
-        this.color = color;
-        this.group = group;
     }
     
     public String toString() {
