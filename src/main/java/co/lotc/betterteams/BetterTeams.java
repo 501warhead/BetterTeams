@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.HashMap;
@@ -25,7 +24,11 @@ public class BetterTeams extends JavaPlugin
     //public HashMap<UUID, Boolean> toggling;
     public HashMap<UUID, Long> statusCooldown;
     private BoardManager boards;
-    
+
+    public static BetterTeams getMain() {
+        return Main;
+    }
+
     public void onEnable() {
         BetterTeams.Main = this;
         this.statusCooldown = Maps.newHashMap();
@@ -40,13 +43,11 @@ public class BetterTeams extends JavaPlugin
         this.getCommand("appearto").setExecutor(handler);
         this.getCommand("tagcolor").setExecutor(handler);
         this.getCommand("showmcnames").setExecutor(handler);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, (Runnable) new BukkitRunnable() {
-            public void run() {
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    BetterTeams.this.boards.init(p);
-                    final double h = Math.min(p.getHealth(), p.getMaxHealth());
-                    p.setHealth(h);
-                }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                BetterTeams.this.boards.init(p);
+                final double h = Math.min(p.getHealth(), p.getMaxHealth());
+                p.setHealth(h);
             }
         });
     }
@@ -54,7 +55,7 @@ public class BetterTeams extends JavaPlugin
     public void onDisable() {
         this.boards.unregister();
     }
-    
+
     public BoardManager getBoardManager() {
         return this.boards;
     }

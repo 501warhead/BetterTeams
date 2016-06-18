@@ -5,19 +5,21 @@ import org.bukkit.entity.Player;
 
 public enum GroupColor
 {
-    ADMIN("ADMIN", 0, new StringBuilder().append(ChatColor.DARK_RED).append(ChatColor.BOLD).toString(), "Admin"),
-    TECHNICIAN("TECHNICIAN", 1, new StringBuilder().append(ChatColor.GOLD).append(ChatColor.BOLD).toString(), "Technician"), 
-    MODERATOR("MODERATOR", 2, new StringBuilder().append(ChatColor.DARK_BLUE).append(ChatColor.BOLD).toString(), "Moderator"),
-    MAT("MAT", 3, new StringBuilder().append(ChatColor.DARK_AQUA).toString(), "MAT"),
-    ET("ET", 4, new StringBuilder().append(ChatColor.DARK_GREEN).toString(), "ET"),
-    LORE("LORE", 5, new StringBuilder().append(ChatColor.GREEN).toString(), "Lore"),
-    VIP500("VIP500", 6, new StringBuilder().append(ChatColor.YELLOW).append(ChatColor.BOLD).toString(), "VIP500"), 
-    VIP300("VIP300", 7, new StringBuilder().append(ChatColor.DARK_PURPLE).toString(), "VIP300"), 
-    VIP200("VIP200", 8, new StringBuilder().append(ChatColor.LIGHT_PURPLE).toString(), "VIP200"), 
-    VIP100("VIP100", 9, new StringBuilder().append(ChatColor.AQUA).toString(), "VIP100"), 
-    VIP50("VIP50", 10, new StringBuilder().append(ChatColor.GOLD).toString(), "VIP50"), 
-    VIP25("VIP25", 11, new StringBuilder().append(ChatColor.YELLOW).toString(), "VIP25"), 
-    VIP10("VIP10", 12, new StringBuilder().append(ChatColor.DARK_GRAY).toString(), "VIP10");
+    ADMIN("ADMIN", 0, String.valueOf(ChatColor.DARK_RED) + ChatColor.BOLD, "Admin"),
+    TECHNICIAN("TECHNICIAN", 1, String.valueOf(ChatColor.GOLD) + ChatColor.BOLD, "Technician"),
+    MODERATOR("MODERATOR", 2, String.valueOf(ChatColor.DARK_BLUE) + ChatColor.BOLD, "Moderator"),
+    MAT("MAT", 3, String.valueOf(ChatColor.DARK_AQUA), "MAT"),
+    ET("ET", 4, String.valueOf(ChatColor.DARK_GREEN), "ET"),
+    LORE("LORE", 5, String.valueOf(ChatColor.GREEN), "Lore"),
+    WIKI("WIKI", 6, String.valueOf(ChatColor.YELLOW), "Wiki"),
+    FM("FM", 7, String.valueOf(ChatColor.RED), "FM"),
+    VIP500("VIP500", 8, String.valueOf(ChatColor.YELLOW) + ChatColor.BOLD, "VIP500"),
+    VIP300("VIP300", 9, String.valueOf(ChatColor.DARK_PURPLE), "VIP300"),
+    VIP200("VIP200", 10, String.valueOf(ChatColor.LIGHT_PURPLE), "VIP200"),
+    VIP100("VIP100", 11, String.valueOf(ChatColor.AQUA), "VIP100"),
+    VIP50("VIP50", 12, String.valueOf(ChatColor.GOLD), "VIP50"),
+    VIP25("VIP25", 13, String.valueOf(ChatColor.YELLOW), "VIP25"),
+    VIP10("VIP10", 14, String.valueOf(ChatColor.DARK_GRAY), "VIP10");
     
     private final String color;
     private final String group;

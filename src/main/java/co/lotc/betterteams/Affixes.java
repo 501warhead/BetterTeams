@@ -123,7 +123,7 @@ public class Affixes
     public String getPrefix() {
         final StringBuilder prefix = new StringBuilder(16);
         if (this.status != null) {
-            prefix.append("[" + this.status + ChatColor.RESET + "] ");
+            prefix.append("[").append(this.status).append(ChatColor.RESET).append("] ");
         }
         if (this.color != null) {
             prefix.append(this.color.toString());

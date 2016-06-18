@@ -98,6 +98,7 @@ public class TeamPlayerListener implements Listener {
 			e.getEntity().sendMessage(ChatColor.AQUA + "Cleared your status due to death.");
 			//BetterTeams.Main.statusCooldown.put(e.getEntity().getUniqueId(), System.currentTimeMillis());
 		}
+		BetterTeams.Main.statusCooldown.remove(e.getEntity().getUniqueId());
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
