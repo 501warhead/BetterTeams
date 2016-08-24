@@ -4,3 +4,7 @@
 .idea/
 .settings/
 BetterTeams.iml
+BetterTeams/target/
+.project
+.classpath
+BetterTeams/bin/.gitignore

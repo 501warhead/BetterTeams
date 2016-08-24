@@ -56,6 +56,36 @@ public class TeamCommandHandler implements CommandExecutor
 
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 		if (!(sender instanceof Player)) {
+			
+			if (cmd.getName().equalsIgnoreCase("status")) {
+				if (args.length > 1){
+					Affixes a;
+					Player t = Bukkit.getPlayer(args[1]);
+					if (t == null) {
+						sender.sendMessage("Player not found.");
+						return true;
+					} else {
+						a = new Affixes(t);
+						sender.sendMessage("Modifying status for " + t.getName());
+					}
+					Status[] values3;
+					for (int length3 = (values3 = Status.values()).length, k = 0; k < length3; ++k) {
+						final Status c2 = values3[k];
+						if (args[0].equalsIgnoreCase(c2.getName())) {
+							if (a.getStatus() == c2) {
+								t.sendMessage(ChatColor.DARK_AQUA + "You already have the status: " + c2.getName());
+							}
+							else {
+								a.setStatus(c2);
+								this.boards.apply(a);
+								t.sendMessage(ChatColor.AQUA + "Successfully set your status to: " + c2.getName());
+							}
+							return true;
+						}
+					}
+					sender.sendMessage(ChatColor.DARK_AQUA + "This is not a valid status.");
+				}
+			}
 			sender.sendMessage("These commands have no need to be issued by the console.");
 			return true;
 		}
