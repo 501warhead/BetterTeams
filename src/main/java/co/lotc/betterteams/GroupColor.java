@@ -6,23 +6,26 @@ import org.bukkit.entity.Player;
 public enum GroupColor
 {
     ADMIN("ADMIN", 0, String.valueOf(ChatColor.DARK_RED) + ChatColor.BOLD, "Admin"),
-    TECHNICIAN("TECHNICIAN", 1, String.valueOf(ChatColor.GOLD) + ChatColor.BOLD, "Technician"),
-    MODERATOR("MODERATOR", 2, String.valueOf(ChatColor.DARK_BLUE) + ChatColor.BOLD, "Moderator"),
-    LORE("LORE", 3, String.valueOf(ChatColor.GREEN) + ChatColor.BOLD, "Lore"),
-    MAT("MAT", 4, String.valueOf(ChatColor.DARK_AQUA), "MAT"),
-    ET("ET", 5, String.valueOf(ChatColor.DARK_GREEN), "ET-Base"),
-    FM("FM", 6, String.valueOf(ChatColor.RED), "FM"),
-    AT("AT", 7, String.valueOf(ChatColor.GREEN), "AT"),
-    WIKI("WIKI", 8, String.valueOf(ChatColor.YELLOW), "Wiki"),
+    DEV("DEV", 1, String.valueOf(ChatColor.GOLD) + ChatColor.BOLD, "Dev"),
+    MOD("MOD", 2, String.valueOf(ChatColor.DARK_BLUE) + ChatColor.BOLD, "Mod"),
+    LEADFM("LeadFM", 3, String.valueOf(ChatColor.RED) + ChatColor.BOLD, "LeadFM"),
+    LEADMT("LeadMT", 4, String.valueOf(ChatColor.DARK_AQUA) + ChatColor.BOLD, "LeadMT"),
+    LEADAT("LeadAT", 5, String.valueOf(ChatColor.DARK_GREEN) + ChatColor.BOLD, "LeadAT"),
+    LT("LT", 6, String.valueOf(ChatColor.GREEN) + ChatColor.BOLD, "LT"),
+    MT("MT", 7, String.valueOf(ChatColor.DARK_AQUA), "MT"),
+    ET("ET", 8, String.valueOf(ChatColor.GREEN), "ET"),
+    FM("FM", 9, String.valueOf(ChatColor.RED), "FM"),
+    AT("AT", 10, String.valueOf(ChatColor.DARK_GREEN), "AT"),
+    WT("WT", 11, String.valueOf(ChatColor.YELLOW), "WT"),
    
-    VIP500("VIP500", 9, String.valueOf(ChatColor.YELLOW) + ChatColor.BOLD, "VIP500"),
-    VIP300("VIP300", 10, String.valueOf(ChatColor.DARK_PURPLE), "VIP300"),
-    VIP200("VIP200", 11, String.valueOf(ChatColor.LIGHT_PURPLE), "VIP200"),
-    VIP100("VIP100", 12, String.valueOf(ChatColor.AQUA), "VIP100"),
-    VIP50("VIP50", 13, String.valueOf(ChatColor.GOLD), "VIP50"),
-    VIP25("VIP25", 14, String.valueOf(ChatColor.GRAY), "VIP25"),
-    VIP10("VIP10", 15, String.valueOf(ChatColor.DARK_GRAY), "VIP10"), 
-    NORMAL("NORMAL", 16, String.valueOf(ChatColor.WHITE), "NORMAL");
+    VIP500("VIP500", 12, String.valueOf(ChatColor.YELLOW) + ChatColor.BOLD, "VIP500"),
+    VIP300("VIP300", 13, String.valueOf(ChatColor.DARK_PURPLE), "VIP300"),
+    VIP200("VIP200", 14, String.valueOf(ChatColor.LIGHT_PURPLE), "VIP200"),
+    VIP100("VIP100", 15, String.valueOf(ChatColor.AQUA), "VIP100"),
+    VIP50("VIP50", 16, String.valueOf(ChatColor.GOLD), "VIP50"),
+    VIP25("VIP25", 17, String.valueOf(ChatColor.GRAY), "VIP25"),
+    VIP10("VIP10", 18, String.valueOf(ChatColor.DARK_GRAY), "VIP10"), 
+    NORMAL("NORMAL", 19, String.valueOf(ChatColor.WHITE), "Normal");
     
     private final String color;
     private final String group;

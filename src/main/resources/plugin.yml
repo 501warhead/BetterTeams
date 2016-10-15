@@ -27,3 +27,4 @@ commands:
     description: Updates the your nametag in accordance with your VIP status
     permission: betterteams.tagcolor
     usage: Invalid usage. Accepted arguments are 'on', 'off' or '[groupname]'.
+    aliases: [tag]
