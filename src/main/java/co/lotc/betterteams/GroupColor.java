@@ -7,7 +7,7 @@ public enum GroupColor
 {
     ADMIN("ADMIN", 0, String.valueOf(ChatColor.DARK_RED) + ChatColor.BOLD, "Admin"),
     DEV("DEV", 1, String.valueOf(ChatColor.GOLD) + ChatColor.BOLD, "Dev"),
-    MOD("MOD", 2, String.valueOf(ChatColor.DARK_BLUE) + ChatColor.BOLD, "Mod"),
+    GM("GM", 2, String.valueOf(ChatColor.DARK_BLUE) + ChatColor.BOLD, "GM"),
     LEADFM("LeadFM", 3, String.valueOf(ChatColor.RED) + ChatColor.BOLD, "LeadFM"),
     LEADMT("LeadMT", 4, String.valueOf(ChatColor.DARK_AQUA) + ChatColor.BOLD, "LeadMT"),
     LEADAT("LeadAT", 5, String.valueOf(ChatColor.DARK_GREEN) + ChatColor.BOLD, "LeadAT"),
