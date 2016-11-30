@@ -10,9 +10,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class BetterTeams extends JavaPlugin
-{
-    public static final int MAX_NAME_LENGTH = 20;
+public class BetterTeams extends JavaPlugin {
     static int ghostTaskId;
     static BetterTeams Main;
     static Scoreboard ghostBoard;
@@ -21,7 +19,6 @@ public class BetterTeams extends JavaPlugin
         BetterTeams.ghostTaskId = -1;
     }
 
-    //public HashMap<UUID, Boolean> toggling;
     public HashMap<UUID, Long> statusCooldown;
     private BoardManager boards;
 
@@ -32,17 +29,18 @@ public class BetterTeams extends JavaPlugin
     public void onEnable() {
         BetterTeams.Main = this;
         this.statusCooldown = Maps.newHashMap();
-       // Main.toggling = Maps.newHashMap();
         this.boards = new BoardManager();
+
         final PluginManager man = Bukkit.getPluginManager();
-        man.registerEvents(new TeamPacketListener(this.boards), this);
         man.registerEvents(new TeamPlayerListener(this.boards), this);
+
         final TeamCommandHandler handler = new TeamCommandHandler();
         this.getCommand("showhealth").setExecutor(handler);
         this.getCommand("status").setExecutor(handler);
         this.getCommand("appearto").setExecutor(handler);
         this.getCommand("tagcolor").setExecutor(handler);
         this.getCommand("showmcnames").setExecutor(handler);
+
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 BetterTeams.this.boards.init(p);

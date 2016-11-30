@@ -263,12 +263,6 @@ public class TeamCommandHandler implements CommandExecutor
 						if (this.boards.isGhosting(p)) {
 							this.boards.removeGhost(p);
 						}
-						if (!this.boards.isSeeingMinecraftNames(p)) {
-							this.toggleShowMcNames(p, a);
-						}
-						if (!this.boards.isSeeingMinecraftNames(target)) {
-							this.toggleShowMcNames(target, new Affixes(target));
-						}
 						this.boards.deleteTeams(p);
 						this.boards.addGhost(p, target);
 						p.sendMessage(String.valueOf(ChatColor.AQUA) + ChatColor.ITALIC + "wooohoooohooo!");
@@ -302,86 +296,9 @@ public class TeamCommandHandler implements CommandExecutor
 				if (this.boards.isGhosting(p) || this.boards.isGhosted(p)) {
 					p.sendMessage(ChatColor.DARK_AQUA + "An Otherwordly entity prevents you from doing this.");
 				}
-				else {
-					final boolean toggle = this.toggleShowMcNames(p, a);
-					if (toggle) {
-						p.sendMessage(ChatColor.AQUA + "You are now seeing Minecraft names");
-					}
-					else {
-						p.sendMessage(ChatColor.AQUA + "You are now seeing character names");
-					}
-				}
 				return true;
 			}
 		}
 		return false;
 	}
-
-	private boolean toggleShowMcNames(final Player p, final Affixes a) {
-		return true;
-		/*
-		final boolean isSwitchingToMcNames = !a.isSeeingMinecraftNames();
-		new BukkitRunnable() {
-			public void run() {
-
-				final ProtocolManager man = ProtocolLibrary.getProtocolManager();
-				final List<Player> tracked = Lists.newArrayList();
-				for (Player x : p.getWorld().getPlayers()) {
-					if (x == p) continue;
-					if (p.getLocation().distance(x.getLocation()) < 96) {
-
-						tracked.add(x);
-					}
-				}
-				List<Integer> toremove = Lists.newArrayList();
-				for (Player x : tracked) {
-					toremove.add(x.getEntityId());
-				}
-				PacketContainer remove = man.createPacket(PacketType.Play.Server.ENTITY_DESTROY);
-				remove.getIntegerArrays().write(0, ArrayUtils.toPrimitive(toremove.toArray(new Integer[toremove.size()])));
-				try {
-					man.sendServerPacket(p, remove);
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
-				boards.toggleShowingNames(p);
-				WrapperPlayServerPlayerInfo update = new WrapperPlayServerPlayerInfo();
-				List<PlayerInfoData> pfile = Lists.newArrayList();
-				for (final Player x : Bukkit.getOnlinePlayers()) {
-					pfile.add(new PlayerInfoData(
-							WrappedGameProfile.fromPlayer(x),
-							0,
-							NativeGameMode.SURVIVAL,
-							null));
-					update.setData(pfile);
-				}
-				update.setAction(PlayerInfoAction.REMOVE_PLAYER);
-				update.sendPacket(p);
-				update.setAction(PlayerInfoAction.ADD_PLAYER);
-				update.sendPacket(p);
-				for (Player x : tracked) {
-					WrapperPlayServerNamedEntitySpawn add = new WrapperPlayServerNamedEntitySpawn();
-					add.setEntityId(x.getEntityId());
-					add.setPlayerUuid(x.getUniqueId());
-					add.setPosition(x.getLocation().toVector());
-					add.setCurrentItem(x.getItemInHand().getTypeId());
-
-					Location head = x.getEyeLocation();
-					add.setPitch(head.getPitch());
-					add.setYaw(head.getYaw());
-
-					WrappedDataWatcher watcher = new WrappedDataWatcher();
-					watcher.setObject(10, ((CraftPlayer)x).getHandle().getDataWatcher().getByte(10));
-					watcher.setObject(6, (float)x.getHealth());
-					add.setMetadata(watcher);
-
-					add.sendPacket(p);
-
-				}
-
-			}
-		}.runTask(BetterTeams.Main);
-		return isSwitchingToMcNames;*/
-	}
-
 }

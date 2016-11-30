@@ -7,12 +7,10 @@ import net.lordofthecraft.arche.interfaces.PersonaHandler;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
 import java.util.List;
-import java.util.Set;
 
 public class BoardManager
 {
@@ -113,66 +111,9 @@ public class BoardManager
         }
     }
     
-    public void toggleShowingNames(final Player p) {
-        final Scoreboard b = p.getScoreboard();
-        if (b == this.boards[0]) {
-            p.setScoreboard(this.boards[2]);
-        }
-        else if (b == this.boards[2]) {
-            p.setScoreboard(this.boards[0]);
-        }
-        else if (b == this.boards[1]) {
-            p.setScoreboard(this.boards[3]);
-        }
-        else if (b == this.boards[3]) {
-            p.setScoreboard(this.boards[1]);
-        }
-    }
-    
     public boolean isShowingHealth(final Player p) {
         final Scoreboard b = p.getScoreboard();
         return b == this.boards[1] || b == this.boards[3];
-    }
-    
-    public boolean isSeeingMinecraftNames(final Player p) {
-        final Scoreboard b = p.getScoreboard();
-        return b == this.boards[2] || b == this.boards[3];
-    }
-    
-    @SuppressWarnings("deprecation")
-	public void setSuffix(final Player p) {
-        final Persona ps = ArcheCore.getControls().getPersonaHandler().getPersona(p);
-        String suffix;
-        if (ps != null && /*ps.getName()*/p.getName().length() > 16) {
-            suffix = ((/*ps.getName()*/p.getName().length() > 20) ? (String.valueOf(/*ps.getName()*/p.getName().substring(16, 20)) + "\u2026") : /*ps.getName()*/p.getName().substring(16, /*ps.getName()*/p.getName().length()));
-        }
-        else {
-            suffix = "";
-        }
-        Set<OfflinePlayer> plays = null;
-        final String name = p.getName();
-        for (int i = 0; i < this.boards.length; ++i) {
-            Team t = this.boards[i].getTeam(name);
-            if (t == null) {
-                t = this.boards[i].registerNewTeam(name);
-                t.addPlayer(p);
-            }
-            else {
-                if (plays == null) {
-                    plays = t.getPlayers();
-                }
-                final String prefix = t.getPrefix();
-                t.unregister();
-                t = this.boards[i].registerNewTeam(name);
-                t.setPrefix(prefix);
-                for (final OfflinePlayer o : plays) {
-                    t.addPlayer(o);
-                }
-            }
-            if (i < 2) {
-                t.setSuffix(suffix);
-            }
-        }
     }
     
     public void apply(final Affixes a) {
