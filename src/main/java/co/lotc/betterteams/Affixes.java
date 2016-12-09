@@ -46,7 +46,7 @@ public class Affixes
             this.suffix = String.valueOf(n.substring(16, 20)) + "\u2026";
         }
         this.showHealth = Affixes.boards.isShowingHealth(p);
-        this.mcNames = Affixes.boards.isSeeingMinecraftNames(p);
+        
         final String name = p.getName();
         final Team t = p.getScoreboard().getTeam(name);
         if (t != null) {
