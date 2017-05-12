@@ -228,6 +228,16 @@ public class TeamCommandHandler implements CommandExecutor
 						if (args[0].equalsIgnoreCase(c2.getName())) {
 							if (a.getStatus() == c2) {
 								p.sendMessage(ChatColor.DARK_AQUA + "You already have the status: " + c2.getName());
+							}else if(c2 == Status.UNDEAD){
+								if(!p.hasPermission("bt.undead")){
+									p.sendMessage(ChatColor.DARK_AQUA + "This is not a valid status.");
+									return false;
+								}else{
+									a.setStatus(c2);
+									this.boards.apply(a);
+									p.sendMessage(ChatColor.AQUA + "Successfully set your status to: " + c2.getName());
+									BetterTeams.Main.statusCooldown.put(p.getUniqueId(), System.currentTimeMillis());
+								}
 							}
 							else {
 								a.setStatus(c2);

@@ -9,7 +9,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -88,5 +90,28 @@ public class TeamPlayerListener implements Listener {
 			e.getEntity().sendMessage(ChatColor.AQUA + "Cleared your status due to death.");
 		}
 		BetterTeams.Main.statusCooldown.remove(e.getEntity().getUniqueId());
+	}
+
+	@EventHandler
+	public void onCommand(PlayerCommandPreprocessEvent e){
+		if(e.getMessage().equalsIgnoreCase("/party status undead")){
+			if(!e.getPlayer().hasPermission("bt.undead")){
+				e.setCancelled(true);
+				e.getPlayer().sendMessage(org.bukkit.ChatColor.DARK_AQUA + "This is not a valid status.");
+			}
+		}
+	}
+
+	@EventHandler
+	public void onEntityTarget(EntityTargetLivingEntityEvent e){
+		if(e.getTarget() instanceof Player){
+			Player p = (Player) e.getTarget();
+			final Affixes a = new Affixes(p);
+			if(a.getStatus() != null){
+				if(a.getStatus().equals(Status.UNDEAD)){ //ang's event status
+					e.setCancelled(true);
+				}
+			}
+		}
 	}
 }
