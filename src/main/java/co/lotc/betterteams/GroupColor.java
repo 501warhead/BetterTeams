@@ -15,7 +15,7 @@ public enum GroupColor
     ETLEAD	(String.valueOf(ChatColor.DARK_GREEN) 		+ ChatColor.BOLD, 	"ET-Lead"),
     
     GM		(String.valueOf(ChatColor.BLUE) 			+ ChatColor.BOLD, 	"GM"),
-    GT		(String.valueOf(ChatColor.BLUE), 								"GT"),
+    GC		(String.valueOf(ChatColor.BLUE), 								"GC"),
     FM		(String.valueOf(ChatColor.RED), 								"FM"),
     AT		(String.valueOf(ChatColor.LIGHT_PURPLE), 						"AT"),
     LT		(String.valueOf(ChatColor.GREEN), 								"LT"),
