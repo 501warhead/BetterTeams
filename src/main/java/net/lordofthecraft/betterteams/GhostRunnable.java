@@ -1,4 +1,4 @@
-package co.lotc.betterteams;
+package net.lordofthecraft.betterteams;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
