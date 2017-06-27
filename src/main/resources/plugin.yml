@@ -1,5 +1,5 @@
 name: BetterTeams
-main: co.lotc.betterteams.BetterTeams
+main: net.lordofthecraft.betterteams.BetterTeams
 description: Integrates all possible team functionality in a sensible way.
 version: ${project.version}
 depend: [ProtocolLib, ArcheCore]

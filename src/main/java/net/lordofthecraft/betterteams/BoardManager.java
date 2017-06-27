@@ -1,4 +1,4 @@
-package co.lotc.betterteams;
+package net.lordofthecraft.betterteams;
 
 import com.google.common.collect.Lists;
 import net.lordofthecraft.arche.ArcheCore;

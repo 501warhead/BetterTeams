@@ -1,4 +1,4 @@
-package co.lotc.betterteams;
+package net.lordofthecraft.betterteams;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
