@@ -29,7 +29,7 @@
 		</repository>
 		<repository>
 			<id>lotc-release</id>
-			<url>http://repo.lordofthecraft.net/artifactory/lotc-releases/</url>
+			<url>https://repo.lordofthecraft.net/artifactory/lotc-releases/</url>
 		</repository>
 	</repositories>
 
