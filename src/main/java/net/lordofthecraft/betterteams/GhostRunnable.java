@@ -40,7 +40,7 @@ class GhostRunnable extends BukkitRunnable
                     for (final OfflinePlayer op : new ArrayList<>(t.getPlayers())) {
                         t.removePlayer(op);
                         if (op.getPlayer() != null) {
-                            BetterTeams.Main.getBoardManager().init(op.getPlayer());
+                            //BetterTeams.Main.getBoardManager().init(op.getPlayer());
                         }
                     }
                     t.addPlayer(ghost);

@@ -17,8 +17,8 @@ public enum Status
     SLEEPING(		"SLEEPING", 		10, ChatColor.DARK_GREEN 	+ "\u262a", "sleeping"),
     CRUSADING(		"CRUSADING", 		11,	ChatColor.YELLOW 		+ "\u2021", "crusading"),
     FLAGGED(		"FLAGGED",			12,	ChatColor.DARK_AQUA		+ "\u2691",	"flagged"),
-    RECORDING(		"RECORDING",		13,	ChatColor.DARK_BLUE		+ "\u2022",	"recording"),
-    UNDEAD(         "UNDEAD",           14, ChatColor.BLACK         + "\u2742", "undead");
+    RECORDING(		"RECORDING",		13,	ChatColor.DARK_BLUE		+ "\u2022",	"recording");
+    //UNDEAD(         "UNDEAD",           14, ChatColor.BLACK         + "\u2742", "undead");
     
     private final String icon;
     private final String name;
@@ -40,10 +40,26 @@ public enum Status
     	return icon.charAt(2);
     }
     
+    public static Status fromName(String name) {
+    	for(Status s : Status.values()) {
+    		if(s.getName().equalsIgnoreCase(name))
+    			return s;
+    	}
+    	return null;
+    }
+    
     public static Status fromSymbol(char symbol) {
     	for(Status s : Status.values()) {
     		if(s.getSymbol() == symbol) return s;
     	}
     	return null;
+    }
+    
+    public static String getAllNames() {
+		final StringBuilder names = new StringBuilder(75);
+		for(Status s : values()) {
+			names.append(s.getName()).append(" ");
+		}
+    	return names.toString();
     }
 }

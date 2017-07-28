@@ -3,6 +3,8 @@ package net.lordofthecraft.betterteams;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import net.lordofthecraft.arche.ArcheCore;
 import net.lordofthecraft.arche.interfaces.Persona;
@@ -21,15 +23,17 @@ public class Affixes
 
     private final Player player;
 
-    private String prefix_rp;
-    private String suffix_rp;
+    private String prefix_rp = "";
+    private String suffix_rp = "";
 
-    private String prefix_mc;
-    private String suffix_mc; //should always be mc_name
+    private String prefix_mc = "";
+    private String suffix_mc = ""; //should always be mc_name
     
     
     private Status status;
     private GroupColor color;
+    
+    private boolean updatedPrefix = false, updatedSuffix = false;
     
     public static Affixes onJoin(Player p, Status cached) {
     	//Player just joined. Have no teams. Find out what
@@ -39,20 +43,21 @@ public class Affixes
     	a.setStatus(cached);
     	a.setGroupColor(GroupColor.getHighest(p));
     	
-    	a.handleSuffix(true, true);
-    	a.handlePrefix(true, true);
+    	a.handleSuffix();
+    	a.handlePrefix();
     	
-    	BoardManager.createTeams(a);
+    	boards.createTeams(a);
     	
     	return a;
     }
     
-    public static Affixes fromExistingTeams(Player p) {
+    public static Affixes fromExistingTeams(Player p, boolean needStatus, boolean needColor) {
     	//Player already online. Should have 4 teams in 4 boards
     	//Parse teams to find out the status, color, suffix, etc
     	Affixes a = new Affixes(p);
     	
-        a.suffix_mc = p.getName(); 
+        if(needStatus) a.parseStatus();
+        if(needColor) a.parseGroupColor();
         
         return a;
     }
@@ -66,26 +71,23 @@ public class Affixes
         }
         
         this.player = p;
- 
     }
-    
+ 
   //NB: Returns whether or not the prefix should be changed
   //based on changes made, specifically if the RP name overflows
-    private boolean handleSuffix(boolean mc, boolean rp) {
-    	if(mc) suffix_mc = player.getName();
-    	
-    	if(!rp)  return false;
+    public void handleSuffix() {
+    	suffix_mc = player.getName();
     	
     	Persona ps = handler.getPersona(player);
     	if(ps == null) {
     		suffix_rp = player.getName();
-    		return false;
+    		return;
     	} else {
     		String persName = ps.getName();
     		int len = persName.length();
     		if(len <= 16) { 
     			suffix_rp = persName;
-    			return false;
+    			return;
     		}else { //RP name will overflow space available in suffix
     			int maxlen = status == null? 24 : 20; //Status takes up 4 characters
     			//Will name overflow? If so take max allowable characters + add ellipses
@@ -95,13 +97,11 @@ public class Affixes
     			}else { //Just take the last 16 characters; they fit entirely
     				suffix_rp = persName.substring(persName.length() - 16, persName.length());
     			}
-    			
-    			return true;
     		}
     	}
     }
     
-    private void handlePrefix(boolean mc, boolean rp) {
+    public void handlePrefix() {
     	
     	
     	boolean hasColor = color !=null;
@@ -109,9 +109,8 @@ public class Affixes
     	
     	String prefix = (hasStatus? status.toString() + " " : "") +
     				(hasColor? color.toString() : "");
-    	if(mc) prefix_mc = color.isStylized()? prefix : prefix + ChatColor.ITALIC;
+    	prefix_mc = color.isStylized()? prefix : prefix + ChatColor.ITALIC;
     	
-    	if(!rp) return;
     	
     	Persona ps = handler.getPersona(player);
     	if(ps == null) {
@@ -165,6 +164,7 @@ public class Affixes
     
     public void setStatus(final Status status) {
         this.status = status;
+        updatedPrefix = true;
     }
     
     public GroupColor getColor() {
@@ -178,6 +178,28 @@ public class Affixes
     
     public void setGroupColor(final GroupColor color) {
         this.color = color;
+        updatedPrefix = true;
+    }
+    
+    public void applyNewPersona() {
+    	updatedSuffix = true;
+    	updatedPrefix = true;
+    }
+    
+    void apply(Scoreboard[] bb) {
+    	if(updatedPrefix) handlePrefix();
+    	if(updatedSuffix) handleSuffix();
+    	
+    	for(Scoreboard b : bb) {
+    		Team t = b.getTeam(player.getName());
+    		if(boards.boardShowsRPNames(b)){
+    			if(updatedPrefix) t.setPrefix(prefix_rp);
+    			if(updatedSuffix) t.setSuffix(suffix_rp);
+    		} else {
+    			if(updatedPrefix) t.setPrefix(prefix_mc);
+    			if(updatedSuffix) t.setSuffix(suffix_mc);
+    		}
+    	}
     }
     
 }

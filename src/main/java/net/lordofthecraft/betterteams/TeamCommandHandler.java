@@ -87,32 +87,27 @@ public class TeamCommandHandler implements CommandExecutor
 						sender.sendMessage("Player not found.");
 						return true;
 					} else {
-						a = new Affixes(t);
+						a = Affixes.fromExistingTeams(t, true, false);
 						sender.sendMessage("Modifying status for " + t.getName());
 					}
-					Status[] values3;
-					for (int length3 = (values3 = Status.values()).length, k = 0; k < length3; ++k) {
-						final Status c2 = values3[k];
-						if (args[0].equalsIgnoreCase(c2.getName())) {
-							if (a.getStatus() == c2) {
-								t.sendMessage(ChatColor.DARK_AQUA + "You already have the status: " + c2.getName());
-							}
-							else {
-								a.setStatus(c2);
-								this.boards.apply(a);
-								t.sendMessage(ChatColor.AQUA + "Successfully set your status to: " + c2.getName());
-							}
-							return true;
-						}
+					Status status = Status.fromName(args[0]);
+					if(status == null) sender.sendMessage(ChatColor.DARK_AQUA + "This is not a valid status.");
+					else if(a.getStatus() == status) sender.sendMessage(ChatColor.DARK_AQUA + "They already have the status: " + status.getName());
+					else {
+						a.setStatus(status);
+						boards.apply(a);
 					}
-					sender.sendMessage(ChatColor.DARK_AQUA + "This is not a valid status.");
+					
+					return true;
 				}
 			}
 			sender.sendMessage("These commands have no need to be issued by the console.");
 			return true;
 		}
+		
+		
 		final Player p = (Player)sender;
-		Affixes a = new Affixes(p);
+		Affixes a = Affixes.fromExistingTeams(p, true, true);
 		if (cmd.getName().equalsIgnoreCase("tagcolor")) {
 			if (args.length == 1) {
 				if (this.boards.isGhosting(p)) {
@@ -120,12 +115,8 @@ public class TeamCommandHandler implements CommandExecutor
 				}
 				else if (args[0].equalsIgnoreCase("on")) {
 					final GroupColor col = GroupColor.getHighest(p);
-					if (col != null) {
-						p.sendMessage(ChatColor.DARK_AQUA + "You do not have VIP status. DONATE to receive a colored tag.");
-					}
-					else if (col == a.getColor()) {
-						p.sendMessage(ChatColor.DARK_AQUA + "Tag color was already at the highest possible status");
-					}
+					if (col != null) p.sendMessage(ChatColor.DARK_AQUA + "You do not have VIP status. DONATE to receive a colored tag.");
+					else if (col == a.getColor()) p.sendMessage(ChatColor.DARK_AQUA + "Tag color was already at the highest possible status");
 					else {
 						p.sendMessage(ChatColor.AQUA + "Set your tag color to your highest possible status.");
 						a.setGroupColor(col);
@@ -160,19 +151,13 @@ public class TeamCommandHandler implements CommandExecutor
 				}
 				return true;
 			}
-		}
-		else if (cmd.getName().equalsIgnoreCase("status")) {
+		}else if (cmd.getName().equalsIgnoreCase("status")) {
 			if (args.length >= 1) {
 				if (this.boards.isGhosting(p)) {
 					p.sendMessage(ChatColor.DARK_AQUA + "You're a ghost. Type '/appearto' to go into the light.");
 				}
 				else if (args[0].equalsIgnoreCase("help")) {
-					final StringBuilder names = new StringBuilder(75);
-					Status[] values2;
-					for (int length2 = (values2 = Status.values()).length, j = 0; j < length2; ++j) {
-						final Status s = values2[j];
-						names.append(String.valueOf(s.getName())).append(" ");
-					}
+					String names = Status.getAllNames();
 					if (p.hasPermission("nexus.moderator")) {
 						p.sendMessage(ChatColor.AQUA+"Type /status list to see a totals list, or /status list [status] to see the players with that status.");
 					}
@@ -217,15 +202,15 @@ public class TeamCommandHandler implements CommandExecutor
 							p.sendMessage("Player not found.");
 							return true;
 						} else {
-							a = new Affixes(t);
+							a = Affixes.fromExistingTeams(t, true, false);
 							p.sendMessage("Modifying status for " + t.getName());
 						}
 					}
+					
 					if (args[0].equalsIgnoreCase("off")) {
 						if (a.getStatus() == null) {
 							p.sendMessage(ChatColor.DARK_AQUA + "No status to clear");
-						}
-						else {
+						} else {
 							a.setStatus(null);
 							this.boards.apply(a);
 							p.sendMessage(ChatColor.AQUA + "Cleared your status");
@@ -250,18 +235,7 @@ public class TeamCommandHandler implements CommandExecutor
 						if (args[0].equalsIgnoreCase(c2.getName())) {
 							if (a.getStatus() == c2) {
 								p.sendMessage(ChatColor.DARK_AQUA + "You already have the status: " + c2.getName());
-							}else if(c2 == Status.UNDEAD){
-								if(!p.hasPermission("bt.undead")){
-									p.sendMessage(ChatColor.DARK_AQUA + "This is not a valid status.");
-									return false;
-								}else{
-									a.setStatus(c2);
-									this.boards.apply(a);
-									p.sendMessage(ChatColor.AQUA + "Successfully set your status to: " + c2.getName());
-									BetterTeams.Main.statusCooldown.put(p.getUniqueId(), System.currentTimeMillis());
-								}
-							}
-							else {
+							} else {
 								a.setStatus(c2);
 								this.boards.apply(a);
 								p.sendMessage(ChatColor.AQUA + "Successfully set your status to: " + c2.getName());
@@ -274,8 +248,7 @@ public class TeamCommandHandler implements CommandExecutor
 				}
 				return true;
 			}
-		}
-		else if (cmd.getName().equalsIgnoreCase("appearto")) {
+/*		}else if (cmd.getName().equalsIgnoreCase("appearto")) {
 			if (args.length == 0) {
 				if (this.boards.isGhosting(p)) {
 					this.boards.removeGhost(p);
@@ -304,31 +277,29 @@ public class TeamCommandHandler implements CommandExecutor
 					}
 				}
 				return true;
-			}
-		}
-		else {
+			}*/
+		} else {
 			if (cmd.getName().equalsIgnoreCase("showhealth")) {
-				final boolean toggle = !a.isShowingHealth();
-				if (toggle) {
+				boolean isNowShowingHealth = this.boards.toggleShowingHealth(p);
+				if (isNowShowingHealth) {
+					Bukkit.getOnlinePlayers().stream()
+					.forEach(x -> x.setHealth( Math.min(x.getHealth(), x.getMaxHealth())));
 					p.sendMessage(ChatColor.AQUA + "You are now seeing players' health.");
 				}
 				else {
 					p.sendMessage(ChatColor.AQUA + "You are no longer seeing players' health.");
 				}
-				this.boards.toggleShowingHealth(p);
-				if (toggle) {
-					for (Player x : Bukkit.getOnlinePlayers()) {
-						final double h = Math.min(x.getHealth(), x.getMaxHealth());
-						x.setHealth(h);
-					}
-				}
 				return true;
 			}
+			
 			if (cmd.getName().equalsIgnoreCase("showmcnames")) {
-				if (this.boards.isGhosting(p) || this.boards.isGhosted(p)) {
-					p.sendMessage(ChatColor.DARK_AQUA + "An Otherwordly entity prevents you from doing this.");
+				boolean isNowShowingRPNames = boards.toggleShowingRPNames(p);
+				if (isNowShowingRPNames) {
+					p.sendMessage(ChatColor.AQUA + "You are now seeing Roleplay names.");
 				}
-				
+				else {
+					p.sendMessage(ChatColor.AQUA + "You are no longer seeing Minecraft names.");
+				}
 		
 				
 			}

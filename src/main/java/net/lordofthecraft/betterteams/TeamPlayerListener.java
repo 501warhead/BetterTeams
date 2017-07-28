@@ -34,28 +34,20 @@ public class TeamPlayerListener implements Listener {
 	public void onJoin(final PlayerJoinEvent e) {
 		final Player p = e.getPlayer();
 		Bukkit.getScheduler().scheduleSyncDelayedTask(BetterTeams.Main, () -> {
-            TeamPlayerListener.this.boards.init(p);
             Status cachedStatus = statusCache.get(p.getUniqueId());
             Affixes.onJoin(p, cachedStatus);
-            
-            if (statusCache.containsKey(p.getUniqueId())) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(BetterTeams.Main, () -> {
-                    Affixes a = new Affixes(p);
-                    a.setStatus(statusCache.get(p.getUniqueId()));
-                    statusCache.remove(p.getUniqueId());
-                    TeamPlayerListener.this.boards.apply(a);
-                }, 40L);
-            }
-        }, 100L);
+            statusCache.remove(p.getUniqueId());
+        }, 60L);
 	}
 
 	@EventHandler
 	public void onQuit(final PlayerQuitEvent e) {
-		Affixes a = new Affixes(e.getPlayer());
+		Affixes a = Affixes.fromExistingTeams(e.getPlayer(), true, false);
+		
 		if (a.getStatus() != null) {
 			this.statusCache.put(e.getPlayer().getUniqueId(), a.getStatus());
-			//System.out.println(e.getPlayer().getName() + " " + a.getStatus().getName());
 		}
+		
 		this.boards.close(e.getPlayer());
 	}
 
@@ -73,8 +65,8 @@ public class TeamPlayerListener implements Listener {
 				}
 			}
 			if (p != null) {
-				Affixes pa = new Affixes(p);
-				Affixes ta = new Affixes(t);
+				Affixes pa = Affixes.fromExistingTeams(p, true, false);
+				Affixes ta = Affixes.fromExistingTeams(t, true, false);
 				if (pa.getStatus() != null && ta.getStatus() != null) {
 					if (pa.getStatus() == ta.getStatus()) {
 						e.setCancelled(true);
@@ -87,36 +79,12 @@ public class TeamPlayerListener implements Listener {
 
 	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
-		Affixes a = new Affixes(e.getEntity());
+		Affixes a = Affixes.fromExistingTeams(e.getEntity(), true, true);
 		if (a.getStatus() != null) {
 			a.setStatus(null);
 			this.boards.apply(a);
 			e.getEntity().sendMessage(ChatColor.AQUA + "Cleared your status due to death.");
 		}
 		BetterTeams.Main.statusCooldown.remove(e.getEntity().getUniqueId());
-	}
-
-	@EventHandler
-	public void onCommand(PlayerCommandPreprocessEvent e){
-		if(e.getMessage().equalsIgnoreCase("/party status undead")){
-			if(!e.getPlayer().hasPermission("bt.undead")){
-				e.setCancelled(true);
-				e.getPlayer().sendMessage(org.bukkit.ChatColor.DARK_AQUA + "This is not a valid status.");
-			}
-		}
-	}
-
-	@EventHandler
-	public void onEntityTarget(EntityTargetLivingEntityEvent e){
-		if(e.getTarget() instanceof Player){
-			Player p = (Player) e.getTarget();
-			final Affixes a = new Affixes(p);
-			if(a.getStatus() != null){
-				if(a.getStatus().equals(Status.UNDEAD)){ //ang's event status
-					e.setCancelled(true);
-				}
-			}
-		}
-
 	}
 }

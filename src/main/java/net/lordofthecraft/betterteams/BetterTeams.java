@@ -46,8 +46,10 @@ public class BetterTeams extends JavaPlugin {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                BetterTeams.this.boards.init(p);
-                final double h = Math.min(p.getHealth(), p.getMaxHealth());
+                Affixes a = Affixes.onJoin(p, null);
+                boards.createTeams(a);
+                @SuppressWarnings("deprecation")
+				final double h = Math.min(p.getHealth(), p.getMaxHealth());
                 p.setHealth(h);
             }
         });
