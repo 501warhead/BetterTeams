@@ -14,7 +14,9 @@ public class BetterTeams extends JavaPlugin {
     static int ghostTaskId;
     static BetterTeams Main;
     static Scoreboard ghostBoard;
-
+    static TeamPacketListener packetListener;
+    
+    
     static {
         BetterTeams.ghostTaskId = -1;
     }
@@ -33,6 +35,7 @@ public class BetterTeams extends JavaPlugin {
 
         final PluginManager man = Bukkit.getPluginManager();
         man.registerEvents(new TeamPlayerListener(this.boards), this);
+        packetListener = new TeamPacketListener(this.boards);
 
         final TeamCommandHandler handler = new TeamCommandHandler();
         this.getCommand("showhealth").setExecutor(handler);

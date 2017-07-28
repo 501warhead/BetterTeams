@@ -9,16 +9,38 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLib;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
+import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
+import com.comphenix.protocol.wrappers.PlayerInfoData;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.comphenix.protocol.wrappers.WrappedGameProfile;
+
+import net.lordofthecraft.arche.ArcheCore;
+import net.lordofthecraft.arche.interfaces.Persona;
+import net.lordofthecraft.arche.interfaces.PersonaHandler;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class TeamCommandHandler implements CommandExecutor
 {
 	private final BoardManager boards;
+	private final ProtocolManager protocolManager;
+	private final PersonaHandler personaHandler;
 
 	public TeamCommandHandler() {
 		super();
 		this.boards = BetterTeams.Main.getBoardManager();
+		personaHandler = ArcheCore.getControls().getPersonaHandler();
+		this.protocolManager = ProtocolLibrary.getProtocolManager();
 	}
 
 	public static String getDurationBreakdown(long millis) {
@@ -306,7 +328,9 @@ public class TeamCommandHandler implements CommandExecutor
 				if (this.boards.isGhosting(p) || this.boards.isGhosted(p)) {
 					p.sendMessage(ChatColor.DARK_AQUA + "An Otherwordly entity prevents you from doing this.");
 				}
-				return true;
+				
+		
+				
 			}
 		}
 		return false;

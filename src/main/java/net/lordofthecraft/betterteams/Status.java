@@ -35,4 +35,15 @@ public enum Status
     public String getName() {
         return this.name;
     }
+    
+    public char getSymbol() {
+    	return icon.charAt(2);
+    }
+    
+    public static Status fromSymbol(char symbol) {
+    	for(Status s : Status.values()) {
+    		if(s.getSymbol() == symbol) return s;
+    	}
+    	return null;
+    }
 }

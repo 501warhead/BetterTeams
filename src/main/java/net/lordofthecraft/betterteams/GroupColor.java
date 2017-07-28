@@ -50,6 +50,17 @@ public enum GroupColor
         return null;
     }
     
+    public static GroupColor match(String chatcolors) {
+    	for(GroupColor gc : GroupColor.values()) {
+    		if(gc.color.equals(chatcolors)) return gc;
+    	}
+    	return null;
+    }
+    
+    public boolean isStylized() {
+    	return color.length() == 4;
+    }
+    
     public String toString() {
         return this.color;
     }

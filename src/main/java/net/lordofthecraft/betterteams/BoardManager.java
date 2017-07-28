@@ -32,17 +32,7 @@ public class BoardManager
             }
         }
     }
-    
-    public void init(final Player p) {
-        p.setScoreboard(this.boards[0]);
-        final GroupColor color = GroupColor.getHighest(p);
-        final Persona ps = this.handler.getPersona(p);
-        final String name = (ps == null) ? null : ((/*ps.getName()*/p.getName().length() <= 16) ? null : ((/*ps.getName()*/p.getName().length() > 20) ? (String.valueOf(/*ps.getName()*/p.getName().substring(16, 20)) + "\u2026") : /*ps.getName()*/p.getName().substring(16, /*ps.getName()*/p.getName().length())));
-        if (color != null || name != null) {
-            this.createTeams(p, (color == null) ? "" : color.toString(), name);
-        }
-    }
-    
+
     public List<Player> getStatusedPlayers(Status st) {
     	List<Player> players = Lists.newArrayList();
     	Affixes status;
@@ -133,7 +123,9 @@ public class BoardManager
     }
     
     @SuppressWarnings("deprecation")
-	void createTeams(final Player p, String prefix, String suffix) {
+	void createTeams(final Player p, ChatColor color) {
+    	
+    	
         final String name = p.getName();
         if (suffix == null) {
             suffix = "";
@@ -146,6 +138,7 @@ public class BoardManager
             if (t == null) {
                 t = this.boards[i].registerNewTeam(name);
                 t.addPlayer(p);
+                t.setColor(ChatColor.GREEN);
             }
             if (i > 1) {
                 t.setPrefix(String.valueOf(prefix) + ChatColor.ITALIC);

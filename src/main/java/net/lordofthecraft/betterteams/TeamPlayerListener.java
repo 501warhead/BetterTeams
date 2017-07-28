@@ -1,7 +1,8 @@
 package net.lordofthecraft.betterteams;
 
-import com.google.common.collect.Maps;
-import net.md_5.bungee.api.ChatColor;
+import java.util.HashMap;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -15,10 +16,9 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import com.google.common.collect.Maps;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class TeamPlayerListener implements Listener {
 
@@ -26,7 +26,6 @@ public class TeamPlayerListener implements Listener {
 	private HashMap<UUID, Status> statusCache;
 
 	public TeamPlayerListener(final BoardManager sboards) {
-		super();
 		this.boards = sboards;
 		this.statusCache = Maps.newHashMap();
 	}
@@ -36,6 +35,9 @@ public class TeamPlayerListener implements Listener {
 		final Player p = e.getPlayer();
 		Bukkit.getScheduler().scheduleSyncDelayedTask(BetterTeams.Main, () -> {
             TeamPlayerListener.this.boards.init(p);
+            Status cachedStatus = statusCache.get(p.getUniqueId());
+            Affixes.onJoin(p, cachedStatus);
+            
             if (statusCache.containsKey(p.getUniqueId())) {
                 Bukkit.getScheduler().scheduleSyncDelayedTask(BetterTeams.Main, () -> {
                     Affixes a = new Affixes(p);
@@ -44,7 +46,7 @@ public class TeamPlayerListener implements Listener {
                     TeamPlayerListener.this.boards.apply(a);
                 }, 40L);
             }
-        }, 60L);
+        }, 100L);
 	}
 
 	@EventHandler
@@ -52,7 +54,7 @@ public class TeamPlayerListener implements Listener {
 		Affixes a = new Affixes(e.getPlayer());
 		if (a.getStatus() != null) {
 			this.statusCache.put(e.getPlayer().getUniqueId(), a.getStatus());
-			System.out.println(e.getPlayer().getName() + " " + a.getStatus().getName());
+			//System.out.println(e.getPlayer().getName() + " " + a.getStatus().getName());
 		}
 		this.boards.close(e.getPlayer());
 	}
