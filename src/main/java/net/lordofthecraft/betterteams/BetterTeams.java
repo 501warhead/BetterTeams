@@ -34,8 +34,9 @@ public class BetterTeams extends JavaPlugin {
         this.boards = new BoardManager();
 
         final PluginManager man = Bukkit.getPluginManager();
-        man.registerEvents(new TeamPlayerListener(this.boards), this);
         packetListener = new TeamPacketListener(this.boards);
+        man.registerEvents(new TeamPlayerListener(this.boards), this);
+        
 
         final TeamCommandHandler handler = new TeamCommandHandler();
         this.getCommand("showhealth").setExecutor(handler);
@@ -48,9 +49,6 @@ public class BetterTeams extends JavaPlugin {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 Affixes a = Affixes.onJoin(p, null);
                 boards.createTeams(a);
-                @SuppressWarnings("deprecation")
-				final double h = Math.min(p.getHealth(), p.getMaxHealth());
-                p.setHealth(h);
             }
         });
     }

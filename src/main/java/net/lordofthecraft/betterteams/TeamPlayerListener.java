@@ -5,19 +5,24 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.google.common.collect.Maps;
 
+import net.lordofthecraft.arche.event.PersonaCreateEvent;
+import net.lordofthecraft.arche.event.PersonaRenameEvent;
+import net.lordofthecraft.arche.event.PersonaSwitchEvent;
 import net.md_5.bungee.api.ChatColor;
 
 public class TeamPlayerListener implements Listener {
@@ -33,22 +38,24 @@ public class TeamPlayerListener implements Listener {
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent e) {
 		final Player p = e.getPlayer();
-		Bukkit.getScheduler().scheduleSyncDelayedTask(BetterTeams.Main, () -> {
-            Status cachedStatus = statusCache.get(p.getUniqueId());
-            Affixes.onJoin(p, cachedStatus);
-            statusCache.remove(p.getUniqueId());
-        }, 60L);
+        Status cachedStatus = statusCache.get(p.getUniqueId());
+        BetterTeams.packetListener.newPlayerNameMapping(p);
+        Affixes.onJoin(p, cachedStatus);
+        statusCache.remove(p.getUniqueId());
+        boards.updateHealth(p, p.getHealth());
+
 	}
 
 	@EventHandler
 	public void onQuit(final PlayerQuitEvent e) {
-		Affixes a = Affixes.fromExistingTeams(e.getPlayer(), true, false);
+		Affixes a = Affixes.fromExistingTeams(e.getPlayer());
 		
 		if (a.getStatus() != null) {
 			this.statusCache.put(e.getPlayer().getUniqueId(), a.getStatus());
 		}
 		
 		this.boards.close(e.getPlayer());
+		BetterTeams.packetListener.clearPlayerMapping(e.getPlayer());
 	}
 
 	@EventHandler (priority = EventPriority.LOW)
@@ -65,8 +72,8 @@ public class TeamPlayerListener implements Listener {
 				}
 			}
 			if (p != null) {
-				Affixes pa = Affixes.fromExistingTeams(p, true, false);
-				Affixes ta = Affixes.fromExistingTeams(t, true, false);
+				Affixes pa = Affixes.fromExistingTeams(p);
+				Affixes ta = Affixes.fromExistingTeams(t);
 				if (pa.getStatus() != null && ta.getStatus() != null) {
 					if (pa.getStatus() == ta.getStatus()) {
 						e.setCancelled(true);
@@ -79,7 +86,7 @@ public class TeamPlayerListener implements Listener {
 
 	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
-		Affixes a = Affixes.fromExistingTeams(e.getEntity(), true, true);
+		Affixes a = Affixes.fromExistingTeams(e.getEntity());
 		if (a.getStatus() != null) {
 			a.setStatus(null);
 			this.boards.apply(a);
@@ -87,4 +94,49 @@ public class TeamPlayerListener implements Listener {
 		}
 		BetterTeams.Main.statusCooldown.remove(e.getEntity().getUniqueId());
 	}
+	
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void event(final EntityDamageEvent e) {
+		updateHealthLater(e);
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void event(final EntityRegainHealthEvent e) {
+		updateHealthLater(e);
+	}
+	
+	private void updateHealthLater(EntityEvent e) {
+		if(e.getEntityType() == EntityType.PLAYER) {
+			final Player p = (Player) e.getEntity();
+			Bukkit.getScheduler().scheduleSyncDelayedTask(BetterTeams.Main, () -> {
+				double hp = p.getHealth();
+				boards.updateHealth(p, hp);
+	        });
+		}
+	}
+
+	
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void event(final PersonaSwitchEvent e) {
+		this.resend(e.getPlayer());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void event(final PersonaRenameEvent e) {
+		this.resend(e.getPlayer());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void event(final PersonaCreateEvent e) {
+		this.resend(e.getPlayer());
+	}
+	
+	private void resend(Player p) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(BetterTeams.Main, () -> {
+			Affixes a = Affixes.fromExistingTeams(p);
+			boards.apply(a);
+        }); //This delay is necessary
+
+	}
+
 }

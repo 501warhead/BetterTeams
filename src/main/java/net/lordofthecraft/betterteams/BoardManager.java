@@ -1,32 +1,43 @@
 package net.lordofthecraft.betterteams;
 
-import com.google.common.collect.Lists;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.Team.Option;
 
-import java.util.List;
+import com.google.common.collect.Lists;
 
 public class BoardManager
-{
+{	
     private final ScoreboardManager manager;
     private final Scoreboard[] boards;
     
     BoardManager() {
-        super();
+    	
         this.manager = Bukkit.getScoreboardManager();
         this.boards = new Scoreboard[4];
         
         for (int i = 0; i < this.boards.length; ++i) {
             this.boards[i] = this.manager.getNewScoreboard();
             if (i == 1 || i == 3) {
-                final Objective o = this.boards[i].registerNewObjective("showhealth", "health");
+                final Objective o = this.boards[i].registerNewObjective("showhealth", "dummy");
                 o.setDisplaySlot(DisplaySlot.BELOW_NAME);
-                //o.setDisplayName(ChatColor.DARK_RED + "\u2764");
-                o.setDisplayName("1234567890abcdef");
+                o.setDisplayName(ChatColor.DARK_RED + "\u2764");
             }
+            
+            //Bit for TownCandy npcs which have name ChatColor.BOLD
+            Team x = boards[i].registerNewTeam("towncandy_npc"); //issues if a player "towncandy_npc" shows up
+            x.setOption(Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+            x.addEntry(""+ChatColor.BOLD);
         }
     }
     
@@ -42,7 +53,7 @@ public class BoardManager
     	List<Player> players = Lists.newArrayList();
     	Affixes status;
     	for (Player pl : Bukkit.getOnlinePlayers()) {
-    		status = Affixes.fromExistingTeams(pl, true, false);
+    		status = Affixes.fromExistingTeams(pl);
             if (status.getStatus() == st) {
                 players.add(pl);
             }
@@ -132,7 +143,7 @@ public class BoardManager
     	a.apply(this.boards);
     }
     
-    @SuppressWarnings("deprecation")
+    
 	void createTeams(Affixes a) {
     	Player p = a.getPlayer();
     	for(Scoreboard board : boards) {
@@ -140,9 +151,7 @@ public class BoardManager
     		if ( t != null)BetterTeams.Main.getLogger().warning("Player Teams already existed for nascent player:" + p.getName());
     		else t = board.registerNewTeam(p.getName());
     		
-    		t.addEntry(p.getUniqueId().toString());
-    		t.setNameTagVisibility(NameTagVisibility.HIDE_FOR_OWN_TEAM);
-    		
+    		t.setOption(Option.NAME_TAG_VISIBILITY, Team.OptionStatus.FOR_OTHER_TEAMS);
     		
     		if(this.boardShowsRPNames(board)) {
     			t.setPrefix(a.getPrefixRP());
@@ -151,6 +160,8 @@ public class BoardManager
     			t.setPrefix(a.getPrefixMC());
     			t.setSuffix(a.getSuffixMC());
     		}
+    		
+    		t.addEntry(BetterTeams.packetListener.getPlayerTeamCode(p));
     	}
     	
     	p.setScoreboard(boards[0]);
@@ -202,5 +213,17 @@ public class BoardManager
                 }
             }
         }
+    }
+    
+    public void updateHealth(Player p, double health) {
+    	int intHP = (int) Math.ceil(health);
+    	for(Scoreboard board : boards) {
+    		if( this.boardShowsHealth(board) ){
+    			String playerCode = BetterTeams.packetListener.getPlayerTeamCode(p);
+    			Objective o = board.getObjective(DisplaySlot.BELOW_NAME);
+    			Score score = o.getScore(playerCode);
+    			score.setScore(intHP);
+    		}
+    	}
     }
 }

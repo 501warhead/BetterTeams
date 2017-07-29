@@ -1,46 +1,28 @@
 package net.lordofthecraft.betterteams;
 
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLib;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
-import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
-import com.comphenix.protocol.wrappers.PlayerInfoData;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.comphenix.protocol.wrappers.WrappedGameProfile;
 
 import net.lordofthecraft.arche.ArcheCore;
-import net.lordofthecraft.arche.interfaces.Persona;
 import net.lordofthecraft.arche.interfaces.PersonaHandler;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class TeamCommandHandler implements CommandExecutor
 {
 	private final BoardManager boards;
-	private final ProtocolManager protocolManager;
-	private final PersonaHandler personaHandler;
 
 	public TeamCommandHandler() {
 		super();
 		this.boards = BetterTeams.Main.getBoardManager();
-		personaHandler = ArcheCore.getControls().getPersonaHandler();
-		this.protocolManager = ProtocolLibrary.getProtocolManager();
 	}
 
 	public static String getDurationBreakdown(long millis) {
@@ -87,7 +69,7 @@ public class TeamCommandHandler implements CommandExecutor
 						sender.sendMessage("Player not found.");
 						return true;
 					} else {
-						a = Affixes.fromExistingTeams(t, true, false);
+						a = Affixes.fromExistingTeams(t);
 						sender.sendMessage("Modifying status for " + t.getName());
 					}
 					Status status = Status.fromName(args[0]);
@@ -107,7 +89,7 @@ public class TeamCommandHandler implements CommandExecutor
 		
 		
 		final Player p = (Player)sender;
-		Affixes a = Affixes.fromExistingTeams(p, true, true);
+		Affixes a = Affixes.fromExistingTeams(p);
 		if (cmd.getName().equalsIgnoreCase("tagcolor")) {
 			if (args.length == 1) {
 				if (this.boards.isGhosting(p)) {
@@ -202,7 +184,7 @@ public class TeamCommandHandler implements CommandExecutor
 							p.sendMessage("Player not found.");
 							return true;
 						} else {
-							a = Affixes.fromExistingTeams(t, true, false);
+							a = Affixes.fromExistingTeams(t);
 							p.sendMessage("Modifying status for " + t.getName());
 						}
 					}
@@ -218,7 +200,7 @@ public class TeamCommandHandler implements CommandExecutor
 						return true;
 					}
 
-					if ((t == null) && BetterTeams.Main.statusCooldown.containsKey(p.getUniqueId())) {
+					if ((t == null) && !p.isOp() && BetterTeams.Main.statusCooldown.containsKey(p.getUniqueId())) {
 						int COOLDOWN = 1800000;
 						if ((System.currentTimeMillis() - BetterTeams.Main.statusCooldown.get(p.getUniqueId())) > COOLDOWN) {
 							BetterTeams.Main.statusCooldown.remove(p.getUniqueId());
@@ -248,6 +230,16 @@ public class TeamCommandHandler implements CommandExecutor
 				}
 				return true;
 			}
+		}else if (cmd.getName().equalsIgnoreCase("appearto")) {
+			String code = args[0];
+			Integer cc = Integer.parseInt(code.substring(2), 16);
+			char ccc = Character.toChars(cc)[0];
+			String z = ""+ccc;
+			sender.sendMessage(z);
+			sender.sendMessage("a"+z+"b");
+			sender.sendMessage("charm"+z+"eleon");
+			return true;
+		
 /*		}else if (cmd.getName().equalsIgnoreCase("appearto")) {
 			if (args.length == 0) {
 				if (this.boards.isGhosting(p)) {
@@ -282,8 +274,6 @@ public class TeamCommandHandler implements CommandExecutor
 			if (cmd.getName().equalsIgnoreCase("showhealth")) {
 				boolean isNowShowingHealth = this.boards.toggleShowingHealth(p);
 				if (isNowShowingHealth) {
-					Bukkit.getOnlinePlayers().stream()
-					.forEach(x -> x.setHealth( Math.min(x.getHealth(), x.getMaxHealth())));
 					p.sendMessage(ChatColor.AQUA + "You are now seeing players' health.");
 				}
 				else {
@@ -298,8 +288,10 @@ public class TeamCommandHandler implements CommandExecutor
 					p.sendMessage(ChatColor.AQUA + "You are now seeing Roleplay names.");
 				}
 				else {
-					p.sendMessage(ChatColor.AQUA + "You are no longer seeing Minecraft names.");
+					p.sendMessage(ChatColor.AQUA + "You are no longer seeing Roleplay names.");
 				}
+				
+				return true;
 		
 				
 			}

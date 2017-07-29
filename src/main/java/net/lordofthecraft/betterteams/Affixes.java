@@ -33,8 +33,6 @@ public class Affixes
     private Status status;
     private GroupColor color;
     
-    private boolean updatedPrefix = false, updatedSuffix = false;
-    
     public static Affixes onJoin(Player p, Status cached) {
     	//Player just joined. Have no teams. Find out what
     	//Team settings player should be entitled to
@@ -51,13 +49,17 @@ public class Affixes
     	return a;
     }
     
-    public static Affixes fromExistingTeams(Player p, boolean needStatus, boolean needColor) {
+    public static Affixes fromExistingTeams(Player p) {
     	//Player already online. Should have 4 teams in 4 boards
     	//Parse teams to find out the status, color, suffix, etc
     	Affixes a = new Affixes(p);
     	
-        if(needStatus) a.parseStatus();
-        if(needColor) a.parseGroupColor();
+    	Team t = p.getScoreboard().getTeam(p.getName());
+    	//Player has status and tag colors in all teams
+    	a.prefix_mc = t.getPrefix();
+    	
+        a.parseStatus();
+        a.parseGroupColor();
         
         return a;
     }
@@ -76,29 +78,41 @@ public class Affixes
   //NB: Returns whether or not the prefix should be changed
   //based on changes made, specifically if the RP name overflows
     public void handleSuffix() {
-    	suffix_mc = player.getName();
+    	final String colorPart = color == null? "" : color.toString();
     	
+    	//MC Part
+    	String namepart = player.getName();
+    	if(namepart.length() > 12) {
+    		namepart = namepart.substring(namepart.length()-12, namepart.length());
+    	}
+    	if(color != null && !color.isStylized()) suffix_mc = colorPart + ChatColor.ITALIC + namepart;
+    	else suffix_mc = colorPart + namepart;
+    	
+    	
+    	//RP Name part
     	Persona ps = handler.getPersona(player);
     	if(ps == null) {
-    		suffix_rp = player.getName();
-    		return;
+    		suffix_rp = suffix_mc; //Replace nonexistent RP name with MC name
     	} else {
     		String persName = ps.getName();
+    		
     		int len = persName.length();
-    		if(len <= 16) { 
+    		if(len <= 12) { 
     			suffix_rp = persName;
-    			return;
     		}else { //RP name will overflow space available in suffix
-    			int maxlen = status == null? 24 : 20; //Status takes up 4 characters
+    			int maxlen = status == null? 20 : 16; //Status takes up 4/8 characters
     			//Will name overflow? If so take max allowable characters + add ellipses
     			if(len > maxlen) {
     				int fitsInPrefix = status == null? 8:4;
-    				suffix_rp = persName.substring(fitsInPrefix, fitsInPrefix+15) + ELLIPSES;
-    			}else { //Just take the last 16 characters; they fit entirely
-    				suffix_rp = persName.substring(persName.length() - 16, persName.length());
+    				suffix_rp = persName.substring(fitsInPrefix, fitsInPrefix+11) + ELLIPSES;
+    			}else { //Just take the last 12 characters; they fit entirely
+    				suffix_rp = persName.substring(persName.length() - 12, persName.length());
     			}
     		}
+    		
+    		suffix_rp = colorPart + suffix_rp;
     	}
+    	
     }
     
     public void handlePrefix() {
@@ -107,21 +121,29 @@ public class Affixes
     	boolean hasColor = color !=null;
     	boolean hasStatus = status != null;
     	
-    	String prefix = (hasStatus? status.toString() + " " : "") +
-    				(hasColor? color.toString() : "");
-    	prefix_mc = color.isStylized()? prefix : prefix + ChatColor.ITALIC;
     	
+    	String prefix = (hasStatus? "[" + status.toString() + ChatColor.RESET + "] " : "") +
+    				(hasColor? color.toString() : "");
+    	
+    	//MC Part
+    	prefix_mc = hasColor && color.isStylized()? prefix : prefix + ChatColor.ITALIC;
+    	String playerName = player.getName();
+    	if(playerName.length() > 12) {
+    		prefix_mc += playerName.substring(0,playerName.length()-12);
+    	}
     	
     	Persona ps = handler.getPersona(player);
     	if(ps == null) {
     		//RP-board name should be MC name since no Persona
     		//Add italicized chars if possible
-    		prefix_rp = color.isStylized()? prefix : prefix + ChatColor.ITALIC;
-    	}else if(ps.getName().length() <= 16) {
+    		prefix_rp = hasColor && color.isStylized()? prefix : prefix + ChatColor.ITALIC;
+    	}else if(ps.getName().length() <= 12) {
+    		prefix_rp = prefix;
     		return; //RP name fits in suffix, no prefix adjustment needed
     	} else {
         	int fitsInPrefix = hasStatus? 4:8;
-        	String persPrefix = ps.getName().substring(0,fitsInPrefix);
+        	int bound = Math.min(fitsInPrefix, ps.getName().length() - 12	);
+        	String persPrefix = ps.getName().substring(0,bound);
         	prefix_rp = prefix + persPrefix;
     	}
 
@@ -149,7 +171,6 @@ public class Affixes
     	if(prefix == null || prefix.length() == offset) return null;
     	final String colorCode = prefix.substring(offset, offset + 
     		((prefix.length() > offset + 3 && prefix.charAt(offset + 2) == ChatColor.COLOR_CHAR)? 4 : 2));
-    	
     	color = GroupColor.match(colorCode);
     	return color;
     }
@@ -164,7 +185,6 @@ public class Affixes
     
     public void setStatus(final Status status) {
         this.status = status;
-        updatedPrefix = true;
     }
     
     public GroupColor getColor() {
@@ -178,26 +198,21 @@ public class Affixes
     
     public void setGroupColor(final GroupColor color) {
         this.color = color;
-        updatedPrefix = true;
     }
     
-    public void applyNewPersona() {
-    	updatedSuffix = true;
-    	updatedPrefix = true;
-    }
     
     void apply(Scoreboard[] bb) {
-    	if(updatedPrefix) handlePrefix();
-    	if(updatedSuffix) handleSuffix();
+    	handlePrefix();
+    	handleSuffix();
     	
     	for(Scoreboard b : bb) {
     		Team t = b.getTeam(player.getName());
     		if(boards.boardShowsRPNames(b)){
-    			if(updatedPrefix) t.setPrefix(prefix_rp);
-    			if(updatedSuffix) t.setSuffix(suffix_rp);
+    			t.setPrefix(prefix_rp);
+    			t.setSuffix(suffix_rp);
     		} else {
-    			if(updatedPrefix) t.setPrefix(prefix_mc);
-    			if(updatedSuffix) t.setSuffix(suffix_mc);
+    			t.setPrefix(prefix_mc);
+    			t.setSuffix(suffix_mc);
     		}
     	}
     }
