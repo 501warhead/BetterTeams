@@ -24,7 +24,7 @@ public class BoardManager
     BoardManager() {
     	
         this.manager = Bukkit.getScoreboardManager();
-        this.boards = new Scoreboard[4];
+        this.boards = new Scoreboard[5];
         
         for (int i = 0; i < this.boards.length; ++i) {
             this.boards[i] = this.manager.getNewScoreboard();
@@ -48,7 +48,11 @@ public class BoardManager
     public boolean boardShowsRPNames(Scoreboard board) {
     	return (board == boards[0] || board == boards[1]);
     }
-
+    
+    public boolean boardShowsNameplates(Scoreboard board) {
+    	return (board != boards[4]);
+    }
+    
     public List<Player> getStatusedPlayers(Status st) {
     	List<Player> players = Lists.newArrayList();
     	Affixes status;
@@ -112,8 +116,12 @@ public class BoardManager
             p.setScoreboard(this.boards[3]);
             return true;
         }
+        else if (b == this.boards[4]) {
+            p.setScoreboard(this.boards[1]);
+            return true;
+        }
         
-        throw new ArrayIndexOutOfBoundsException("More than 4 scoreboards in BetterTeams");
+        throw new ArrayIndexOutOfBoundsException("More than 5 scoreboards in BetterTeams");
     }
     
     public boolean toggleShowingRPNames(final Player p) {
@@ -134,8 +142,23 @@ public class BoardManager
             p.setScoreboard(this.boards[0]);
             return true;
         }
+        else if (b == this.boards[4]) {
+        	p.setScoreboard(this.boards[0]);
+        	return true;
+        }
         
-        throw new ArrayIndexOutOfBoundsException("More than 4 scoreboards in BetterTeams");
+        throw new ArrayIndexOutOfBoundsException("More than 5 scoreboards in BetterTeams");
+    }
+    
+    public boolean toggleHideNameplates(final Player p) {
+    	 final Scoreboard b = p.getScoreboard();
+         if (b == this.boards[4]) { //no longer hiding nameplates
+             p.setScoreboard(this.boards[0]); //RP names, no health
+             return false;  
+         } else { //now hiding nameplates
+             p.setScoreboard(this.boards[4]); //Nameplates hidden
+             return true;
+         }
     }
     
     
@@ -151,7 +174,10 @@ public class BoardManager
     		if ( t != null)BetterTeams.Main.getLogger().warning("Player Teams already existed for nascent player:" + p.getName());
     		else t = board.registerNewTeam(p.getName());
     		
-    		t.setOption(Option.NAME_TAG_VISIBILITY, Team.OptionStatus.FOR_OTHER_TEAMS);
+    		t.setOption(Option.NAME_TAG_VISIBILITY, boardShowsNameplates(board)?
+    				Team.OptionStatus.FOR_OTHER_TEAMS :
+    				Team.OptionStatus.NEVER	
+    				);
     		
     		if(this.boardShowsRPNames(board)) {
     			t.setPrefix(a.getPrefixRP());

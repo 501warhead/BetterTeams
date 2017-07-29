@@ -290,10 +290,18 @@ public class TeamCommandHandler implements CommandExecutor
 				else {
 					p.sendMessage(ChatColor.AQUA + "You are no longer seeing Roleplay names.");
 				}
-				
 				return true;
-		
-				
+			}
+			
+			if (cmd.getName().equalsIgnoreCase("hidenameplates")) {
+				boolean isNowHidingNameplates = boards.toggleHideNameplates(p);
+				if (isNowHidingNameplates) {
+					p.sendMessage(ChatColor.AQUA + "Nameplates are now hidden");
+				}
+				else {
+					p.sendMessage(ChatColor.AQUA + "Nameplates are no longer hidden");
+				}
+				return true;
 			}
 		}
 		return false;
