@@ -67,7 +67,6 @@ public class BoardManager
     public void close(final Player p) {
         if (this.isGhosting(p)) {
             this.removeGhost(p);
-            return;
         }
         
         final String name = p.getName();
@@ -91,7 +90,7 @@ public class BoardManager
         final Team t = p.getScoreboard().getTeam(p.getName()); //This is the player's team
         String myTeamCode = BetterTeams.packetListener.getPlayerTeamCode(p);
         for(String entry : t.getEntries()) {
-        	if(entry.equals(myTeamCode)) return true; //player is in its home team
+        	if(entry.equals(myTeamCode)) return false; //player is in its home team
         }
         
         return true; //not in its home team
@@ -103,7 +102,7 @@ public class BoardManager
         final Team t = p.getScoreboard().getTeam(p.getName()); //This is the player's team
         String myTeamCode = BetterTeams.packetListener.getPlayerTeamCode(p);
         for(String entry : t.getEntries()) {
-        	if(entry.length() < 36 && !entry.equals(myTeamCode)){
+        	if(entry.endsWith(ChatColor.RESET.toString()) && !entry.equals(myTeamCode)){
         		return true;
         	}
         }
@@ -186,9 +185,10 @@ public class BoardManager
     		Team t = board.getTeam(p.getName());
     		if ( t != null)BetterTeams.Main.getLogger().warning("Player Teams already existed for nascent player:" + p.getName());
     		else t = board.registerNewTeam(p.getName());
+    		t.addEntry(p.getName()); //This lets the player's client know which team they're supposed to be on
     		
     		t.setOption(Option.NAME_TAG_VISIBILITY, boardShowsNameplates(board)?
-    				Team.OptionStatus.FOR_OTHER_TEAMS :
+    				Team.OptionStatus.FOR_OWN_TEAM :
     				Team.OptionStatus.NEVER	
     				);
     		

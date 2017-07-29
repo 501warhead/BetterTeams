@@ -231,17 +231,7 @@ public class TeamCommandHandler implements CommandExecutor
 					p.sendMessage(ChatColor.DARK_AQUA + "This is not a valid status.");
 				}
 				return true;
-			}
-		}else if (cmd.getName().equalsIgnoreCase("appearto")) {
-			String code = args[0];
-			Integer cc = Integer.parseInt(code.substring(2), 16);
-			char ccc = Character.toChars(cc)[0];
-			String z = ""+ccc;
-			sender.sendMessage(z);
-			sender.sendMessage("a"+z+"b");
-			sender.sendMessage("charm"+z+"eleon");
-			return true;
-		
+			}		
 		}else if (cmd.getName().equalsIgnoreCase("appearto")) {
 			if (args.length == 0) {
 				if (this.boards.isGhosting(p)) {
@@ -267,7 +257,6 @@ public class TeamCommandHandler implements CommandExecutor
 				else {
 					p.sendMessage(ChatColor.DARK_AQUA + "That player is not in reach!");
 				}
-
 				return true;
 			}
 		} else {
@@ -282,7 +271,7 @@ public class TeamCommandHandler implements CommandExecutor
 				return true;
 			}
 			
-			if (cmd.getName().equalsIgnoreCase("showmcnames")) {
+			if (cmd.getName().equalsIgnoreCase("showrpnames")) {
 				boolean isNowShowingRPNames = boards.toggleShowingRPNames(p);
 				if (isNowShowingRPNames) {
 					p.sendMessage(ChatColor.AQUA + "You are now seeing Roleplay names.");
