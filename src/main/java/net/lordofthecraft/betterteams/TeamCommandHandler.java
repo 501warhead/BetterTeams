@@ -9,6 +9,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -240,11 +242,10 @@ public class TeamCommandHandler implements CommandExecutor
 			sender.sendMessage("charm"+z+"eleon");
 			return true;
 		
-/*		}else if (cmd.getName().equalsIgnoreCase("appearto")) {
+		}else if (cmd.getName().equalsIgnoreCase("appearto")) {
 			if (args.length == 0) {
 				if (this.boards.isGhosting(p)) {
 					this.boards.removeGhost(p);
-					this.boards.init(p);
 				}
 				if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
 					p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 2400, 5, true), true);
@@ -253,23 +254,22 @@ public class TeamCommandHandler implements CommandExecutor
 				return true;
 			}
 			if (args.length == 1) {
-				if (!args[0].equalsIgnoreCase("all")) {
-					final Player target = Bukkit.getServer().getPlayer(args[0]);
-					if (target != null && target.getLocation().getWorld() == p.getLocation().getWorld() && target.getLocation().distance(p.getLocation()) <= 90.0) {
-						p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 24000, 5, true), true);
-						if (this.boards.isGhosting(p)) {
-							this.boards.removeGhost(p);
-						}
-						this.boards.deleteTeams(p);
-						this.boards.addGhost(p, target);
-						p.sendMessage(String.valueOf(ChatColor.AQUA) + ChatColor.ITALIC + "wooohoooohooo!");
+				final Player target = Bukkit.getServer().getPlayer(args[0]);
+				if (target != null && target.getLocation().getWorld() == p.getLocation().getWorld() && target.getLocation().distance(p.getLocation()) <= 90.0) {
+					p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 24000, 5, true), true);
+					if (this.boards.isGhosting(p)) {
+						this.boards.removeGhost(p);
 					}
-					else {
-						p.sendMessage(ChatColor.DARK_AQUA + "That player is not in reach!");
-					}
+					
+					this.boards.addGhost(p, target);
+					p.sendMessage(String.valueOf(ChatColor.AQUA) + ChatColor.ITALIC + "wooohoooohooo!");
 				}
+				else {
+					p.sendMessage(ChatColor.DARK_AQUA + "That player is not in reach!");
+				}
+
 				return true;
-			}*/
+			}
 		} else {
 			if (cmd.getName().equalsIgnoreCase("showhealth")) {
 				boolean isNowShowingHealth = this.boards.toggleShowingHealth(p);

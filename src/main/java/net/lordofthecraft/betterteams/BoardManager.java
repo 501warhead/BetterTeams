@@ -2,7 +2,6 @@ package net.lordofthecraft.betterteams;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -86,16 +85,30 @@ public class BoardManager
     	}
     }
     
-    @SuppressWarnings("deprecation")
 	public boolean isGhosting(final Player p) {
-        final Team t = p.getScoreboard().getPlayerTeam(p);
-        return t != null && (t.getSize() > 1 && !t.getName().equals(p.getName()));
+    	//Is player ghosting (appearing ethereal to) another player?
+    	//Answer is YES if player is NOT in its own team
+        final Team t = p.getScoreboard().getTeam(p.getName()); //This is the player's team
+        String myTeamCode = BetterTeams.packetListener.getPlayerTeamCode(p);
+        for(String entry : t.getEntries()) {
+        	if(entry.equals(myTeamCode)) return true; //player is in its home team
+        }
+        
+        return true; //not in its home team
     }
     
-    @SuppressWarnings("deprecation")
 	public boolean isGhosted(final Player p) {
-        final Team t = p.getScoreboard().getPlayerTeam(p);
-        return t != null && (t.getSize() > 1 && t.getName().equals(p.getName()));
+    	//Is player being visited by >=1 ghost
+    	//Answer is YES if another faux-player is in the team of the player
+        final Team t = p.getScoreboard().getTeam(p.getName()); //This is the player's team
+        String myTeamCode = BetterTeams.packetListener.getPlayerTeamCode(p);
+        for(String entry : t.getEntries()) {
+        	if(entry.length() < 36 && !entry.equals(myTeamCode)){
+        		return true;
+        	}
+        }
+        
+        return false;
     }
     
     public boolean toggleShowingHealth(final Player p) {
@@ -203,42 +216,25 @@ public class BoardManager
         }
     }
     
-    @SuppressWarnings("deprecation")
 	public void addGhost(final Player c, final Player o) {
-        Scoreboard[] boards;
-        for (int length = (boards = this.boards).length, i = 0; i < length; ++i) {
-            final Scoreboard s = boards[i];
-            Team t = s.getTeam(o.getName());
-            if (t == null) {
-                t = s.registerNewTeam(o.getName());
-                t.addPlayer(o);
-            }
-            t.addPlayer(c);
-            t.setCanSeeFriendlyInvisibles(true);
-        }
+    	String ghostsTeamCode = BetterTeams.packetListener.getPlayerTeamCode(c);
+    	for (Scoreboard board :  boards) {
+    		Team target = board.getTeam(o.getName());
+    		target.addEntry(ghostsTeamCode);
+    		target.setCanSeeFriendlyInvisibles(true);
+    	}
     }
-    
-    @SuppressWarnings("deprecation")
+
 	public void removeGhost(final Player p) {
-        Scoreboard[] boards;
-        for (int length = (boards = this.boards).length, i = 0; i < length; ++i) {
-            final Scoreboard s = boards[i];
-            final Team t = s.getPlayerTeam(p);
-            if (t != null) {
-                t.removePlayer(p);
-                if (t.getSize() == 0) {
-                    t.unregister();
-                }
-                else if (t.getSize() == 1) {
-                    if (StringUtils.isEmpty(t.getPrefix()) && StringUtils.isEmpty(t.getSuffix())) {
-                        t.unregister();
-                    }
-                    else {
-                        t.setCanSeeFriendlyInvisibles(false);
-                    }
-                }
-            }
-        }
+    	//Assume the player's home teams still exist
+    	//So just add them back to these ones
+    	String myTeamCode = BetterTeams.packetListener.getPlayerTeamCode(p);
+    	for(Scoreboard board : boards) {
+    		Team original = board.getEntryTeam(myTeamCode);
+    		original.setCanSeeFriendlyInvisibles(false);
+    		Team target = board.getTeam(p.getName());
+    		target.addEntry(myTeamCode); //This should also remove them from team 'original'
+    	}
     }
     
     public void updateHealth(Player p, double health) {
