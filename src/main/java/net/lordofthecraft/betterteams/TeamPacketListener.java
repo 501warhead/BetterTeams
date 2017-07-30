@@ -43,7 +43,8 @@ public class TeamPacketListener implements Listener
 				if (at == PlayerInfoAction.ADD_PLAYER) {
 					List<PlayerInfoData> pidl = packet.getPlayerInfoDataLists().read(0);
 					pidl = pidl.stream()
-							.map(info -> new PlayerInfoData(
+							.map(info -> info.getProfile().getName().length() < 3? info :
+									new PlayerInfoData(
 									ArcheGameProfile.rewrap(info.getProfile(), 
 											playerNameMappings.get(info.getProfile().getUUID()),
 											info.getProfile().getUUID()), 
