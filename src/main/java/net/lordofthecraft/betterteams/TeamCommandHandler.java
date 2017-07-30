@@ -238,7 +238,7 @@ public class TeamCommandHandler implements CommandExecutor
 					this.boards.removeGhost(p);
 				}
 				if (p.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-					p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 2400, 5, true), true);
+					p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 2400, 5, true, false), true);
 				}
 				p.sendMessage(ChatColor.AQUA + "You dissappear into thin air, perpetuating the mystery.");
 				return true;
