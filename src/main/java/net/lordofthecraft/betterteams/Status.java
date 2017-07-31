@@ -17,7 +17,7 @@ public enum Status
     SLEEPING(		"SLEEPING", 		10, ChatColor.DARK_GREEN 	+ "\u262a", "sleeping"),
     CRUSADING(		"CRUSADING", 		11,	ChatColor.YELLOW 		+ "\u2021", "crusading"),
     FLAGGED(		"FLAGGED",			12,	ChatColor.DARK_AQUA		+ "\u2691",	"flagged"),
-    RECORDING(		"RECORDING",		13,	ChatColor.DARK_BLUE		+ "\u2022",	"recording");
+    RECORDING(		"RECORDING",		13,	ChatColor.DARK_BLUE		+ "\u25A0",	"recording");
     //UNDEAD(         "UNDEAD",           14, ChatColor.BLACK         + "\u2742", "undead");
     
     private final String icon;

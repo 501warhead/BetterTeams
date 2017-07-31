@@ -28,7 +28,7 @@ public class TeamPacketListener implements Listener
 	//Why?  Because why not :D
 	private final Plugin plugin;
 	
-	private final Map<UUID, String> playerNameMappings = HashBiMap.create(200); //how optimistic about lotcs playercount are you ;)
+	private final Map<UUID, String> playerNameMappings = HashBiMap.create(300); //how optimistic about lotcs playercount are you ;) // we have 300 cap we are making it 300 - we do get over 200 during warclaims
 	private final int[] tokens = new int[4];
 	
 	public TeamPacketListener(final BoardManager sboards) {

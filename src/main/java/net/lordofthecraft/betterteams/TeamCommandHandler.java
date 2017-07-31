@@ -99,7 +99,7 @@ public class TeamCommandHandler implements CommandExecutor
 				}
 				else if (args[0].equalsIgnoreCase("on")) {
 					final GroupColor col = GroupColor.getHighest(p);
-					if (col != null) p.sendMessage(ChatColor.DARK_AQUA + "You do not have VIP status. DONATE to receive a colored tag.");
+					if (col != null) p.sendMessage(ChatColor.DARK_AQUA + "You do not have VIP status. Purchase VIP to receive a colored tag. Type /store");
 					else if (col == a.getColor()) p.sendMessage(ChatColor.DARK_AQUA + "Tag color was already at the highest possible status");
 					else {
 						p.sendMessage(ChatColor.AQUA + "Set your tag color to your highest possible status.");
@@ -107,14 +107,14 @@ public class TeamCommandHandler implements CommandExecutor
 						this.boards.apply(a);
 					}
 				}
-				else if (args[0].equalsIgnoreCase("off")) {
+				else if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("clear")) {
 					if (a.getColor() == null) {
 						p.sendMessage(ChatColor.DARK_AQUA + "You do not have a colored tag!");
 					}
 					else {
 						a.setGroupColor(null);
 						this.boards.apply(a);
-						p.sendMessage(ChatColor.AQUA + "Removed your donor tag successfully.");
+						p.sendMessage(ChatColor.AQUA + "Removed your colored tag successfully.");
 					}
 				}
 				else if (sender.hasPermission("betterteams.tag." + args[0].toLowerCase())) {

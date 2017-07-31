@@ -3,13 +3,14 @@ main: net.lordofthecraft.betterteams.BetterTeams
 description: Integrates all possible team functionality in a sensible way.
 version: ${project.version}
 depend: [ProtocolLib, ArcheCore]
-authors: [Arche, Kowaman]
+author: Arche
 
 commands:
   showhealth:
     description: Shows the health of each player below their name.
     permission: betterteams.showhealth
     usage: Invalid usage. Use /showhealth
+     aliases: [showhealth, health]
   showrpnames:
     description: Toggle between the showing of MC Names or RP names
     permission: betterteams.showrpnames
@@ -19,7 +20,7 @@ commands:
     description: Hide the nameplates of other players
     permission: betterteams.hidenameplates
     usage: Invalid usage. Use /hidenameplates
-    aliases: [shownameplates]
+    aliases: [shownameplates, togglenameplates, names, nameplates, shownames, hidenames, togglenames]
   status:
     description: Update your status icon
     permission: betterteams.status
