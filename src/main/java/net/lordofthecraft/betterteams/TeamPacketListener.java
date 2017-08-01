@@ -51,7 +51,9 @@ public class TeamPacketListener implements Listener
 									info.getLatency(), 
 									info.getGameMode(), 
 									//display name must now be MC name so tab menu looks right
-									WrappedChatComponent.fromText(info.getProfile().getName()))) 
+									WrappedChatComponent.fromText((Affixes.fromExistingTeams(info.getProfile().getUUID()) != null ? Affixes.fromExistingTeams(info.getProfile().getUUID()).getColor().toString() : "")+info.getProfile().getName())
+									//info.getDisplayName()
+									))
 							.collect(Collectors.toList());
 
 					packet.getPlayerInfoDataLists().write(0, pidl);

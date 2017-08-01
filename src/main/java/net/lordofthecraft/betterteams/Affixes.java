@@ -1,6 +1,7 @@
 package net.lordofthecraft.betterteams;
 
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
@@ -9,6 +10,8 @@ import org.bukkit.scoreboard.Team;
 import net.lordofthecraft.arche.ArcheCore;
 import net.lordofthecraft.arche.interfaces.Persona;
 import net.lordofthecraft.arche.interfaces.PersonaHandler;
+
+import java.util.UUID;
 
 public class Affixes
 {
@@ -63,6 +66,15 @@ public class Affixes
         
         return a;
     }
+
+    public static Affixes fromExistingTeams(UUID id) {
+    	Player pl = Bukkit.getPlayer(id);
+    	if (pl != null) {
+    		return fromExistingTeams(pl);
+		} else {
+    		return null;
+		}
+	}
     
 
 

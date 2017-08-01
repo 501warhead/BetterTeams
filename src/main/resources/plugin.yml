@@ -10,7 +10,7 @@ commands:
     description: Shows the health of each player below their name.
     permission: betterteams.showhealth
     usage: Invalid usage. Use /showhealth
-     aliases: [showhealth, health]
+    aliases: [health]
   showrpnames:
     description: Toggle between the showing of MC Names or RP names
     permission: betterteams.showrpnames
