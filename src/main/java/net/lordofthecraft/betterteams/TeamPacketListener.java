@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -28,7 +29,7 @@ public class TeamPacketListener implements Listener
 	//Why?  Because why not :D
 	private final Plugin plugin;
 	
-	private final Map<UUID, String> playerNameMappings = HashBiMap.create(300); //how optimistic about lotcs playercount are you ;) // we have 300 cap we are making it 300 - we do get over 200 during warclaims
+	private final Map<UUID, String> playerNameMappings = HashBiMap.create(Bukkit.getServer().getMaxPlayers()); //how optimistic about lotcs playercount are you ;) // we have 300 cap we are making it 300 - we do get over 200 during warclaims
 	private final int[] tokens = new int[4];
 	
 	public TeamPacketListener(final BoardManager sboards) {
