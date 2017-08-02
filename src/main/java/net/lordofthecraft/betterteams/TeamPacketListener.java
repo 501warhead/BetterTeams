@@ -44,7 +44,7 @@ public class TeamPacketListener implements Listener
 				if (at == PlayerInfoAction.ADD_PLAYER) {
 					List<PlayerInfoData> pidl = packet.getPlayerInfoDataLists().read(0);
 					pidl = pidl.stream()
-							.map(info -> info.getProfile().getName().length() < 3? info :
+							.map(info -> info.getProfile().getName().length() < 3 ? info :
 									new PlayerInfoData(
 									ArcheGameProfile.rewrap(info.getProfile(), 
 											playerNameMappings.get(info.getProfile().getUUID()),
@@ -52,7 +52,7 @@ public class TeamPacketListener implements Listener
 									info.getLatency(), 
 									info.getGameMode(), 
 									//display name must now be MC name so tab menu looks right
-									WrappedChatComponent.fromText(getColor(info)+info.getProfile().getName())
+									WrappedChatComponent.fromText(Affixes.fromExistingTeams(info.getProfile().getUUID()).getColor().toString()+info.getProfile().getName())
 									//info.getDisplayName()
 									))
 							.collect(Collectors.toList());
@@ -61,12 +61,6 @@ public class TeamPacketListener implements Listener
 				}
 			}
 		});
-	}
-	
-	protected String getColor(PlayerInfoData info) {
-		Affixes a = Affixes.fromExistingTeams(info.getProfile().getUUID());
-		if (a == null || a.getColor() == null) return ChatColor.WHITE.toString();
-		else return a.getColor().toString();
 	}
 
 	public String getPlayerTeamCode(Player player) {

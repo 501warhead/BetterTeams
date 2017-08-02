@@ -46,7 +46,7 @@ public enum GroupColor
                 return c;
             }
         }
-        return null;
+        return GroupColor.NORMAL;
     }
     
     public static GroupColor match(String chatcolors) {
