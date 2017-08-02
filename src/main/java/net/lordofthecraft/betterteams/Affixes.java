@@ -228,5 +228,9 @@ public class Affixes
     		}
     	}
     }
+
+	public String getTabName() {
+		return color.toString()+this.getPlayer().getName();
+	}
     
 }
