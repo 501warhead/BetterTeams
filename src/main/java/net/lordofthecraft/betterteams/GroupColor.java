@@ -15,7 +15,6 @@ public enum GroupColor
     ETLEAD	(String.valueOf(ChatColor.DARK_GREEN) 		+ ChatColor.BOLD, 	"ET-Lead"),
     
     GM		(String.valueOf(ChatColor.BLUE) 			+ ChatColor.BOLD, 	"GM"),
-    GC		(String.valueOf(ChatColor.BLUE), 								"GC"),
     FM		(String.valueOf(ChatColor.RED), 								"FM"),
     AT		(String.valueOf(ChatColor.LIGHT_PURPLE), 						"AT"),
     LT		(String.valueOf(ChatColor.GREEN), 								"LT"),
@@ -47,7 +46,18 @@ public enum GroupColor
                 return c;
             }
         }
-        return null;
+        return GroupColor.NORMAL;
+    }
+    
+    public static GroupColor match(String chatcolors) {
+    	for(GroupColor gc : GroupColor.values()) {
+    		if(gc.color.equals(chatcolors)) return gc;
+    	}
+    	return null;
+    }
+    
+    public boolean isStylized() {
+    	return color.length() == 4;
     }
     
     public String toString() {

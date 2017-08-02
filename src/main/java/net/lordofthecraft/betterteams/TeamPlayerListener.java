@@ -1,24 +1,29 @@
 package net.lordofthecraft.betterteams;
 
-import com.google.common.collect.Maps;
-import net.md_5.bungee.api.ChatColor;
+import java.util.HashMap;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import com.google.common.collect.Maps;
+
+import net.lordofthecraft.arche.event.PersonaCreateEvent;
+import net.lordofthecraft.arche.event.PersonaRenameEvent;
+import net.lordofthecraft.arche.event.PersonaSwitchEvent;
+import net.md_5.bungee.api.ChatColor;
 
 public class TeamPlayerListener implements Listener {
 
@@ -26,7 +31,6 @@ public class TeamPlayerListener implements Listener {
 	private HashMap<UUID, Status> statusCache;
 
 	public TeamPlayerListener(final BoardManager sboards) {
-		super();
 		this.boards = sboards;
 		this.statusCache = Maps.newHashMap();
 	}
@@ -34,27 +38,24 @@ public class TeamPlayerListener implements Listener {
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent e) {
 		final Player p = e.getPlayer();
-		Bukkit.getScheduler().scheduleSyncDelayedTask(BetterTeams.Main, () -> {
-            TeamPlayerListener.this.boards.init(p);
-            if (statusCache.containsKey(p.getUniqueId())) {
-                Bukkit.getScheduler().scheduleSyncDelayedTask(BetterTeams.Main, () -> {
-                    Affixes a = new Affixes(p);
-                    a.setStatus(statusCache.get(p.getUniqueId()));
-                    statusCache.remove(p.getUniqueId());
-                    TeamPlayerListener.this.boards.apply(a);
-                }, 40L);
-            }
-        }, 60L);
+        Status cachedStatus = statusCache.get(p.getUniqueId());
+        BetterTeams.packetListener.newPlayerNameMapping(p);
+        Affixes.onJoin(p, cachedStatus);
+        statusCache.remove(p.getUniqueId());
+        boards.updateHealth(p, p.getHealth());
+
 	}
 
 	@EventHandler
 	public void onQuit(final PlayerQuitEvent e) {
-		Affixes a = new Affixes(e.getPlayer());
+		Affixes a = Affixes.fromExistingTeams(e.getPlayer());
+		
 		if (a.getStatus() != null) {
 			this.statusCache.put(e.getPlayer().getUniqueId(), a.getStatus());
-			System.out.println(e.getPlayer().getName() + " " + a.getStatus().getName());
 		}
+		
 		this.boards.close(e.getPlayer());
+		BetterTeams.packetListener.clearPlayerMapping(e.getPlayer());
 	}
 
 	@EventHandler (priority = EventPriority.LOW)
@@ -71,8 +72,8 @@ public class TeamPlayerListener implements Listener {
 				}
 			}
 			if (p != null) {
-				Affixes pa = new Affixes(p);
-				Affixes ta = new Affixes(t);
+				Affixes pa = Affixes.fromExistingTeams(p);
+				Affixes ta = Affixes.fromExistingTeams(t);
 				if (pa.getStatus() != null && ta.getStatus() != null) {
 					if (pa.getStatus() == ta.getStatus()) {
 						e.setCancelled(true);
@@ -85,7 +86,7 @@ public class TeamPlayerListener implements Listener {
 
 	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
-		Affixes a = new Affixes(e.getEntity());
+		Affixes a = Affixes.fromExistingTeams(e.getEntity());
 		if (a.getStatus() != null) {
 			a.setStatus(null);
 			this.boards.apply(a);
@@ -93,28 +94,49 @@ public class TeamPlayerListener implements Listener {
 		}
 		BetterTeams.Main.statusCooldown.remove(e.getEntity().getUniqueId());
 	}
+	
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void event(final EntityDamageEvent e) {
+		updateHealthLater(e);
+	}
 
-	@EventHandler
-	public void onCommand(PlayerCommandPreprocessEvent e){
-		if(e.getMessage().equalsIgnoreCase("/party status undead")){
-			if(!e.getPlayer().hasPermission("bt.undead")){
-				e.setCancelled(true);
-				e.getPlayer().sendMessage(org.bukkit.ChatColor.DARK_AQUA + "This is not a valid status.");
-			}
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void event(final EntityRegainHealthEvent e) {
+		updateHealthLater(e);
+	}
+	
+	private void updateHealthLater(EntityEvent e) {
+		if(e.getEntityType() == EntityType.PLAYER) {
+			final Player p = (Player) e.getEntity();
+			Bukkit.getScheduler().scheduleSyncDelayedTask(BetterTeams.Main, () -> {
+				double hp = p.getHealth();
+				boards.updateHealth(p, hp);
+	        });
 		}
 	}
 
-	@EventHandler
-	public void onEntityTarget(EntityTargetLivingEntityEvent e){
-		if(e.getTarget() instanceof Player){
-			Player p = (Player) e.getTarget();
-			final Affixes a = new Affixes(p);
-			if(a.getStatus() != null){
-				if(a.getStatus().equals(Status.UNDEAD)){ //ang's event status
-					e.setCancelled(true);
-				}
-			}
-		}
+	
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void event(final PersonaSwitchEvent e) {
+		this.resend(e.getPlayer());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void event(final PersonaRenameEvent e) {
+		this.resend(e.getPlayer());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void event(final PersonaCreateEvent e) {
+		this.resend(e.getPlayer());
+	}
+	
+	private void resend(Player p) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(BetterTeams.Main, () -> {
+			Affixes a = Affixes.fromExistingTeams(p);
+			boards.apply(a);
+        }); //This delay is necessary
 
 	}
+
 }

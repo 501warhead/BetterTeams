@@ -1,53 +1,62 @@
 package net.lordofthecraft.betterteams;
 
-import com.google.common.collect.Lists;
-import net.lordofthecraft.arche.ArcheCore;
-import net.lordofthecraft.arche.interfaces.Persona;
-import net.lordofthecraft.arche.interfaces.PersonaHandler;
-import org.apache.commons.lang.StringUtils;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.Team.Option;
 
-import java.util.List;
+import com.google.common.collect.Lists;
 
 public class BoardManager
-{
+{	
     private final ScoreboardManager manager;
-    private final PersonaHandler handler;
     private final Scoreboard[] boards;
     
     BoardManager() {
-        super();
+    	
         this.manager = Bukkit.getScoreboardManager();
-        this.handler = ArcheCore.getControls().getPersonaHandler();
-        this.boards = new Scoreboard[4];
+        this.boards = new Scoreboard[5];
+        
         for (int i = 0; i < this.boards.length; ++i) {
             this.boards[i] = this.manager.getNewScoreboard();
             if (i == 1 || i == 3) {
-                final Objective o = this.boards[i].registerNewObjective("showhealth", "health");
+                final Objective o = this.boards[i].registerNewObjective("showhealth", "dummy");
                 o.setDisplaySlot(DisplaySlot.BELOW_NAME);
                 o.setDisplayName(ChatColor.DARK_RED + "\u2764");
             }
+            
+            //Bit for TownCandy npcs which have name ChatColor.BOLD
+            Team x = boards[i].registerNewTeam("towncandy_npc"); //issues if a player "towncandy_npc" shows up
+            x.setOption(Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
+            x.addEntry(""+ChatColor.BOLD);
         }
     }
     
-    public void init(final Player p) {
-        p.setScoreboard(this.boards[0]);
-        final GroupColor color = GroupColor.getHighest(p);
-        final Persona ps = this.handler.getPersona(p);
-        final String name = (ps == null) ? null : ((/*ps.getName()*/p.getName().length() <= 16) ? null : ((/*ps.getName()*/p.getName().length() > 20) ? (String.valueOf(/*ps.getName()*/p.getName().substring(16, 20)) + "\u2026") : /*ps.getName()*/p.getName().substring(16, /*ps.getName()*/p.getName().length())));
-        if (color != null || name != null) {
-            this.createTeams(p, (color == null) ? "" : color.toString(), name);
-        }
+    public boolean boardShowsHealth(Scoreboard board) {
+    	return (board == boards[1] || board == boards[3]);
+    }
+    
+    public boolean boardShowsRPNames(Scoreboard board) {
+    	return (board == boards[0] || board == boards[1]);
+    }
+    
+    public boolean boardShowsNameplates(Scoreboard board) {
+    	return (board != boards[4]);
     }
     
     public List<Player> getStatusedPlayers(Status st) {
     	List<Player> players = Lists.newArrayList();
     	Affixes status;
     	for (Player pl : Bukkit.getOnlinePlayers()) {
-    		status = new Affixes(pl);
+    		status = Affixes.fromExistingTeams(pl);
             if (status.getStatus() == st) {
                 players.add(pl);
             }
@@ -58,8 +67,8 @@ public class BoardManager
     public void close(final Player p) {
         if (this.isGhosting(p)) {
             this.removeGhost(p);
-            return;
         }
+        
         final String name = p.getName();
         for (Scoreboard board : this.boards) {
             final Team t = board.getTeam(name);
@@ -70,91 +79,131 @@ public class BoardManager
     }
     
     public void unregister() {
-        Scoreboard[] boards;
-        for (int length = (boards = this.boards).length, i = 0; i < length; ++i) {
-            final Scoreboard s = boards[i];
-            for (final Team t : s.getTeams()) {
-                t.unregister();
-            }
-        }
+    	for(Scoreboard board : boards) {
+    		board.getTeams().stream().forEach(t -> t.unregister());
+    	}
     }
     
-    public boolean hasTeam(final Player p) {
-        return p.getScoreboard().getTeam(p.getName()) != null;
-    }
-    
-    @SuppressWarnings("deprecation")
 	public boolean isGhosting(final Player p) {
-        final Team t = p.getScoreboard().getPlayerTeam(p);
-        return t != null && (t.getSize() > 1 && !t.getName().equals(p.getName()));
+    	//Is player ghosting (appearing ethereal to) another player?
+    	//Answer is YES if player is NOT in its own team
+        final Team t = p.getScoreboard().getTeam(p.getName()); //This is the player's team
+        String myTeamCode = BetterTeams.packetListener.getPlayerTeamCode(p);
+        for(String entry : t.getEntries()) {
+        	if(entry.equals(myTeamCode)) return false; //player is in its home team
+        }
+        
+        return true; //not in its home team
     }
     
-    @SuppressWarnings("deprecation")
 	public boolean isGhosted(final Player p) {
-        final Team t = p.getScoreboard().getPlayerTeam(p);
-        return t != null && (t.getSize() > 1 && t.getName().equals(p.getName()));
+    	//Is player being visited by >=1 ghost
+    	//Answer is YES if another faux-player is in the team of the player
+        final Team t = p.getScoreboard().getTeam(p.getName()); //This is the player's team
+        String myTeamCode = BetterTeams.packetListener.getPlayerTeamCode(p);
+        for(String entry : t.getEntries()) {
+        	if(entry.endsWith(ChatColor.RESET.toString()) && !entry.equals(myTeamCode)){
+        		return true;
+        	}
+        }
+        
+        return false;
     }
     
-    public void toggleShowingHealth(final Player p) {
+    public boolean toggleShowingHealth(final Player p) {
         final Scoreboard b = p.getScoreboard();
         if (b == this.boards[0]) {
             p.setScoreboard(this.boards[1]);
+            return true;
         }
         else if (b == this.boards[1]) {
             p.setScoreboard(this.boards[0]);
+            return false;
         }
         else if (b == this.boards[3]) {
             p.setScoreboard(this.boards[2]);
+            return false;
         }
         else if (b == this.boards[2]) {
             p.setScoreboard(this.boards[3]);
+            return true;
         }
+        else if (b == this.boards[4]) {
+            p.setScoreboard(this.boards[1]);
+            return true;
+        }
+        
+        throw new ArrayIndexOutOfBoundsException("More than 5 scoreboards in BetterTeams");
     }
     
-    public boolean isShowingHealth(final Player p) {
+    public boolean toggleShowingRPNames(final Player p) {
         final Scoreboard b = p.getScoreboard();
-        return b == this.boards[1] || b == this.boards[3];
+        if (b == this.boards[0]) {
+            p.setScoreboard(this.boards[2]);
+            return false;
+        }
+        else if (b == this.boards[1]) {
+            p.setScoreboard(this.boards[3]);
+            return false;
+        }
+        else if (b == this.boards[3]) {
+            p.setScoreboard(this.boards[1]);
+            return true;
+        }
+        else if (b == this.boards[2]) {
+            p.setScoreboard(this.boards[0]);
+            return true;
+        }
+        else if (b == this.boards[4]) {
+        	p.setScoreboard(this.boards[0]);
+        	return true;
+        }
+        
+        throw new ArrayIndexOutOfBoundsException("More than 5 scoreboards in BetterTeams");
     }
     
-    public void apply(final Affixes a) {
-        final Player p = a.getPlayer();
-        final Scoreboard b = this.boards[(a.isSeeingMinecraftNames() ? 2 : 0) + (a.isShowingHealth() ? 1 : 0)];
-        if (b != p.getScoreboard()) {
-            p.setScoreboard(b);
-        }
-        final String suffix = a.getSuffix();
-        final String prefix = a.getPrefix();
-        if (StringUtils.isEmpty(suffix) && StringUtils.isEmpty(prefix)) {
-            this.deleteTeams(p);
-        }
-        else {
-            this.createTeams(p, prefix, suffix);
-        }
+    public boolean toggleHideNameplates(final Player p) {
+    	 final Scoreboard b = p.getScoreboard();
+         if (b == this.boards[4]) { //no longer hiding nameplates
+             p.setScoreboard(this.boards[0]); //RP names, no health
+             return false;  
+         } else { //now hiding nameplates
+             p.setScoreboard(this.boards[4]); //Nameplates hidden
+             return true;
+         }
     }
     
-    @SuppressWarnings("deprecation")
-	void createTeams(final Player p, String prefix, String suffix) {
-        final String name = p.getName();
-        if (suffix == null) {
-            suffix = "";
-        }
-        if (prefix == null) {
-            prefix = "";
-        }
-        for (int i = 0; i < this.boards.length; ++i) {
-            Team t = this.boards[i].getTeam(name);
-            if (t == null) {
-                t = this.boards[i].registerNewTeam(name);
-                t.addPlayer(p);
-            }
-            if (i > 1) {
-                t.setPrefix(String.valueOf(prefix) + ChatColor.ITALIC);
-            }
-            else {
-                t.setPrefix(prefix);
-                t.setSuffix(suffix);
-            }
-        }
+    
+    public void apply(Affixes a){
+    	a.apply(this.boards);
+    }
+    
+    
+	void createTeams(Affixes a) {
+    	Player p = a.getPlayer();
+    	for(Scoreboard board : boards) {
+    		Team t = board.getTeam(p.getName());
+    		if ( t != null)BetterTeams.Main.getLogger().warning("Player Teams already existed for nascent player:" + p.getName());
+    		else t = board.registerNewTeam(p.getName());
+    		t.addEntry(p.getName()); //This lets the player's client know which team they're supposed to be on
+    		
+    		t.setOption(Option.NAME_TAG_VISIBILITY, boardShowsNameplates(board)?
+    				Team.OptionStatus.FOR_OWN_TEAM :
+    				Team.OptionStatus.NEVER	
+    				);
+    		
+    		if(this.boardShowsRPNames(board)) {
+    			t.setPrefix(a.getPrefixRP());
+    			t.setSuffix(a.getSuffixRP());
+    		} else {
+    			t.setPrefix(a.getPrefixMC());
+    			t.setSuffix(a.getSuffixMC());
+    		}
+    		
+    		t.addEntry(BetterTeams.packetListener.getPlayerTeamCode(p));
+    	}
+    	
+    	p.setScoreboard(boards[0]);
     }
     
     void deleteTeams(final Player p) {
@@ -167,41 +216,36 @@ public class BoardManager
         }
     }
     
-    @SuppressWarnings("deprecation")
 	public void addGhost(final Player c, final Player o) {
-        Scoreboard[] boards;
-        for (int length = (boards = this.boards).length, i = 0; i < length; ++i) {
-            final Scoreboard s = boards[i];
-            Team t = s.getTeam(o.getName());
-            if (t == null) {
-                t = s.registerNewTeam(o.getName());
-                t.addPlayer(o);
-            }
-            t.addPlayer(c);
-            t.setCanSeeFriendlyInvisibles(true);
-        }
+    	String ghostsTeamCode = BetterTeams.packetListener.getPlayerTeamCode(c);
+    	for (Scoreboard board :  boards) {
+    		Team target = board.getTeam(o.getName());
+    		target.addEntry(ghostsTeamCode);
+    		target.setCanSeeFriendlyInvisibles(true);
+    	}
+    }
+
+	public void removeGhost(final Player p) {
+    	//Assume the player's home teams still exist
+    	//So just add them back to these ones
+    	String myTeamCode = BetterTeams.packetListener.getPlayerTeamCode(p);
+    	for(Scoreboard board : boards) {
+    		Team original = board.getEntryTeam(myTeamCode);
+    		original.setCanSeeFriendlyInvisibles(false);
+    		Team target = board.getTeam(p.getName());
+    		target.addEntry(myTeamCode); //This should also remove them from team 'original'
+    	}
     }
     
-    @SuppressWarnings("deprecation")
-	public void removeGhost(final Player p) {
-        Scoreboard[] boards;
-        for (int length = (boards = this.boards).length, i = 0; i < length; ++i) {
-            final Scoreboard s = boards[i];
-            final Team t = s.getPlayerTeam(p);
-            if (t != null) {
-                t.removePlayer(p);
-                if (t.getSize() == 0) {
-                    t.unregister();
-                }
-                else if (t.getSize() == 1) {
-                    if (StringUtils.isEmpty(t.getPrefix()) && StringUtils.isEmpty(t.getSuffix())) {
-                        t.unregister();
-                    }
-                    else {
-                        t.setCanSeeFriendlyInvisibles(false);
-                    }
-                }
-            }
-        }
+    public void updateHealth(Player p, double health) {
+    	int intHP = (int) Math.ceil(health);
+    	for(Scoreboard board : boards) {
+    		if( this.boardShowsHealth(board) ){
+    			String playerCode = BetterTeams.packetListener.getPlayerTeamCode(p);
+    			Objective o = board.getObjective(DisplaySlot.BELOW_NAME);
+    			Score score = o.getScore(playerCode);
+    			score.setScore(intHP);
+    		}
+    	}
     }
 }
