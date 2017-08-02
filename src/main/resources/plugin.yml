@@ -15,7 +15,7 @@ commands:
     description: Toggle between the showing of MC Names or RP names
     permission: betterteams.showrpnames
     usage: Invalid usage. Use /showrpnames
-    aliases: [usernames, showusernames, showmcnames, showroleplaynames, showminecraftnames, toggleusernames, togglemcnames, mcnames, mcn, rpn]
+    aliases: [usernames, showusernames, showmcnames, showroleplaynames, showminecraftnames, toggleusernames, togglemcnames, mcnames, rpnames mcn, rpn]
   hidenameplates:
     description: Hide the nameplates of other players
     permission: betterteams.hidenameplates

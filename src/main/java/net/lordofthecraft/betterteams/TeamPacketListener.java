@@ -52,7 +52,7 @@ public class TeamPacketListener implements Listener
 									info.getLatency(), 
 									info.getGameMode(), 
 									//display name must now be MC name so tab menu looks right
-									WrappedChatComponent.fromText((Affixes.fromExistingTeams(info.getProfile().getUUID()) != null ? Affixes.fromExistingTeams(info.getProfile().getUUID()).getColor().toString() : "")+info.getProfile().getName())
+									WrappedChatComponent.fromText(getColor(info)+info.getProfile().getName())
 									//info.getDisplayName()
 									))
 							.collect(Collectors.toList());
@@ -63,6 +63,12 @@ public class TeamPacketListener implements Listener
 		});
 	}
 	
+	protected String getColor(PlayerInfoData info) {
+		Affixes a = Affixes.fromExistingTeams(info.getProfile().getUUID());
+		if (a == null || a.getColor() == null) return ChatColor.WHITE.toString();
+		else return a.getColor().toString();
+	}
+
 	public String getPlayerTeamCode(Player player) {
 		return playerNameMappings.get(player.getUniqueId());
 	}
