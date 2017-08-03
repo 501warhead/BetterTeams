@@ -307,7 +307,8 @@ public class TeamCommandHandler implements CommandExecutor
 					p.sendRawMessage("Prefix MC: " + aff.getPrefixMC());
 					p.sendRawMessage("Suffix MC: " + aff.getSuffixMC());
 					p.sendRawMessage("Prefix RP: " + aff.getPrefixRP());
-					p.sendRawMessage("Prefix RP: " + aff.getSuffixRP());					
+					p.sendRawMessage("Prefix RP: " + aff.getSuffixRP());
+					p.sendRawMessage("Name Mapping: " + BetterTeams.packetListener.getPlayerTeamCode(aff.getPlayer()));	
 					p.sendRawMessage("Bukkit Custom: " + aff.getPlayer().getCustomName());
 					p.sendRawMessage("Bukkit Display: " + aff.getPlayer().getDisplayName());
 					p.sendRawMessage("Bukkit List: " + aff.getPlayer().getPlayerListName());
