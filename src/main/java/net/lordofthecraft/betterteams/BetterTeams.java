@@ -45,6 +45,7 @@ public class BetterTeams extends JavaPlugin {
         this.getCommand("tagcolor").setExecutor(handler);
         this.getCommand("showrpnames").setExecutor(handler);
         this.getCommand("hidenameplates").setExecutor(handler);
+        this.getCommand("affixes").setExecutor(handler);
         
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
             for (Player p : Bukkit.getOnlinePlayers()) {

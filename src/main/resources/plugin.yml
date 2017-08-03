@@ -38,4 +38,4 @@ commands:
     description: Shows the health of each player below their name.
     permission: betterteams.affixes
     usage: Invalid usage. Use /affixes <player>
-    aliases: [aff]
+    aliases: [aff, affix]
