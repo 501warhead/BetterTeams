@@ -97,8 +97,8 @@ public class Affixes
     	if(namepart.length() > 12) {
     		namepart = namepart.substring(namepart.length()-12, namepart.length());
     	}
-    	if(color != null && !color.isStylized()) suffix_mc = colorPart + ChatColor.ITALIC + namepart;
-    	else suffix_mc = colorPart + namepart;
+    	//if(color != null && !color.isStylized()) suffix_mc = colorPart + ChatColor.ITALIC + namepart; else //It's hard to read
+    	suffix_mc = colorPart + namepart;
     	
     	
     	//RP Name part
@@ -138,7 +138,8 @@ public class Affixes
     				(hasColor? color.toString() : "");
     	
     	//MC Part
-    	prefix_mc = hasColor && color.isStylized()? prefix : prefix + ChatColor.ITALIC;
+    	prefix_mc = prefix;
+    	//prefix_mc = hasColor && color.isStylized()? prefix : prefix + ChatColor.ITALIC;
     	String playerName = player.getName();
     	if(playerName.length() > 12) {
     		prefix_mc += playerName.substring(0,playerName.length()-12);

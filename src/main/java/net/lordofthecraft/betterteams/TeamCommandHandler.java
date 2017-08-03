@@ -292,6 +292,28 @@ public class TeamCommandHandler implements CommandExecutor
 				}
 				return true;
 			}
+			
+			if (cmd.getName().equalsIgnoreCase("affixes")) {
+				if (args.length == 0) {
+					return false;
+				}
+				final Player target = Bukkit.getServer().getPlayer(args[0]);
+				if (target != null) {
+					Affixes aff = Affixes.fromExistingTeams(target);
+					p.sendRawMessage("Name: " + aff.getPlayer().getName());
+					p.sendRawMessage("Color: " + aff.getColor().toString());
+					p.sendRawMessage("Tab Name: " + aff.getTabName());
+					p.sendRawMessage("Status: " + aff.getStatus().toString());
+					p.sendRawMessage("Prefix MC: " + aff.getPrefixMC());
+					p.sendRawMessage("Suffix MC: " + aff.getSuffixMC());
+					p.sendRawMessage("Prefix RP: " + aff.getPrefixRP());
+					p.sendRawMessage("Prefix RP: " + aff.getSuffixRP());					
+					p.sendRawMessage("Bukkit Custom: " + aff.getPlayer().getCustomName());
+					p.sendRawMessage("Bukkit Display: " + aff.getPlayer().getDisplayName());
+					p.sendRawMessage("Bukkit List: " + aff.getPlayer().getPlayerListName());
+				}
+				
+			}
 		}
 		return false;
 	}

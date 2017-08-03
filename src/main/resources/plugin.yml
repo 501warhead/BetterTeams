@@ -34,3 +34,8 @@ commands:
     permission: betterteams.tagcolor
     usage: Invalid usage. Accepted arguments are 'on', 'off' or '[groupname]'.
     aliases: [tag]
+  affixes:
+    description: Shows the health of each player below their name.
+    permission: betterteams.affixes
+    usage: Invalid usage. Use /affixes <player>
+    aliases: [aff]
