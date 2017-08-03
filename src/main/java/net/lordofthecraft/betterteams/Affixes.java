@@ -34,7 +34,7 @@ public class Affixes
     
     
     private Status status;
-    private GroupColor color;
+    private GroupColor color = GroupColor.NORMAL;
     
     public static Affixes onJoin(Player p, Status cached) {
     	//Player just joined. Have no teams. Find out what
@@ -180,7 +180,7 @@ public class Affixes
     private GroupColor parseGroupColor(){
     	String prefix = prefix_mc;
     	final int offset = parseHasStatus()? 8 : 0;
-    	if(prefix == null || prefix.length() == offset) return null;
+    	if(prefix == null || prefix.length() == offset) return GroupColor.NORMAL;
     	final String colorCode = prefix.substring(offset, offset + 
     		((prefix.length() > offset + 3 && prefix.charAt(offset + 2) == ChatColor.COLOR_CHAR)? 4 : 2));
     	color = GroupColor.match(colorCode);
