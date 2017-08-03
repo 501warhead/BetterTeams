@@ -300,18 +300,19 @@ public class TeamCommandHandler implements CommandExecutor
 				final Player target = Bukkit.getServer().getPlayer(args[0]);
 				if (target != null) {
 					Affixes aff = Affixes.fromExistingTeams(target);
-					p.sendRawMessage("Name: " + aff.getPlayer().getName());
-					p.sendRawMessage("Color: " + aff.getColor() == null ? "null" : aff.getColor().toString());
-					p.sendRawMessage("Tab Name: " + aff.getTabName());
-					p.sendRawMessage("Status: " + aff.getStatus() == null ? "null" : aff.getStatus().toString());
-					p.sendRawMessage("Prefix MC: " + aff.getPrefixMC());
-					p.sendRawMessage("Suffix MC: " + aff.getSuffixMC());
-					p.sendRawMessage("Prefix RP: " + aff.getPrefixRP());
-					p.sendRawMessage("Prefix RP: " + aff.getSuffixRP());
-					p.sendRawMessage("Name Mapping: " + BetterTeams.packetListener.getPlayerTeamCode(aff.getPlayer()));	
-					p.sendRawMessage("Bukkit Custom: " + aff.getPlayer().getCustomName());
-					p.sendRawMessage("Bukkit Display: " + aff.getPlayer().getDisplayName());
-					p.sendRawMessage("Bukkit List: " + aff.getPlayer().getPlayerListName());
+					p.sendMessage("Name: " + aff.getPlayer().getName());
+					p.sendMessage("Color: " + aff.getColor() == null ? "null" : aff.getColor().toString());
+					p.sendMessage("Tab Name: " + aff.getTabName());
+					p.sendMessage("Status: " + aff.getStatus() == null ? "null" : aff.getStatus().toString());
+					p.sendMessage("Prefix MC: " + aff.getPrefixMC());
+					p.sendMessage("Suffix MC: " + aff.getSuffixMC());
+					p.sendMessage("Prefix RP: " + aff.getPrefixRP());
+					p.sendMessage("Prefix RP: " + aff.getSuffixRP());
+					p.sendMessage("Name Mapping: " + BetterTeams.packetListener.getPlayerTeamCode(aff.getPlayer()));	
+					p.sendMessage("Bukkit Custom: " + aff.getPlayer().getCustomName());
+					p.sendMessage("Bukkit Display: " + aff.getPlayer().getDisplayName());
+					p.sendMessage("Bukkit List: " + aff.getPlayer().getPlayerListName());
+					return true;
 				}
 				
 			}
