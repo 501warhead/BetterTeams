@@ -301,9 +301,9 @@ public class TeamCommandHandler implements CommandExecutor
 				if (target != null) {
 					Affixes aff = Affixes.fromExistingTeams(target);
 					p.sendRawMessage("Name: " + aff.getPlayer().getName());
-					p.sendRawMessage("Color: " + aff.getColor().toString());
+					p.sendRawMessage("Color: " + aff.getColor() == null ? "null" : aff.getColor().toString());
 					p.sendRawMessage("Tab Name: " + aff.getTabName());
-					p.sendRawMessage("Status: " + aff.getStatus().toString());
+					p.sendRawMessage("Status: " + aff.getStatus() == null ? "null" : aff.getStatus().toString());
 					p.sendRawMessage("Prefix MC: " + aff.getPrefixMC());
 					p.sendRawMessage("Suffix MC: " + aff.getSuffixMC());
 					p.sendRawMessage("Prefix RP: " + aff.getPrefixRP());
