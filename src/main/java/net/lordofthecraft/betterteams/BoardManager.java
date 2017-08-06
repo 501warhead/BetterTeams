@@ -231,7 +231,7 @@ public class BoardManager
     	String myTeamCode = BetterTeams.packetListener.getPlayerTeamCode(p);
     	for(Scoreboard board : boards) {
     		Team original = board.getEntryTeam(myTeamCode);
-    		original.setCanSeeFriendlyInvisibles(false);
+    		if(original != null) original.setCanSeeFriendlyInvisibles(false);
     		Team target = board.getTeam(p.getName());
     		target.addEntry(myTeamCode); //This should also remove them from team 'original'
     	}

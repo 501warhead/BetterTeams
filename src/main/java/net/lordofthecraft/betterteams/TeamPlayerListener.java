@@ -38,9 +38,11 @@ public class TeamPlayerListener implements Listener {
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent e) {
 		final Player p = e.getPlayer();
+		
         Status cachedStatus = statusCache.get(p.getUniqueId());
         BetterTeams.packetListener.newPlayerNameMapping(p);
-        Affixes.onJoin(p, cachedStatus);
+        Affixes aff = Affixes.onJoin(p, cachedStatus);
+        p.setPlayerListName(aff.getTabName());
         statusCache.remove(p.getUniqueId());
         boards.updateHealth(p, p.getHealth());
 

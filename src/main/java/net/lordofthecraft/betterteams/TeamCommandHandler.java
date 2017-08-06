@@ -105,6 +105,7 @@ public class TeamCommandHandler implements CommandExecutor
 						p.sendMessage(ChatColor.AQUA + "Set your tag color to your highest possible status.");
 						a.setGroupColor(col);
 						this.boards.apply(a);
+						p.setPlayerListName(a.getTabName());
 					}
 				}
 				else if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("clear")) {
@@ -114,6 +115,7 @@ public class TeamCommandHandler implements CommandExecutor
 					else {
 						a.setGroupColor(GroupColor.NORMAL);
 						this.boards.apply(a);
+						p.setPlayerListName(a.getTabName());
 						p.sendMessage(ChatColor.AQUA + "Removed your colored tag successfully.");
 					}
 				}
@@ -126,6 +128,7 @@ public class TeamCommandHandler implements CommandExecutor
 							if (c != a.getColor()) {
 								a.setGroupColor(c);
 								this.boards.apply(a);
+								p.setPlayerListName(a.getTabName());
 							}
 						}
 					}
@@ -242,8 +245,7 @@ public class TeamCommandHandler implements CommandExecutor
 				}
 				p.sendMessage(ChatColor.AQUA + "You dissappear into thin air, perpetuating the mystery.");
 				return true;
-			}
-			if (args.length == 1) {
+			}else if (args.length == 1) {
 				final Player target = Bukkit.getServer().getPlayer(args[0]);
 				if (target != null && target.getLocation().getWorld() == p.getLocation().getWorld() && target.getLocation().distance(p.getLocation()) <= 90.0) {
 					p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 24000, 5, true), true);
