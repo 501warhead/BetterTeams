@@ -12,12 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-
-import net.lordofthecraft.arche.ArcheCore;
-import net.lordofthecraft.arche.interfaces.PersonaHandler;
-
 public class TeamCommandHandler implements CommandExecutor
 {
 	private final BoardManager boards;
@@ -115,8 +109,12 @@ public class TeamCommandHandler implements CommandExecutor
 					else {
 						a.setGroupColor(GroupColor.NORMAL);
 						this.boards.apply(a);
-						p.setPlayerListName(a.getTabName());
 						p.sendMessage(ChatColor.AQUA + "Removed your colored tag successfully.");
+						//The chatcolor WHITE is required. There MUST be additional characters
+						//Theory is: if playerListName is set to MC name, Bukkit instead instructs
+						//to send a UPDATE_DISPLAY_NAME: remove (hasDisplayName = false) packet, so
+						//it reverts to the team name, which might be your RP name and not your MC name
+						p.setPlayerListName(ChatColor.WHITE + p.getName());
 					}
 				}
 				else if (sender.hasPermission("betterteams.tag." + args[0].toLowerCase())) {

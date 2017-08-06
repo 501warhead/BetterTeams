@@ -43,6 +43,7 @@ public class TeamPlayerListener implements Listener {
         BetterTeams.packetListener.newPlayerNameMapping(p);
         Affixes aff = Affixes.onJoin(p, cachedStatus);
         p.setPlayerListName(aff.getTabName());
+        //aff.setGroupColor(aff.getColor());
         statusCache.remove(p.getUniqueId());
         boards.updateHealth(p, p.getHealth());
 
