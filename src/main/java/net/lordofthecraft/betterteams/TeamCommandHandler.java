@@ -99,7 +99,7 @@ public class TeamCommandHandler implements CommandExecutor
 						p.sendMessage(ChatColor.AQUA + "Set your tag color to your highest possible status.");
 						a.setGroupColor(col);
 						this.boards.apply(a);
-						p.setPlayerListName(a.getTabName());
+						BetterTeams.packetListener.updateDisplayName(a.getColor(), p.getUniqueId(), p.getName());
 					}
 				}
 				else if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("clear")) {
@@ -110,11 +110,7 @@ public class TeamCommandHandler implements CommandExecutor
 						a.setGroupColor(GroupColor.NORMAL);
 						this.boards.apply(a);
 						p.sendMessage(ChatColor.AQUA + "Removed your colored tag successfully.");
-						//The chatcolor WHITE is required. There MUST be additional characters
-						//Theory is: if playerListName is set to MC name, Bukkit instead instructs
-						//to send a UPDATE_DISPLAY_NAME: remove (hasDisplayName = false) packet, so
-						//it reverts to the team name, which might be your RP name and not your MC name
-						p.setPlayerListName(ChatColor.WHITE + p.getName());
+						BetterTeams.packetListener.updateDisplayName(a.getColor(), p.getUniqueId(), p.getName());
 					}
 				}
 				else if (sender.hasPermission("betterteams.tag." + args[0].toLowerCase())) {
@@ -126,7 +122,7 @@ public class TeamCommandHandler implements CommandExecutor
 							if (c != a.getColor()) {
 								a.setGroupColor(c);
 								this.boards.apply(a);
-								p.setPlayerListName(a.getTabName());
+								BetterTeams.packetListener.updateDisplayName(c, p.getUniqueId(), p.getName());
 							}
 						}
 					}

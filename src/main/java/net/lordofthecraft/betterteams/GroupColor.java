@@ -56,6 +56,15 @@ public enum GroupColor
     	return GroupColor.NORMAL;
     }
     
+    public ChatColor getPrimaryColor() {
+    	return ChatColor.getByChar(color.charAt(1));
+    }
+    
+    public ChatColor getStyleColor() {
+    	if(color.length() == 4) return ChatColor.getByChar(color.charAt(3));
+    	return null;
+    }
+    
     public boolean isStylized() {
     	return color.length() == 4;
     }

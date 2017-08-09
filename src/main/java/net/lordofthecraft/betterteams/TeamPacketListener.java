@@ -1,4 +1,5 @@
 package net.lordofthecraft.betterteams;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -14,8 +15,11 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.google.common.collect.HashBiMap;
 
 import net.md_5.bungee.api.ChatColor;
@@ -49,8 +53,8 @@ public class TeamPacketListener implements Listener
 											playerNameMappings.get(info.getProfile().getUUID()),
 											info.getProfile().getUUID()), 
 									info.getLatency(), 
-									info.getGameMode(), 
-									info.getDisplayName()
+									info.getGameMode(),
+									WrappedChatComponent.fromText(getColor(info) + info.getProfile().getName())
 									))
 							.collect(Collectors.toList());
 
@@ -58,6 +62,24 @@ public class TeamPacketListener implements Listener
 				}
 			}
 		});
+	}
+	
+	public void updateDisplayName(GroupColor gc, UUID uuid, String mcname) {
+		String displayName = gc + mcname;
+		
+		PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.PLAYER_INFO);
+		packet.getPlayerInfoAction().write(0, PlayerInfoAction.UPDATE_DISPLAY_NAME);
+		PlayerInfoData pid = new PlayerInfoData(new WrappedGameProfile(uuid, mcname), 0, NativeGameMode.NOT_SET, WrappedChatComponent.fromText(displayName));
+		
+		packet.getPlayerInfoDataLists().write(0, Collections.singletonList(pid));
+		
+		ProtocolLibrary.getProtocolManager().broadcastServerPacket(packet);
+	}
+	
+	protected String getColor(PlayerInfoData info) {
+		Affixes a = Affixes.fromExistingTeams(info.getProfile().getUUID());
+		if (a == null || a.getColor() == null) return ChatColor.WHITE.toString();
+		else return a.getColor().toString();
 	}
 
 	public String getPlayerTeamCode(Player player) {

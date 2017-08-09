@@ -34,19 +34,24 @@ public class TeamPlayerListener implements Listener {
 		this.boards = sboards;
 		this.statusCache = Maps.newHashMap();
 	}
-
+	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent e) {
 		final Player p = e.getPlayer();
-		
         Status cachedStatus = statusCache.get(p.getUniqueId());
         BetterTeams.packetListener.newPlayerNameMapping(p);
-        Affixes aff = Affixes.onJoin(p, cachedStatus);
-        p.setPlayerListName(aff.getTabName());
-        //aff.setGroupColor(aff.getColor());
+        Affixes a = Affixes.onJoin(p, cachedStatus);
         statusCache.remove(p.getUniqueId());
         boards.updateHealth(p, p.getHealth());
-
+        if(a.getColor() != GroupColor.NORMAL) {
+        	final TeamPacketListener ll = BetterTeams.packetListener;
+        	final String mcname = p.getName();
+        	final UUID uuid = p.getUniqueId();
+        	Bukkit.getScheduler().scheduleAsyncDelayedTask(BetterTeams.getMain(), 
+        			()->ll.updateDisplayName(a.getColor(), uuid, mcname), 60L);
+        	
+        }
 	}
 
 	@EventHandler
