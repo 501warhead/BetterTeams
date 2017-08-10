@@ -59,6 +59,7 @@ public class Affixes
     	
     	Team t = p.getScoreboard().getTeam(p.getName());
     	//Player has status and tag colors in all teams
+    	if(t == null) return null;
     	a.prefix_mc = t.getPrefix();
     	
         a.parseStatus();
