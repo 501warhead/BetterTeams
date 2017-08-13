@@ -43,6 +43,7 @@ public class TeamPlayerListener implements Listener {
         Affixes a = Affixes.onJoin(p, cachedStatus);
         statusCache.remove(p.getUniqueId());
         boards.updateHealth(p, p.getHealth());
+        p.setPlayerListName(a.getTabName());
 	}
 
 	@EventHandler

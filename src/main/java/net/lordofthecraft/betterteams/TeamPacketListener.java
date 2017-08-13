@@ -27,13 +27,13 @@ public class TeamPacketListener implements Listener
 	//Purpose: Set MC name to string of color codes
 	//Name is reinserted with the team prefixes/suffixes
 	//Why?  Because why not :D
-	private final Plugin plugin;
+	private final BetterTeams plugin;
 	
-	private final Map<UUID, String> playerNameMappings = HashBiMap.create(Bukkit.getServer().getMaxPlayers()); //how optimistic about lotcs playercount are you ;) // we have 300 cap we are making it 300 - we do get over 200 during warclaims
+	private final Map<UUID, String> playerNameMappings = HashBiMap.create(200); 
 	private final int[] tokens = new int[4];
 	
 	public TeamPacketListener(final BoardManager sboards) {
-		this.plugin = (Plugin)BetterTeams.Main;
+		this.plugin = BetterTeams.Main;
 		
 		ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this.plugin, PacketType.Play.Server.PLAYER_INFO) {
 			public void onPacketSending(final PacketEvent event) {
@@ -46,7 +46,7 @@ public class TeamPacketListener implements Listener
 					
 					//This fixes a vanish conflict with players logging off while already unregistered
 					//Vanish sends this packet before logging a player off, which causes crashes
-					if(pidl.size() == 1 && Affixes.fromExistingTeams(pidl.get(0).getProfile().getUUID()) == null)
+					if(pidl.size() == 1 && !BetterTeams.Main.getBoardManager().hasTeam(pidl.get(0).getProfile().getName()))
 						return;
 					
 					pidl = pidl.stream()
@@ -57,7 +57,7 @@ public class TeamPacketListener implements Listener
 											info.getProfile().getUUID()), 
 									info.getLatency(), 
 									info.getGameMode(),
-									WrappedChatComponent.fromText(getColor(info) + info.getProfile().getName())
+									info.getDisplayName()
 									))
 							.collect(Collectors.toList());
 

@@ -40,6 +40,10 @@ public class BoardManager
         }
     }
     
+    public boolean hasTeam(String playerName) {
+    	return boards[0].getTeam(playerName) != null; //Can be any of the 5 boards
+    }
+    
     public boolean boardShowsHealth(Scoreboard board) {
     	return (board == boards[1] || board == boards[3]);
     }
