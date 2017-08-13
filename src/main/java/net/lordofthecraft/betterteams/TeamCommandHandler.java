@@ -99,7 +99,7 @@ public class TeamCommandHandler implements CommandExecutor
 						p.sendMessage(ChatColor.AQUA + "Set your tag color to your highest possible status.");
 						a.setGroupColor(col);
 						this.boards.apply(a);
-						BetterTeams.packetListener.updateDisplayName(a.getColor(), p.getUniqueId(), p.getName());
+						p.setPlayerListName(a.getTabName());
 					}
 				}
 				else if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("clear")) {
@@ -110,7 +110,7 @@ public class TeamCommandHandler implements CommandExecutor
 						a.setGroupColor(GroupColor.NORMAL);
 						this.boards.apply(a);
 						p.sendMessage(ChatColor.AQUA + "Removed your colored tag successfully.");
-						BetterTeams.packetListener.updateDisplayName(a.getColor(), p.getUniqueId(), p.getName());
+						p.setPlayerListName(a.getTabName());
 					}
 				}
 				else if (sender.hasPermission("betterteams.tag." + args[0].toLowerCase())) {
@@ -122,7 +122,7 @@ public class TeamCommandHandler implements CommandExecutor
 							if (c != a.getColor()) {
 								a.setGroupColor(c);
 								this.boards.apply(a);
-								BetterTeams.packetListener.updateDisplayName(c, p.getUniqueId(), p.getName());
+								p.setPlayerListName(a.getTabName());
 							}
 						}
 					}

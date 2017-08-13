@@ -1,5 +1,4 @@
 package net.lordofthecraft.betterteams;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -15,11 +14,9 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.google.common.collect.HashBiMap;
 
 import net.md_5.bungee.api.ChatColor;
@@ -46,6 +43,12 @@ public class TeamPacketListener implements Listener
 				
 				if (at == PlayerInfoAction.ADD_PLAYER) {
 					List<PlayerInfoData> pidl = packet.getPlayerInfoDataLists().read(0);
+					
+					//This fixes a vanish conflict with players logging off while already unregistered
+					//Vanish sends this packet before logging a player off, which causes crashes
+					if(pidl.size() == 1 && Affixes.fromExistingTeams(pidl.get(0).getProfile().getUUID()) == null)
+						return;
+					
 					pidl = pidl.stream()
 							.map(info -> info.getProfile().getName().length() < 3 ? info :
 									new PlayerInfoData(
@@ -64,7 +67,7 @@ public class TeamPacketListener implements Listener
 		});
 	}
 	
-	public void updateDisplayName(GroupColor gc, UUID uuid, String mcname) {
+/*	public void updateDisplayName(GroupColor gc, UUID uuid, String mcname) {
 		String displayName = gc + mcname;
 		
 		PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.PLAYER_INFO);
@@ -74,7 +77,7 @@ public class TeamPacketListener implements Listener
 		packet.getPlayerInfoDataLists().write(0, Collections.singletonList(pid));
 		
 		ProtocolLibrary.getProtocolManager().broadcastServerPacket(packet);
-	}
+	}*/
 	
 	protected String getColor(PlayerInfoData info) {
 		Affixes a = Affixes.fromExistingTeams(info.getProfile().getUUID());
