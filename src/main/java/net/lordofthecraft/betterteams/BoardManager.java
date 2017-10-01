@@ -243,6 +243,7 @@ public class BoardManager
     
     public void updateHealth(Player p, double health) {
     	int intHP = (int) Math.ceil(health);
+    	if(intHP > 40) intHP = 40;
     	for(Scoreboard board : boards) {
     		if( this.boardShowsHealth(board) ){
     			String playerCode = BetterTeams.packetListener.getPlayerTeamCode(p);
