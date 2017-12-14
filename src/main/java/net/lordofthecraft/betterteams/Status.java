@@ -22,10 +22,12 @@ public enum Status
     
     private final String icon;
     private final String name;
+    private final int id;
 
     Status(final String s, final int n, final String icon, final String name) {
         this.icon = icon;
         this.name = name;
+        this.id = n;
     }
     
     public String toString() {
@@ -62,4 +64,6 @@ public enum Status
 		}
     	return names.toString();
     }
+
+    public int getId(){return this.id;}
 }
