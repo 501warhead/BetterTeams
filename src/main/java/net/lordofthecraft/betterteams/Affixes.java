@@ -1,5 +1,7 @@
-package net.lordofthecraft.betterteams;
+package java.net.lordofthecraft.betterteams;
 
+import net.lordofthecraft.betterteams.BetterTeams;
+import net.lordofthecraft.betterteams.GroupColor;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,7 +18,7 @@ import java.util.UUID;
 public class Affixes
 {
 	private static final char ELLIPSES = '\u2026';
-    private static BoardManager boards;
+    private static net.lordofthecraft.betterteams.BoardManager boards;
     private static PersonaHandler handler;
 
     static {
@@ -36,7 +38,7 @@ public class Affixes
     private Status status;
     private GroupColor color = GroupColor.NORMAL;
     
-    public static Affixes onJoin(Player p, Status cached) {
+    public static Affixes onJoin(Player p, Packet.Status cached) {
     	//Player just joined. Have no teams. Find out what
     	//Team settings player should be entitled to
     	Affixes a = new Affixes(p);

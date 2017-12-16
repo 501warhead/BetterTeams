@@ -31,6 +31,7 @@ public class BoardManager
                 final Objective o = this.boards[i].registerNewObjective("showhealth", "dummy");
                 o.setDisplaySlot(DisplaySlot.BELOW_NAME);
                 o.setDisplayName(ChatColor.DARK_RED + "\u2764");
+
             }
             
             //Bit for TownCandy npcs which have name ChatColor.BOLD
