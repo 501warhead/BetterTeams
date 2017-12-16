@@ -2,6 +2,8 @@ package net.lordofthecraft.betterteams;
 
 import java.util.List;
 
+import net.lordofthecraft.Persistence.APIManager;
+import net.lordofthecraft.Persistence.PersistenceConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -19,6 +21,7 @@ public class BoardManager
 {	
     private final ScoreboardManager manager;
     private final Scoreboard[] boards;
+    private APIManager a = new APIManager();
     
     BoardManager() {
     	
@@ -119,22 +122,27 @@ public class BoardManager
         final Scoreboard b = p.getScoreboard();
         if (b == this.boards[0]) {
             p.setScoreboard(this.boards[1]);
+            a.showhealth(p);
             return true;
         }
         else if (b == this.boards[1]) {
             p.setScoreboard(this.boards[0]);
+            a.showhealth(p);
             return false;
         }
         else if (b == this.boards[3]) {
             p.setScoreboard(this.boards[2]);
+            a.showhealth(p);
             return false;
         }
         else if (b == this.boards[2]) {
             p.setScoreboard(this.boards[3]);
+            a.showhealth(p);
             return true;
         }
         else if (b == this.boards[4]) {
             p.setScoreboard(this.boards[1]);
+            a.showhealth(p);
             return true;
         }
         
@@ -145,22 +153,27 @@ public class BoardManager
         final Scoreboard b = p.getScoreboard();
         if (b == this.boards[0]) {
             p.setScoreboard(this.boards[2]);
+            a.mcnames(p);
             return false;
         }
         else if (b == this.boards[1]) {
             p.setScoreboard(this.boards[3]);
+            a.mcnames(p);
             return false;
         }
         else if (b == this.boards[3]) {
             p.setScoreboard(this.boards[1]);
+            a.mcnames(p);
             return true;
         }
         else if (b == this.boards[2]) {
             p.setScoreboard(this.boards[0]);
+            a.mcnames(p);
             return true;
         }
         else if (b == this.boards[4]) {
         	p.setScoreboard(this.boards[0]);
+            a.mcnames(p);
         	return true;
         }
         
@@ -171,9 +184,11 @@ public class BoardManager
     	 final Scoreboard b = p.getScoreboard();
          if (b == this.boards[4]) { //no longer hiding nameplates
              p.setScoreboard(this.boards[0]); //RP names, no health
+             a.setnameplates(p);
              return false;  
          } else { //now hiding nameplates
              p.setScoreboard(this.boards[4]); //Nameplates hidden
+             a.setnameplates(p);
              return true;
          }
     }

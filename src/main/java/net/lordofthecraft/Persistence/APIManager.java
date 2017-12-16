@@ -16,13 +16,9 @@ public class APIManager {
             keep_showhealth.add(p.getUniqueId());
         }
         else {
-
-        }
-    }
-
-    public void removeshowhealth(Player p){
-        if(keep_showhealth.contains(p)){
             keep_showhealth.remove(p.getUniqueId());
+            return;
+
         }
     }
 
@@ -30,10 +26,7 @@ public class APIManager {
         if(!no_nameplates.contains(p)){
             keep_mcnames.add(p.getUniqueId());
         }
-    }
-
-    public void removenameplates(Player p){
-        if(no_nameplates.contains(p)){
+        else {
             no_nameplates.remove(p.getUniqueId());
         }
     }
@@ -42,14 +35,10 @@ public class APIManager {
         if(!keep_mcnames.contains(p)){
             keep_mcnames.add(p.getUniqueId());
         }
-    }
-
-    public void removemcnames(Player p){
-        if(no_nameplates.contains(p)){
+        else {
             keep_mcnames.remove(p.getUniqueId());
         }
     }
-
     public ArrayList<UUID> getKeep_mcnames() {
         return keep_mcnames;
     }
