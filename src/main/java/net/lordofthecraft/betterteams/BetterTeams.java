@@ -6,11 +6,11 @@ import net.lordofthecraft.Persistence.APIManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 
-import javax.persistence.Persistence;
 import net.lordofthecraft.Persistence.PersistenceConfig;
 import java.io.File;
 import java.util.HashMap;
@@ -70,6 +70,10 @@ public class BetterTeams extends JavaPlugin {
                 Affixes a = Affixes.onJoin(p, null);
                 boards.createTeams(a);
             }
+            for(Player p : a.getKeep_showhealth()){
+                boards.toggleShowingHealth(p);
+                break;
+            }
         });
     }
     
@@ -80,6 +84,15 @@ public class BetterTeams extends JavaPlugin {
 
     public BoardManager getBoardManager() {
         return this.boards;
+    }
+
+    public void onPlayerJoin(PlayerJoinEvent e){
+        if(a.getKeep_showhealth().contains(e.getPlayer())){
+            boards.toggleShowingHealth(e.getPlayer());
+        }
+        else {
+            return;
+        }
     }
 
     private void save(){

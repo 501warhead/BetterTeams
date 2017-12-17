@@ -192,7 +192,7 @@ public class BoardManager
              return true;
          }
     }
-    
+
     
     public void apply(Affixes a){
     	a.apply(this.boards);

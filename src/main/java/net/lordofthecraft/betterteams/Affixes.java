@@ -1,7 +1,5 @@
-package java.net.lordofthecraft.betterteams;
+package net.lordofthecraft.betterteams;
 
-import net.lordofthecraft.betterteams.BetterTeams;
-import net.lordofthecraft.betterteams.GroupColor;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -38,7 +36,7 @@ public class Affixes
     private Status status;
     private GroupColor color = GroupColor.NORMAL;
     
-    public static Affixes onJoin(Player p, Packet.Status cached) {
+    public static Affixes onJoin(Player p, Status cached) {
     	//Player just joined. Have no teams. Find out what
     	//Team settings player should be entitled to
     	Affixes a = new Affixes(p);
