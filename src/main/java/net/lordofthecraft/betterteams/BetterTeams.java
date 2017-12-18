@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
@@ -90,8 +91,18 @@ public class BetterTeams extends JavaPlugin {
         if(a.getKeep_showhealth().contains(e.getPlayer())){
             boards.toggleShowingHealth(e.getPlayer());
         }
-        else {
-            return;
+        if(a.getNo_nameplates().contains(e.getPlayer())){
+            boards.toggleHideNameplates(e.getPlayer());
+        }
+        if(a.getKeep_mcnames().contains(e.getPlayer())){
+            boards.toggleShowingRPNames(e.getPlayer());
+        }
+    }
+
+    public void onPlayerQuit(PlayerQuitEvent e){
+        Player p = e.getPlayer();
+        if(a.getKeep_showhealth().contains(p) || a.getKeep_mcnames().contains(p) || a.getNo_nameplates().contains(p)){
+            save();
         }
     }
 
