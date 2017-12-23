@@ -1,19 +1,18 @@
 package net.lordofthecraft.Persistence;
 
-import net.lordofthecraft.betterteams.BoardManager;
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class APIManager {
-    ArrayList<UUID> keep_showhealth = new ArrayList<UUID>();
-    ArrayList<UUID> no_nameplates = new ArrayList<UUID>();
-    ArrayList<UUID> keep_mcnames = new ArrayList<UUID>();
+    ArrayList<Player> keep_showhealth = new ArrayList<>();
+    ArrayList<Player> no_nameplates = new ArrayList<>();
+    ArrayList<Player> keep_mcnames = new ArrayList<>();
     public void showhealth(Player p){
         if(!keep_showhealth.contains(p)){
-            keep_showhealth.add(p.getUniqueId());
+            keep_showhealth.add(p);
         }
         else {
             keep_showhealth.remove(p.getUniqueId());
@@ -24,7 +23,7 @@ public class APIManager {
 
     public void setnameplates(Player p){
         if(!no_nameplates.contains(p)){
-            keep_mcnames.add(p.getUniqueId());
+            keep_mcnames.add(p);
         }
         else {
             no_nameplates.remove(p.getUniqueId());
@@ -33,21 +32,21 @@ public class APIManager {
 
     public void mcnames(Player p){
         if(!keep_mcnames.contains(p)){
-            keep_mcnames.add(p.getUniqueId());
+            keep_mcnames.add(p);
         }
         else {
             keep_mcnames.remove(p.getUniqueId());
         }
     }
-    public ArrayList<UUID> getKeep_mcnames() {
+    public ArrayList<Player> getKeep_mcnames() {
         return keep_mcnames;
     }
 
-    public ArrayList<UUID> getNo_nameplates() {
+    public ArrayList<Player> getNo_nameplates() {
         return no_nameplates;
     }
 
-    public ArrayList<UUID> getKeep_showhealth() {
+    public ArrayList<Player> getKeep_showhealth() {
         return keep_showhealth;
     }
 }

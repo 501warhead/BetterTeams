@@ -1,5 +1,9 @@
 package net.lordofthecraft.Persistence;
 
+import com.comphenix.protocol.PacketType;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import java.util.*;
 
 public class PersistenceConfig {
@@ -11,22 +15,25 @@ public class PersistenceConfig {
             ArrayList<String> mcnamesString = (ArrayList<String>) map.get("mcnamessave");
             ArrayList<String> nameplatesString = (ArrayList<String>) map.get("nameplatessave");
 
-            ArrayList<UUID> keep_showhealth = new ArrayList<>();
+            ArrayList<Player> keep_showhealth = new ArrayList<>();
 
             for(String s: showhealthString){
-                keep_showhealth.add(UUID.fromString(s));
+                UUID t = UUID.fromString(s);
+                keep_showhealth.add(Bukkit.getPlayer(t));
             }
 
-            ArrayList<UUID> remove_nameplates = new ArrayList<>();
+            ArrayList<Player> remove_nameplates = new ArrayList<>();
 
             for(String s : nameplatesString){
-                remove_nameplates.add(UUID.fromString(s));
+                UUID u = UUID.fromString(s);
+                remove_nameplates.add(Bukkit.getPlayer(u));
             }
 
-            ArrayList<UUID> show_mcnames = new ArrayList<>();
+            ArrayList<Player> show_mcnames = new ArrayList<>();
 
             for(String s : mcnamesString){
-                show_mcnames.add(UUID.fromString(s));
+                UUID u = UUID.fromString(s);
+                show_mcnames.add(Bukkit.getPlayer(u));
 
             }
 
@@ -36,25 +43,26 @@ public class PersistenceConfig {
     public static Map<String, Object> serialize(APIManager am){
         Map<String, Object> map = new HashMap<>();
 
-        ArrayList<UUID> keepshowhealth = new ArrayList<>();
-        for(UUID a : am.getKeep_showhealth()){
-            keepshowhealth.add(UUID.fromString(a.toString()));
+        ArrayList<Player> keepshowhealth = new ArrayList<>();
+        for(Player a : am.getKeep_showhealth()){
+            keepshowhealth.add(a);
 
         }
+
         map.put("showhealth", keepshowhealth);
 
-        ArrayList<UUID> showmcnames = new ArrayList<>();
+        ArrayList<Player> showmcnames = new ArrayList<>();
 
-        for(UUID u : am.getKeep_mcnames()){
-            showmcnames.add(UUID.fromString(u.toString()));
+        for(Player u : am.getKeep_mcnames()){
+            showmcnames.add(u);
         }
 
         map.put("mcnames", showmcnames);
 
-        ArrayList<UUID> nonameplates = new ArrayList<>();
+        ArrayList<Player> nonameplates = new ArrayList<>();
 
-        for(UUID u : am.getNo_nameplates()){
-            nonameplates.add(UUID.fromString(u.toString()));
+        for(Player u : am.getNo_nameplates()){
+            nonameplates.add(u);
         }
 
         map.put("nameplates", nonameplates);

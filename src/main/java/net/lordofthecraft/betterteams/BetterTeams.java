@@ -5,6 +5,7 @@ import net.lordofthecraft.Persistence.PersistenceFile;
 import net.lordofthecraft.Persistence.APIManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -86,7 +87,7 @@ public class BetterTeams extends JavaPlugin {
     public BoardManager getBoardManager() {
         return this.boards;
     }
-
+    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e){
         if(a.getKeep_showhealth().contains(e.getPlayer())){
             boards.toggleShowingHealth(e.getPlayer());
@@ -98,7 +99,7 @@ public class BetterTeams extends JavaPlugin {
             boards.toggleShowingRPNames(e.getPlayer());
         }
     }
-
+    @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e){
         Player p = e.getPlayer();
         if(a.getKeep_showhealth().contains(p) || a.getKeep_mcnames().contains(p) || a.getNo_nameplates().contains(p)){
