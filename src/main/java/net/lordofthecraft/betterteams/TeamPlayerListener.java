@@ -20,9 +20,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.google.common.collect.Maps;
 
-import net.lordofthecraft.arche.event.PersonaCreateEvent;
-import net.lordofthecraft.arche.event.PersonaRenameEvent;
-import net.lordofthecraft.arche.event.PersonaSwitchEvent;
+import net.lordofthecraft.arche.event.persona.PersonaCreateEvent;
+import net.lordofthecraft.arche.event.persona.PersonaRenameEvent;
+import net.lordofthecraft.arche.event.persona.PersonaSwitchEvent;
 import net.md_5.bungee.api.ChatColor;
 
 public class TeamPlayerListener implements Listener {
@@ -115,7 +115,7 @@ public class TeamPlayerListener implements Listener {
 		}
 	}
 
-	
+
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void event(final PersonaSwitchEvent e) {
 		this.resend(e.getPlayer());

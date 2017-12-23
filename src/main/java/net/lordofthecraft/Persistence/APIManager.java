@@ -13,10 +13,11 @@ public class APIManager {
     public void showhealth(Player p){
         if(!keep_showhealth.contains(p)){
             keep_showhealth.add(p);
+            p.sendMessage("Added to showhealth list!");
         }
         else {
-            keep_showhealth.remove(p.getUniqueId());
-            return;
+            keep_showhealth.remove(p);
+
 
         }
     }
@@ -26,7 +27,7 @@ public class APIManager {
             keep_mcnames.add(p);
         }
         else {
-            no_nameplates.remove(p.getUniqueId());
+            no_nameplates.remove(p);
         }
     }
 
@@ -35,7 +36,7 @@ public class APIManager {
             keep_mcnames.add(p);
         }
         else {
-            keep_mcnames.remove(p.getUniqueId());
+            keep_mcnames.remove(p);
         }
     }
     public ArrayList<Player> getKeep_mcnames() {

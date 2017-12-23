@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class BetterTeams extends JavaPlugin {
+public class BetterTeams extends JavaPlugin implements Listener {
     static int ghostTaskId;
     static BetterTeams Main;
     static Scoreboard ghostBoard;
@@ -47,7 +47,7 @@ public class BetterTeams extends JavaPlugin {
             folder.mkdirs();
         }
         PersistenceFile.init(new File(folder, "persistence.yml"));
-        this.getServer().getPluginManager().registerEvents((Listener) this, this);
+        this.getServer().getPluginManager().registerEvents(this, this);
 
         this.statusCooldown = Maps.newHashMap();
         this.boards = new BoardManager();
