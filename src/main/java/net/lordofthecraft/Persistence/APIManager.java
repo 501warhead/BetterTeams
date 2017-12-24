@@ -1,53 +1,42 @@
 package net.lordofthecraft.Persistence;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 import java.util.ArrayList;
 import java.util.UUID;
+import lombok.Getter;
+import lombok.Setter;
+import org.bukkit.entity.Player;
 
+@Getter
+@Setter
 public class APIManager {
-    ArrayList<Player> keep_showhealth = new ArrayList<>();
-    ArrayList<Player> no_nameplates = new ArrayList<>();
-    ArrayList<Player> keep_mcnames = new ArrayList<>();
-    public void showhealth(Player p){
-        if(!keep_showhealth.contains(p)){
-            keep_showhealth.add(p);
-            p.sendMessage("Added to showhealth list!");
-        }
-        else {
-            keep_showhealth.remove(p);
+
+  ArrayList<UUID> keepShowHealth = new ArrayList<>();
+  ArrayList<UUID> noNameplates = new ArrayList<>();
+  ArrayList<UUID> keepMCNames = new ArrayList<>();
+
+  public void showhealth(Player p) {
+    if (!keepShowHealth.contains(p.getUniqueId())) {
+      keepShowHealth.add(p.getUniqueId());
+    } else {
+      keepShowHealth.remove(p.getUniqueId());
 
 
-        }
     }
+  }
 
-    public void setnameplates(Player p){
-        if(!no_nameplates.contains(p)){
-            keep_mcnames.add(p);
-        }
-        else {
-            no_nameplates.remove(p);
-        }
+  public void setnameplates(Player p) {
+    if (!noNameplates.contains(p.getUniqueId())) {
+      keepMCNames.add(p.getUniqueId());
+    } else {
+      noNameplates.remove(p.getUniqueId());
     }
+  }
 
-    public void mcnames(Player p){
-        if(!keep_mcnames.contains(p)){
-            keep_mcnames.add(p);
-        }
-        else {
-            keep_mcnames.remove(p);
-        }
+  public void mcnames(Player p) {
+    if (!keepMCNames.contains(p.getUniqueId())) {
+      keepMCNames.add(p.getUniqueId());
+    } else {
+      keepMCNames.remove(p.getUniqueId());
     }
-    public ArrayList<Player> getKeep_mcnames() {
-        return keep_mcnames;
-    }
-
-    public ArrayList<Player> getNo_nameplates() {
-        return no_nameplates;
-    }
-
-    public ArrayList<Player> getKeep_showhealth() {
-        return keep_showhealth;
-    }
+  }
 }

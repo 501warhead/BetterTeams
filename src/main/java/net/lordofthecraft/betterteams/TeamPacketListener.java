@@ -1,14 +1,4 @@
 package net.lordofthecraft.betterteams;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -16,10 +6,14 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.common.collect.HashBiMap;
-
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 
 public class TeamPacketListener implements Listener
 {
@@ -44,8 +38,8 @@ public class TeamPacketListener implements Listener
 				if (at == PlayerInfoAction.ADD_PLAYER) {
 					List<PlayerInfoData> pidl = packet.getPlayerInfoDataLists().read(0);
 					
-					//This fixes a vanish conflict with players logging off while already unregistered
-					//Vanish sends this packet before logging a player off, which causes crashes
+					//This fixes apiManager vanish conflict with players logging off while already unregistered
+					//Vanish sends this packet before logging apiManager player off, which causes crashes
 					if(pidl.size() == 1 && !BetterTeams.Main.getBoardManager().hasTeam(pidl.get(0).getProfile().getName()))
 						return;
 					
