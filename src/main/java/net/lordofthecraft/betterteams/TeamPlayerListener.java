@@ -1,12 +1,8 @@
 package net.lordofthecraft.betterteams;
 
-import com.google.common.collect.Maps;
 import java.util.HashMap;
 import java.util.UUID;
-import net.lordofthecraft.arche.event.PersonaCreateEvent;
-import net.lordofthecraft.arche.event.PersonaRenameEvent;
-import net.lordofthecraft.arche.event.PersonaSwitchEvent;
-import net.md_5.bungee.api.ChatColor;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
@@ -21,6 +17,13 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import com.google.common.collect.Maps;
+
+import net.lordofthecraft.arche.event.persona.PersonaCreateEvent;
+import net.lordofthecraft.arche.event.persona.PersonaRenameEvent;
+import net.lordofthecraft.arche.event.persona.PersonaSwitchEvent;
+import net.md_5.bungee.api.ChatColor;
 
 public class TeamPlayerListener implements Listener {
 

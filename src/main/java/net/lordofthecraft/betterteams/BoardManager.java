@@ -12,6 +12,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.scoreboard.Team.Option;
+import org.bukkit.scoreboard.Team.OptionStatus;
 
 import com.google.common.collect.Lists;
 
@@ -26,7 +27,7 @@ public class BoardManager
         this.boards = new Scoreboard[5];
         
         for (int i = 0; i < this.boards.length; ++i) {
-            this.boards[i] = this.manager.getNewScoreboard();
+            boards[i] = this.manager.getNewScoreboard();
             if (i == 1 || i == 3) {
                 final Objective o = this.boards[i].registerNewObjective("showhealth", "dummy");
                 o.setDisplaySlot(DisplaySlot.BELOW_NAME);
@@ -195,6 +196,7 @@ public class BoardManager
     				Team.OptionStatus.FOR_OWN_TEAM :
     				Team.OptionStatus.NEVER	
     				);
+    		t.setOption(Option.COLLISION_RULE, OptionStatus.NEVER);
     		
     		if(this.boardShowsRPNames(board)) {
     			t.setPrefix(a.getPrefixRP());
@@ -243,7 +245,6 @@ public class BoardManager
     
     public void updateHealth(Player p, double health) {
     	int intHP = (int) Math.ceil(health);
-    	if(intHP > 40) intHP = 40;
     	for(Scoreboard board : boards) {
     		if( this.boardShowsHealth(board) ){
     			String playerCode = BetterTeams.packetListener.getPlayerTeamCode(p);
