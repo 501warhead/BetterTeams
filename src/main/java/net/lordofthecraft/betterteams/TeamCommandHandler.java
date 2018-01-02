@@ -3,6 +3,7 @@ package net.lordofthecraft.betterteams;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import net.lordofthecraft.Persistence.APIManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -258,10 +259,13 @@ public class TeamCommandHandler implements CommandExecutor
 		} else {
 			if (cmd.getName().equalsIgnoreCase("showhealth")) {
 				boolean isNowShowingHealth = this.boards.toggleShowingHealth(p);
+
 				if (isNowShowingHealth) {
+					BetterTeams.apiManager.getKeepShowHealth().add(p.getUniqueId());
 					p.sendMessage(ChatColor.AQUA + "You are now seeing players' health.");
 				}
 				else {
+					BetterTeams.apiManager.getKeepShowHealth().remove(p.getUniqueId());
 					p.sendMessage(ChatColor.AQUA + "You are no longer seeing players' health.");
 				}
 				return true;
@@ -270,9 +274,11 @@ public class TeamCommandHandler implements CommandExecutor
 			if (cmd.getName().equalsIgnoreCase("showrpnames")) {
 				boolean isNowShowingRPNames = boards.toggleShowingRPNames(p);
 				if (isNowShowingRPNames) {
+				    BetterTeams.apiManager.getKeepMCNames().remove(p.getUniqueId());
 					p.sendMessage(ChatColor.AQUA + "You are now seeing Roleplay names.");
 				}
 				else {
+				    BetterTeams.apiManager.getKeepMCNames().add(p.getUniqueId());
 					p.sendMessage(ChatColor.AQUA + "You are no longer seeing Roleplay names.");
 				}
 				return true;
@@ -281,9 +287,11 @@ public class TeamCommandHandler implements CommandExecutor
 			if (cmd.getName().equalsIgnoreCase("hidenameplates")) {
 				boolean isNowHidingNameplates = boards.toggleHideNameplates(p);
 				if (isNowHidingNameplates) {
+				    BetterTeams.apiManager.getNoNameplates().add(p.getUniqueId());
 					p.sendMessage(ChatColor.AQUA + "Nameplates are now hidden");
 				}
 				else {
+				    BetterTeams.apiManager.getNoNameplates().remove(p.getUniqueId());
 					p.sendMessage(ChatColor.AQUA + "Nameplates are no longer hidden");
 				}
 				return true;

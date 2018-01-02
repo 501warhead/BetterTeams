@@ -72,6 +72,7 @@ public class BetterTeams extends JavaPlugin implements Listener {
         Affixes a = Affixes.onJoin(p, null);
         boards.createTeams(a);
 
+
         if (apiManager.getKeepShowHealth().contains(p.getUniqueId())) {
           boards.toggleShowingHealth(p);
         }
