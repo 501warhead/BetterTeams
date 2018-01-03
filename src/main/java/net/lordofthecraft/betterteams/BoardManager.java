@@ -248,6 +248,7 @@ public class BoardManager
     	for(Scoreboard board : boards) {
     		if( this.boardShowsHealth(board) ){
     			String playerCode = BetterTeams.packetListener.getPlayerTeamCode(p);
+    			if(playerCode == null) continue;	
     			Objective o = board.getObjective(DisplaySlot.BELOW_NAME);
     			Score score = o.getScore(playerCode);
     			score.setScore(intHP);
