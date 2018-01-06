@@ -13,6 +13,7 @@ public enum GroupColor
     FMLEAD	(String.valueOf(ChatColor.RED 				+""+ ChatColor.BOLD), 	"FM-Lead"),
     WTLEAD	(String.valueOf(ChatColor.DARK_AQUA 		+""+ ChatColor.BOLD), 	"WT-Lead"),
     ETLEAD	(String.valueOf(ChatColor.DARK_GREEN 		+""+ ChatColor.BOLD), 	"ET-Lead"),
+    MEDIALEAD(String.valueOf(ChatColor.YELLOW + "" + ChatColor.BOLD), "Media-Lead"),
     WD(String.valueOf(ChatColor.AQUA + "" + ChatColor.BOLD), "WD"),
 
     GM(String.valueOf(ChatColor.BLUE + "" + ChatColor.BOLD), "GM"),
@@ -22,6 +23,7 @@ public enum GroupColor
     ET		(String.valueOf(ChatColor.DARK_GREEN), 								"ET"),
     WT		(String.valueOf(ChatColor.DARK_AQUA), 								"WT"),
     MS(String.valueOf(ChatColor.YELLOW), "MS"),
+    MEDIA(String.valueOf(ChatColor.YELLOW), "Media"),
    
     VIP500	(String.valueOf(ChatColor.YELLOW 			+""+ ChatColor.BOLD), 	"VIP500"),
     VIP300	(String.valueOf(ChatColor.DARK_PURPLE 		+""+ ChatColor.BOLD), 	"VIP300"),
