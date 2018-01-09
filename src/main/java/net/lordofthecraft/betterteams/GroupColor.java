@@ -13,7 +13,6 @@ public enum GroupColor
     FMLEAD	(String.valueOf(ChatColor.RED 				+""+ ChatColor.BOLD), 	"FM-Lead"),
     WTLEAD	(String.valueOf(ChatColor.DARK_AQUA 		+""+ ChatColor.BOLD), 	"WT-Lead"),
     ETLEAD	(String.valueOf(ChatColor.DARK_GREEN 		+""+ ChatColor.BOLD), 	"ET-Lead"),
-    MEDIALEAD(String.valueOf(ChatColor.YELLOW + "" + ChatColor.BOLD), "Media-Lead"),
     WD(String.valueOf(ChatColor.AQUA + "" + ChatColor.BOLD), "WD"),
 
     GM(String.valueOf(ChatColor.BLUE + "" + ChatColor.BOLD), "GM"),
