@@ -73,9 +73,9 @@ public class BetterTeams extends JavaPlugin implements Listener {
         boards.createTeams(a);
 
 
-        if (apiManager.getKeepShowHealth().contains(p.getUniqueId())) {
-          boards.toggleShowingHealth(p);
-        }
+        //if (apiManager.getKeepShowHealth().contains(p.getUniqueId())) {
+         // boards.toggleShowingHealth(p);
+       // }
       }
 
     });

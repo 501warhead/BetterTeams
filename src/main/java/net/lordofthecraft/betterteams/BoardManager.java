@@ -119,23 +119,18 @@ public class BoardManager {
     final Scoreboard b = p.getScoreboard();
     if (b == this.boards[0]) {
       p.setScoreboard(this.boards[1]);
-      BetterTeams.apiManager.getKeepShowHealth().add(p.getUniqueId());
       return true;
     } else if (b == this.boards[1]) {
       p.setScoreboard(this.boards[0]);
-      BetterTeams.apiManager.getKeepShowHealth().add(p.getUniqueId());
       return false;
     } else if (b == this.boards[3]) {
       p.setScoreboard(this.boards[2]);
-      BetterTeams.apiManager.getKeepShowHealth().add(p.getUniqueId());
       return false;
     } else if (b == this.boards[2]) {
       p.setScoreboard(this.boards[3]);
-      BetterTeams.apiManager.getKeepShowHealth().add(p.getUniqueId());
       return true;
     } else if (b == this.boards[4]) {
       p.setScoreboard(this.boards[1]);
-      BetterTeams.apiManager.getKeepShowHealth().add(p.getUniqueId());
       return true;
     }
 
@@ -147,23 +142,18 @@ public class BoardManager {
     final Scoreboard b = p.getScoreboard();
     if (b == this.boards[0]) {
       p.setScoreboard(this.boards[2]);
-      BetterTeams.apiManager.getKeepMCNames().add(p.getUniqueId());
       return false;
     } else if (b == this.boards[1]) {
       p.setScoreboard(this.boards[3]);
-      BetterTeams.apiManager.getKeepMCNames().add(p.getUniqueId());
       return false;
     } else if (b == this.boards[3]) {
       p.setScoreboard(this.boards[1]);
-      BetterTeams.apiManager.getKeepMCNames().add(p.getUniqueId());
       return true;
     } else if (b == this.boards[2]) {
       p.setScoreboard(this.boards[0]);
-      BetterTeams.apiManager.getKeepMCNames().add(p.getUniqueId());
       return true;
     } else if (b == this.boards[4]) {
       p.setScoreboard(this.boards[0]);
-      BetterTeams.apiManager.getKeepMCNames().add(p.getUniqueId());
       return true;
     }
 
@@ -174,11 +164,9 @@ public class BoardManager {
     final Scoreboard b = p.getScoreboard();
     if (b == this.boards[4]) { //no longer hiding nameplates
       p.setScoreboard(this.boards[0]); //RP names, no health
-      BetterTeams.apiManager.getNoNameplates().add(p.getUniqueId());
       return false;
     } else { //now hiding nameplates
       p.setScoreboard(this.boards[4]); //Nameplates hidden
-      BetterTeams.apiManager.getNoNameplates().add(p.getUniqueId());
       return true;
     }
   }

@@ -259,13 +259,16 @@ public class TeamCommandHandler implements CommandExecutor
 		} else {
 			if (cmd.getName().equalsIgnoreCase("showhealth")) {
 				boolean isNowShowingHealth = this.boards.toggleShowingHealth(p);
-
-				if (isNowShowingHealth) {
+				if(BetterTeams.apiManager.getKeepMCNames().contains(p.getUniqueId())){
+					BetterTeams.apiManager.getKeepShowHealth().remove(p.getUniqueId());
+				}
+				else {
 					BetterTeams.apiManager.getKeepShowHealth().add(p.getUniqueId());
+				}
+				if (isNowShowingHealth) {
 					p.sendMessage(ChatColor.AQUA + "You are now seeing players' health.");
 				}
 				else {
-					BetterTeams.apiManager.getKeepShowHealth().remove(p.getUniqueId());
 					p.sendMessage(ChatColor.AQUA + "You are no longer seeing players' health.");
 				}
 				return true;
@@ -273,8 +276,14 @@ public class TeamCommandHandler implements CommandExecutor
 			
 			if (cmd.getName().equalsIgnoreCase("showrpnames")) {
 				boolean isNowShowingRPNames = boards.toggleShowingRPNames(p);
+				if(!(BetterTeams.apiManager.getKeepMCNames().contains(p.getUniqueId()))){
+					BetterTeams.apiManager.getKeepMCNames().add(p.getUniqueId());
+
+				}
+				else {
+					BetterTeams.apiManager.getKeepMCNames().remove(p.getUniqueId());
+				}
 				if (isNowShowingRPNames) {
-				    BetterTeams.apiManager.getKeepMCNames().remove(p.getUniqueId());
 					p.sendMessage(ChatColor.AQUA + "You are now seeing Roleplay names.");
 				}
 				else {
@@ -286,6 +295,12 @@ public class TeamCommandHandler implements CommandExecutor
 			
 			if (cmd.getName().equalsIgnoreCase("hidenameplates")) {
 				boolean isNowHidingNameplates = boards.toggleHideNameplates(p);
+				if(BetterTeams.apiManager.getNoNameplates().contains(p.getUniqueId())){
+				    BetterTeams.apiManager.getNoNameplates().remove(p.getUniqueId());
+                }
+                else {
+				    BetterTeams.apiManager.getNoNameplates().add(p.getUniqueId());
+                }
 				if (isNowHidingNameplates) {
 				    BetterTeams.apiManager.getNoNameplates().add(p.getUniqueId());
 					p.sendMessage(ChatColor.AQUA + "Nameplates are now hidden");
