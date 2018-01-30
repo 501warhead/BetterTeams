@@ -22,6 +22,7 @@ public enum GroupColor
     ET		(String.valueOf(ChatColor.DARK_GREEN), 								"ET"),
     WT		(String.valueOf(ChatColor.DARK_AQUA), 								"WT"),
     MS(String.valueOf(ChatColor.YELLOW), "MS"),
+    MEDIA(String.valueOf(ChatColor.YELLOW), "Media"),
    
     VIP500	(String.valueOf(ChatColor.YELLOW 			+""+ ChatColor.BOLD), 	"VIP500"),
     VIP300	(String.valueOf(ChatColor.DARK_PURPLE 		+""+ ChatColor.BOLD), 	"VIP300"),
