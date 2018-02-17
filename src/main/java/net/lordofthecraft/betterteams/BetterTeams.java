@@ -10,6 +10,7 @@ import net.lordofthecraft.Persistence.APIManager;
 import net.lordofthecraft.Persistence.PersistenceFile;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -17,6 +18,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
+
+import static org.bukkit.Bukkit.getLogger;
 
 public class BetterTeams extends JavaPlugin implements Listener {
 
@@ -73,9 +76,10 @@ public class BetterTeams extends JavaPlugin implements Listener {
         boards.createTeams(a);
 
 
-        //if (apiManager.getKeepShowHealth().contains(p.getUniqueId())) {
-         // boards.toggleShowingHealth(p);
-       // }
+        if (apiManager.getKeepShowHealth().contains(p.getUniqueId())) {
+          getLogger().info("adding to list in scheduler");
+          boards.toggleShowingHealth(p);
+        }
       }
 
     });
@@ -93,16 +97,21 @@ public class BetterTeams extends JavaPlugin implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent e) {
     if (apiManager.getKeepShowHealth().contains(e.getPlayer().getUniqueId())) {
-      boards.toggleShowingHealth(e.getPlayer());
-      getLogger().info("Toggling");
+      getLogger().info("Toggling in BetterTeams(PlayerJoin)");
     }
+
     if (apiManager.getNoNameplates().contains(e.getPlayer().getUniqueId())) {
       boards.toggleHideNameplates(e.getPlayer());
-      getLogger().info("Toggling");
+      getLogger().info("Toggling in BetterTeams(PlayerJoin)");
     }
     if (apiManager.getKeepMCNames().contains(e.getPlayer().getUniqueId())) {
       boards.toggleShowingRPNames(e.getPlayer());
-      getLogger().info("Toggling");
+      getLogger().info("Toggling in BetterTeams(PlayerJoin)");
+    }
+    try {
+
+    } catch (IndexOutOfBoundsException exc){
+      getLogger().info("IndexOutOfBonds error occured");
     }
   }
 
