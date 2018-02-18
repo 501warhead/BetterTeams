@@ -110,7 +110,7 @@ public class BetterTeams extends JavaPlugin implements Listener {
     }
     try {
 
-    } catch (IndexOutOfBoundsException exc){
+    } catch (ArrayIndexOutOfBoundsException exc){
       getLogger().info("IndexOutOfBonds error occured");
     }
   }

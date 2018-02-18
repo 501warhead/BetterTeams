@@ -262,12 +262,17 @@ public class TeamCommandHandler implements CommandExecutor
 			if (cmd.getName().equalsIgnoreCase("showhealth")) {
 				boolean isNowShowingHealth = this.boards.toggleShowingHealth(p);
 				if (isNowShowingHealth) {
-					BetterTeams.apiManager.getKeepShowHealth().add(p.getUniqueId());
-					p.sendMessage(ChatColor.AQUA + "You are now seeing players' health.");
+					if(BetterTeams.apiManager.getKeepShowHealth().contains(p.getUniqueId())){
+						BetterTeams.apiManager.getKeepShowHealth().remove(p.getUniqueId());
+					}
 				}
 				else {
-					BetterTeams.apiManager.getKeepShowHealth().remove(p.getUniqueId());
-					p.sendMessage(ChatColor.AQUA + "You are no longer seeing players' health.");
+					if(!(BetterTeams.apiManager.getKeepShowHealth().contains(p.getUniqueId()))){
+						BetterTeams.apiManager.getKeepShowHealth().add(p.getUniqueId());
+					}
+					else {
+						BetterTeams.apiManager.getKeepShowHealth().remove(p.getUniqueId());
+					}
 				}
 				return true;
 			}
@@ -296,11 +301,18 @@ public class TeamCommandHandler implements CommandExecutor
 			if (cmd.getName().equalsIgnoreCase("hidenameplates")) {
 				boolean isNowHidingNameplates = boards.toggleHideNameplates(p);
 				if (isNowHidingNameplates) {
-				    BetterTeams.apiManager.getNoNameplates().add(p.getUniqueId());
-					p.sendMessage(ChatColor.AQUA + "Nameplates are now hidden");
+					if(!(BetterTeams.apiManager.getNoNameplates().contains(p.getUniqueId()))){
+						BetterTeams.apiManager.getNoNameplates().add(p.getUniqueId());
+						p.sendMessage(ChatColor.AQUA + "Nameplates are now hidden");
+					}
 				}
 				else {
-				    BetterTeams.apiManager.getNoNameplates().remove(p.getUniqueId());
+				    if(BetterTeams.apiManager.getNoNameplates().contains(p.getUniqueId())){
+				    	BetterTeams.apiManager.getNoNameplates().remove(p.getUniqueId());
+					}
+					else{
+				    	BetterTeams.apiManager.getNoNameplates().add(p.getUniqueId());
+					}
 					p.sendMessage(ChatColor.AQUA + "Nameplates are no longer hidden");
 				}
 				return true;
