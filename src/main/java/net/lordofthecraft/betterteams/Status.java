@@ -31,7 +31,7 @@ public enum Status
     }
     
     public String getName() {
-        return this.toString().toLowerCase();
+        return this.name().toLowerCase();
     }
     
     public char getSymbol() {
