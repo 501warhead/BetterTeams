@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -20,6 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 
 import static org.bukkit.Bukkit.getLogger;
+import static org.bukkit.Bukkit.getPlayer;
 
 public class BetterTeams extends JavaPlugin implements Listener {
 
@@ -94,18 +96,19 @@ public class BetterTeams extends JavaPlugin implements Listener {
     return this.boards;
   }
 
-  @EventHandler
+  @EventHandler (priority = EventPriority.HIGH)
   public void onPlayerJoin(PlayerJoinEvent e) {
     if (apiManager.getKeepShowHealth().contains(e.getPlayer().getUniqueId())) {
       getLogger().info("Toggling in BetterTeams(PlayerJoin)");
+      this.getBoardManager().toggleShowingHealth(e.getPlayer());
     }
 
     if (apiManager.getNoNameplates().contains(e.getPlayer().getUniqueId())) {
-      boards.toggleHideNameplates(e.getPlayer());
+      this.getBoardManager().toggleShowingRPNames(e.getPlayer());
       getLogger().info("Toggling in BetterTeams(PlayerJoin)");
     }
     if (apiManager.getKeepMCNames().contains(e.getPlayer().getUniqueId())) {
-      boards.toggleShowingRPNames(e.getPlayer());
+      this.getBoardManager().toggleShowingRPNames(e.getPlayer());
       getLogger().info("Toggling in BetterTeams(PlayerJoin)");
     }
     try {
@@ -115,7 +118,7 @@ public class BetterTeams extends JavaPlugin implements Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler (priority = EventPriority.LOW)
   public void onPlayerQuit(PlayerQuitEvent e) {
     Player p = e.getPlayer();
     save();
