@@ -16,7 +16,7 @@ import java.util.UUID;
 public class Affixes
 {
 	private static final char ELLIPSES = '\u2026';
-    private static BoardManager boards;
+    private static net.lordofthecraft.betterteams.BoardManager boards;
     private static PersonaHandler handler;
 
     static {

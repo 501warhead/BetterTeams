@@ -9,6 +9,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import net.lordofthecraft.persistence.APIManager;
+import net.lordofthecraft.persistence.APIManager.BoardType;
+
+import static org.bukkit.Bukkit.getLogger;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -69,7 +74,7 @@ public class TeamCommandHandler implements CommandExecutor
 						sender.sendMessage("Modifying status for " + t.getName());
 					}
 					Status status = Status.fromName(args[0]);
-					if(status == null) sender.sendMessage(ChatColor.DARK_AQUA + "This is not a valid status.");
+					if(status == null) sender.sendMessage(ChatColor.DARK_AQUA + "This is not apiManager valid status.");
 					else if(a.getStatus() == status) sender.sendMessage(ChatColor.DARK_AQUA + "They already have the status: " + status.getName());
 					else {
 						a.setStatus(status);
@@ -89,11 +94,11 @@ public class TeamCommandHandler implements CommandExecutor
 		if (cmd.getName().equalsIgnoreCase("tagcolor")) {
 			if (args.length == 1) {
 				if (this.boards.isGhosting(p)) {
-					p.sendMessage(ChatColor.DARK_AQUA + "You're a ghost. Type '/appearto' to go into the light.");
+					p.sendMessage(ChatColor.DARK_AQUA + "You're apiManager ghost. Type '/appearto' to go into the light.");
 				}
 				else if (args[0].equalsIgnoreCase("on")) {
 					final GroupColor col = GroupColor.getHighest(p);
-					if (col == GroupColor.NORMAL) p.sendMessage(ChatColor.DARK_AQUA + "You do not have VIP status. Purchase VIP to receive a colored tag. Type /store");
+					if (col == GroupColor.NORMAL) p.sendMessage(ChatColor.DARK_AQUA + "You do not have VIP status. Purchase VIP to receive apiManager colored tag. Type /store");
 					else if (col == a.getColor()) p.sendMessage(ChatColor.DARK_AQUA + "Tag color was already at the highest possible status");
 					else {
 						p.sendMessage(ChatColor.AQUA + "Set your tag color to your highest possible status.");
@@ -104,7 +109,7 @@ public class TeamCommandHandler implements CommandExecutor
 				}
 				else if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("clear")) {
 					if (a.getColor() == null) {
-						p.sendMessage(ChatColor.DARK_AQUA + "You do not have a colored tag!");
+						p.sendMessage(ChatColor.DARK_AQUA + "You do not have apiManager colored tag!");
 					}
 					else {
 						a.setGroupColor(GroupColor.NORMAL);
@@ -135,14 +140,14 @@ public class TeamCommandHandler implements CommandExecutor
 		}else if (cmd.getName().equalsIgnoreCase("status")) {
 			if (args.length >= 1) {
 				if (this.boards.isGhosting(p)) {
-					p.sendMessage(ChatColor.DARK_AQUA + "You're a ghost. Type '/appearto' to go into the light.");
+					p.sendMessage(ChatColor.DARK_AQUA + "You're apiManager ghost. Type '/appearto' to go into the light.");
 				}
 				else if (args[0].equalsIgnoreCase("help")) {
 					String names = Status.getAllNames();
 					if (p.hasPermission("nexus.moderator")) {
-						p.sendMessage(ChatColor.AQUA+"Type /status list to see a totals list, or /status list [status] to see the players with that status.");
+						p.sendMessage(ChatColor.AQUA+"Type /status list to see apiManager totals list, or /status list [status] to see the players with that status.");
 					}
-					p.sendMessage(ChatColor.AQUA + "Usage: Type '/status [status]' to set a status, or '/status off' to clear your status.");
+					p.sendMessage(ChatColor.AQUA + "Usage: Type '/status [status]' to set apiManager status, or '/status off' to clear your status.");
 					p.sendMessage(ChatColor.AQUA + "Available Statuses: " + ChatColor.RESET + names);
 				}
 				else if (args[0].equalsIgnoreCase("list") && p.hasPermission("nexus.moderator")) {
@@ -225,7 +230,7 @@ public class TeamCommandHandler implements CommandExecutor
 							return true;
 						}
 					}
-					p.sendMessage(ChatColor.DARK_AQUA + "This is not a valid status.");
+					p.sendMessage(ChatColor.DARK_AQUA + "This is not apiManager valid status.");
 				}
 				return true;
 			}		
@@ -264,17 +269,20 @@ public class TeamCommandHandler implements CommandExecutor
 				else {
 					p.sendMessage(ChatColor.AQUA + "You are no longer seeing players' health.");
 				}
+				BetterTeams.apiManager.persist(p, isNowShowingHealth, BoardType.HEALTH);
 				return true;
 			}
 			
 			if (cmd.getName().equalsIgnoreCase("showrpnames")) {
 				boolean isNowShowingRPNames = boards.toggleShowingRPNames(p);
+
 				if (isNowShowingRPNames) {
 					p.sendMessage(ChatColor.AQUA + "You are now seeing Roleplay names.");
 				}
 				else {
 					p.sendMessage(ChatColor.AQUA + "You are no longer seeing Roleplay names.");
 				}
+				BetterTeams.apiManager.persist(p, !isNowShowingRPNames, BoardType.MCNAMES);
 				return true;
 			}
 			
@@ -286,6 +294,7 @@ public class TeamCommandHandler implements CommandExecutor
 				else {
 					p.sendMessage(ChatColor.AQUA + "Nameplates are no longer hidden");
 				}
+				BetterTeams.apiManager.persist(p, isNowHidingNameplates, BoardType.NAMEPLATES);
 				return true;
 			}
 			

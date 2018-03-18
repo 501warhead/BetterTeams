@@ -77,7 +77,7 @@ public class TeamPlayerListener implements Listener {
 				if (pa.getStatus() != null && ta.getStatus() != null) {
 					if (pa.getStatus() == ta.getStatus()) {
 						e.setCancelled(true);
-						p.sendMessage(ChatColor.RED + "You may not damage a player with the same status as yourself.");
+						p.sendMessage(ChatColor.RED + "You may not damage apiManager player with the same status as yourself.");
 					}
 				}
 			}
@@ -115,7 +115,7 @@ public class TeamPlayerListener implements Listener {
 		}
 	}
 
-	
+
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void event(final PersonaSwitchEvent e) {
 		this.resend(e.getPlayer());

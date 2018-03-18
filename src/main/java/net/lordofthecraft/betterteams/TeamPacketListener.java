@@ -15,8 +15,13 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.google.common.collect.HashBiMap;
-
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 
 public class TeamPacketListener implements Listener
 {
@@ -41,8 +46,8 @@ public class TeamPacketListener implements Listener
 				if (at == PlayerInfoAction.ADD_PLAYER) {
 					List<PlayerInfoData> pidl = packet.getPlayerInfoDataLists().read(0);
 					
-					//This fixes a vanish conflict with players logging off while already unregistered
-					//Vanish sends this packet before logging a player off, which causes crashes
+					//This fixes apiManager vanish conflict with players logging off while already unregistered
+					//Vanish sends this packet before logging apiManager player off, which causes crashes
 					if(pidl.size() == 1 && !BetterTeams.Main.getBoardManager().hasTeam(pidl.get(0).getProfile().getName()))
 						return;
 					
