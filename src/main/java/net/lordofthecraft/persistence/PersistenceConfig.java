@@ -1,4 +1,4 @@
-package net.lordofthecraft.Persistence;
+package net.lordofthecraft.persistence;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -3,7 +3,6 @@ package net.lordofthecraft.betterteams;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import net.lordofthecraft.Persistence.APIManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -12,6 +11,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import net.lordofthecraft.persistence.APIManager;
+import net.lordofthecraft.persistence.APIManager.BoardType;
 
 import static org.bukkit.Bukkit.getLogger;
 
@@ -262,18 +264,12 @@ public class TeamCommandHandler implements CommandExecutor
 			if (cmd.getName().equalsIgnoreCase("showhealth")) {
 				boolean isNowShowingHealth = this.boards.toggleShowingHealth(p);
 				if (isNowShowingHealth) {
-					if(BetterTeams.apiManager.getKeepShowHealth().contains(p.getUniqueId())){
-						BetterTeams.apiManager.getKeepShowHealth().remove(p.getUniqueId());
-					}
+					p.sendMessage(ChatColor.AQUA + "You are now seeing players' health.");
 				}
 				else {
-					if(!(BetterTeams.apiManager.getKeepShowHealth().contains(p.getUniqueId()))){
-						BetterTeams.apiManager.getKeepShowHealth().add(p.getUniqueId());
-					}
-					else {
-						BetterTeams.apiManager.getKeepShowHealth().remove(p.getUniqueId());
-					}
+					p.sendMessage(ChatColor.AQUA + "You are no longer seeing players' health.");
 				}
+				BetterTeams.apiManager.persist(p, isNowShowingHealth, BoardType.HEALTH);
 				return true;
 			}
 			
@@ -281,40 +277,24 @@ public class TeamCommandHandler implements CommandExecutor
 				boolean isNowShowingRPNames = boards.toggleShowingRPNames(p);
 
 				if (isNowShowingRPNames) {
-					if(BetterTeams.apiManager.getKeepMCNames().contains(p.getUniqueId())){
-						BetterTeams.apiManager.getKeepMCNames().remove(p.getUniqueId());
-					}
 					p.sendMessage(ChatColor.AQUA + "You are now seeing Roleplay names.");
 				}
 				else {
-					if(!(BetterTeams.apiManager.getKeepMCNames().contains(p.getUniqueId()))){
-						BetterTeams.apiManager.getKeepMCNames().add(p.getUniqueId());
-					}
-					else {
-						BetterTeams.apiManager.getKeepMCNames().remove(p.getUniqueId());
-					}
 					p.sendMessage(ChatColor.AQUA + "You are no longer seeing Roleplay names.");
 				}
+				BetterTeams.apiManager.persist(p, !isNowShowingRPNames, BoardType.MCNAMES);
 				return true;
 			}
 			
 			if (cmd.getName().equalsIgnoreCase("hidenameplates")) {
 				boolean isNowHidingNameplates = boards.toggleHideNameplates(p);
 				if (isNowHidingNameplates) {
-					if(!(BetterTeams.apiManager.getNoNameplates().contains(p.getUniqueId()))){
-						BetterTeams.apiManager.getNoNameplates().add(p.getUniqueId());
-						p.sendMessage(ChatColor.AQUA + "Nameplates are now hidden");
-					}
+					p.sendMessage(ChatColor.AQUA + "Nameplates are now hidden");
 				}
 				else {
-				    if(BetterTeams.apiManager.getNoNameplates().contains(p.getUniqueId())){
-				    	BetterTeams.apiManager.getNoNameplates().remove(p.getUniqueId());
-					}
-					else{
-				    	BetterTeams.apiManager.getNoNameplates().add(p.getUniqueId());
-					}
 					p.sendMessage(ChatColor.AQUA + "Nameplates are no longer hidden");
 				}
+				BetterTeams.apiManager.persist(p, isNowHidingNameplates, BoardType.NAMEPLATES);
 				return true;
 			}
 			

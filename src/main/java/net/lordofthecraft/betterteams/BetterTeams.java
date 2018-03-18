@@ -1,13 +1,16 @@
 package net.lordofthecraft.betterteams;
 
 import com.google.common.collect.Maps;
+
+import net.lordofthecraft.persistence.APIManager;
+import net.lordofthecraft.persistence.PersistenceFile;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import net.lordofthecraft.Persistence.APIManager;
-import net.lordofthecraft.Persistence.PersistenceFile;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventException;
@@ -20,145 +23,113 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 
-import static org.bukkit.Bukkit.getLogger;
-import static org.bukkit.Bukkit.getPlayer;
-
 public class BetterTeams extends JavaPlugin implements Listener {
 
-  static int ghostTaskId;
-  static BetterTeams Main;
-  static Scoreboard ghostBoard;
-  static TeamPacketListener packetListener;
+	static int ghostTaskId;
+	static BetterTeams Main;
+	static Scoreboard ghostBoard;
+	static TeamPacketListener packetListener;
 
-  static  APIManager apiManager;
-
-
-  static {
-    BetterTeams.ghostTaskId = -1;
-  }
-
-  public HashMap<UUID, Long> statusCooldown;
-  private BoardManager boards;
-
-  public static BetterTeams getMain() {
-    return Main;
-  }
-
-  public void onEnable() {
-    apiManager = new APIManager();
-
-    BetterTeams.Main = this;
-    File folder = getDataFolder();
-    if (!folder.exists()) {
-      folder.mkdirs();
-    }
-    PersistenceFile.init(new File(folder, "persistence.yml"));
-    this.getServer().getPluginManager().registerEvents(this, this);
-
-    this.statusCooldown = Maps.newHashMap();
-    this.boards = new BoardManager();
-
-    final PluginManager man = Bukkit.getPluginManager();
-    packetListener = new TeamPacketListener(this.boards);
-    man.registerEvents(new TeamPlayerListener(this.boards), this);
-
-    final TeamCommandHandler handler = new TeamCommandHandler();
-    this.getCommand("showhealth").setExecutor(handler);
-    this.getCommand("status").setExecutor(handler);
-    this.getCommand("appearto").setExecutor(handler);
-    this.getCommand("tagcolor").setExecutor(handler);
-    this.getCommand("showrpnames").setExecutor(handler);
-    this.getCommand("hidenameplates").setExecutor(handler);
-    this.getCommand("affixes").setExecutor(handler);
-    read();
-
-    Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-      for (Player p : Bukkit.getOnlinePlayers()) {
-        Affixes a = Affixes.onJoin(p, null);
-        boards.createTeams(a);
+	static  APIManager apiManager;
 
 
-        if (apiManager.getKeepShowHealth().contains(p.getUniqueId())) {
-          getLogger().info("adding to list in scheduler");
-          boards.toggleShowingHealth(p);
-        }
-      }
+	static {
+		BetterTeams.ghostTaskId = -1;
+	}
 
-    });
-  }
+	public HashMap<UUID, Long> statusCooldown;
+	private BoardManager boards;
 
-  public void onDisable() {
-    this.boards.unregister();
-    save();
-  }
+	public static BetterTeams getMain() {
+		return Main;
+	}
 
-  public BoardManager getBoardManager() {
-    return this.boards;
-  }
+	public void onEnable() {
+		apiManager = new APIManager();
 
-  @EventHandler (priority = EventPriority.HIGH)
-  public void onPlayerJoin(PlayerJoinEvent e) {
-    if (apiManager.getKeepShowHealth().contains(e.getPlayer().getUniqueId())) {
-      getLogger().info("Toggling Health in BetterTeams(PlayerJoin)");
-      this.getBoardManager().toggleShowingHealth(e.getPlayer());
-    }
+		BetterTeams.Main = this;
+		File folder = getDataFolder();
+		if (!folder.exists()) {
+			folder.mkdirs();
+		}
+		PersistenceFile.init(new File(folder, "persistence.yml"));
+		this.getServer().getPluginManager().registerEvents(this, this);
 
-    if (apiManager.getNoNameplates().contains(e.getPlayer().getUniqueId())) {
-      this.getBoardManager().toggleShowingRPNames(e.getPlayer());
-      getLogger().info("Toggling Nameplates in BetterTeams(PlayerJoin)");
-    }
-    if (apiManager.getKeepMCNames().contains(e.getPlayer().getUniqueId())) {
-      this.getBoardManager().toggleShowingRPNames(e.getPlayer());
-      getLogger().info("Toggling MCNames in BetterTeams(PlayerJoin)");
-    }
-    try {
+		this.statusCooldown = Maps.newHashMap();
+		this.boards = new BoardManager();
 
-    } catch (ArrayIndexOutOfBoundsException exc){
-      getLogger().info("IndexOutOfBonds error occured");
-    }
-  }
+		final PluginManager man = Bukkit.getPluginManager();
+		packetListener = new TeamPacketListener(this.boards);
+		man.registerEvents(new TeamPlayerListener(this.boards), this);
 
-  @EventHandler (priority = EventPriority.LOW)
-  public void onPlayerQuit(PlayerQuitEvent e) {
-    Player p = e.getPlayer();
-    save();
-    if (apiManager.getKeepShowHealth().contains(p.getUniqueId())
-        || apiManager.getKeepMCNames().contains(p.getUniqueId())
-        || apiManager.getNoNameplates().contains(p.getUniqueId())) {
-      save();
-    }
-  }
+		final TeamCommandHandler handler = new TeamCommandHandler();
+		this.getCommand("showhealth").setExecutor(handler);
+		this.getCommand("status").setExecutor(handler);
+		this.getCommand("appearto").setExecutor(handler);
+		this.getCommand("tagcolor").setExecutor(handler);
+		this.getCommand("showrpnames").setExecutor(handler);
+		this.getCommand("hidenameplates").setExecutor(handler);
+		this.getCommand("affixes").setExecutor(handler);
+		read();
 
-  private void save() {
-    PersistenceFile.getConfig().set("keepMCName", apiManager.getNoNameplates().stream().map(UUID::toString).collect
-        (Collectors.toList()));
-    PersistenceFile.getConfig().set("noNamePlates", apiManager.getNoNameplates().stream().map(UUID::toString).collect
-        (Collectors.toList()));
-    PersistenceFile.getConfig().set("showHealth", apiManager.getKeepShowHealth().stream().map(UUID::toString).collect
-        (Collectors.toList()));
-    PersistenceFile.save();
-  }
+		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				Affixes a = Affixes.onJoin(p, null);
+				boards.createTeams(a);
+			}
 
-  private void read() {
-    ArrayList<UUID> keepMCName = new ArrayList<>();
-    ArrayList<UUID> noNamePlates = new ArrayList<>();
-    ArrayList<UUID> showHealth = new ArrayList<>();
+		});
+	}
 
-    for (String uuid : PersistenceFile.getConfig().getStringList("keepMCName")) {
-      keepMCName.add(UUID.fromString(uuid));
-    }
+	public void onDisable() {
+		save();
+		this.boards.unregister();
+	}
 
-    for (String uuid : PersistenceFile.getConfig().getStringList("noNamePlates")) {
-      noNamePlates.add(UUID.fromString(uuid));
-    }
+	public BoardManager getBoardManager() {
+		return this.boards;
+	}
 
-    for (String uuid : PersistenceFile.getConfig().getStringList("showHealth")) {
-      showHealth.add(UUID.fromString(uuid));
-    }
+	@EventHandler (priority = EventPriority.LOW)
+	public void onPlayerQuit(PlayerQuitEvent e) {
+		Player p = e.getPlayer();
+		if (apiManager.getKeepShowHealth().contains(p.getUniqueId())
+				|| apiManager.getKeepMCNames().contains(p.getUniqueId())
+				|| apiManager.getNoNameplates().contains(p.getUniqueId())) {
+			save();
+		}
+	}
 
-    apiManager.setKeepMCNames(keepMCName);
-    apiManager.setKeepShowHealth(noNamePlates);
-    apiManager.setKeepShowHealth(showHealth);
+	private void save() {
+		PersistenceFile.getConfig().set("keepMCName", apiManager.getKeepMCNames().stream().map(UUID::toString).collect
+				(Collectors.toList()));
+		PersistenceFile.getConfig().set("noNamePlates", apiManager.getNoNameplates().stream().map(UUID::toString).collect
+				(Collectors.toList()));
+		PersistenceFile.getConfig().set("showHealth", apiManager.getKeepShowHealth().stream().map(UUID::toString).collect
+				(Collectors.toList()));
+		PersistenceFile.save();
+	}
 
-  }
+	private void read() {
+		ArrayList<UUID> keepMCName = new ArrayList<>();
+		ArrayList<UUID> noNamePlates = new ArrayList<>();
+		ArrayList<UUID> showHealth = new ArrayList<>();
+
+		for (String uuid : PersistenceFile.getConfig().getStringList("keepMCName")) {
+			keepMCName.add(UUID.fromString(uuid));
+		}
+
+		for (String uuid : PersistenceFile.getConfig().getStringList("noNamePlates")) {
+			noNamePlates.add(UUID.fromString(uuid));
+		}
+
+		for (String uuid : PersistenceFile.getConfig().getStringList("showHealth")) {
+			showHealth.add(UUID.fromString(uuid));
+		}
+
+		apiManager.setKeepMCNames(keepMCName);
+		apiManager.setKeepShowHealth(showHealth);
+		apiManager.setNoNameplates(noNamePlates);
+
+	}
 }
