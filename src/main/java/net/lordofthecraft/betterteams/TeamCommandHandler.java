@@ -1,8 +1,5 @@
 package net.lordofthecraft.betterteams;
 
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -192,8 +189,8 @@ public class TeamCommandHandler implements CommandExecutor
 							p.sendMessage("Modifying status for " + t.getName());
 						}
 					}
-					
-					if (args[0].equalsIgnoreCase("off")) {
+
+                    if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("clear") || args[0].equalsIgnoreCase("none") || args[0].equalsIgnoreCase("remove")) {
 						if (a.getStatus() == null) {
 							p.sendMessage(ChatColor.DARK_AQUA + "No status to clear");
 						} else {
