@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 @Getter @Setter
 public class PersistenceConfig {
     private static final List<APIManager> all = new ArrayList<>();
@@ -25,8 +26,6 @@ public class PersistenceConfig {
         map.put("nameplates", nonameplates);
 
         return map;
-
-
 
     }
 
