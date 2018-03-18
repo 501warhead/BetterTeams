@@ -99,17 +99,17 @@ public class BetterTeams extends JavaPlugin implements Listener {
   @EventHandler (priority = EventPriority.HIGH)
   public void onPlayerJoin(PlayerJoinEvent e) {
     if (apiManager.getKeepShowHealth().contains(e.getPlayer().getUniqueId())) {
-      getLogger().info("Toggling in BetterTeams(PlayerJoin)");
+      getLogger().info("Toggling Health in BetterTeams(PlayerJoin)");
       this.getBoardManager().toggleShowingHealth(e.getPlayer());
     }
 
     if (apiManager.getNoNameplates().contains(e.getPlayer().getUniqueId())) {
       this.getBoardManager().toggleShowingRPNames(e.getPlayer());
-      getLogger().info("Toggling in BetterTeams(PlayerJoin)");
+      getLogger().info("Toggling Nameplates in BetterTeams(PlayerJoin)");
     }
     if (apiManager.getKeepMCNames().contains(e.getPlayer().getUniqueId())) {
       this.getBoardManager().toggleShowingRPNames(e.getPlayer());
-      getLogger().info("Toggling in BetterTeams(PlayerJoin)");
+      getLogger().info("Toggling MCNames in BetterTeams(PlayerJoin)");
     }
     try {
 
