@@ -99,8 +99,10 @@ public class Affixes
 		boolean hasPrefix = prefixtag != null;
 		boolean hasStatus = status != null;
 
-		String prefix = (hasStatus ? "[" + status.toString() + ChatColor.RESET + "] " : "") +
+		String mcprefix = (hasStatus ? "[" + status.toString() + ChatColor.RESET + "] " : "") +
 				(hasPrefix && !hasStatus ? prefixtag.toString() + " " : "");
+		
+		String rpprefix = (hasStatus ? "[" + status.toString() + ChatColor.RESET + "] " : "");
 
 		String color = hasColor ? this.color.toString() : "";
 
@@ -112,26 +114,27 @@ public class Affixes
 
 		String rpname = persona == null ? mcname : persona.getName();
 
-		int extraspace = 16-prefix.length() - (sameColor ? 0 : color.length());
+		int rpextraspace = 16-rpprefix.length() - (sameColor ? 0 : color.length());
+		int mcextraspace = 16-mcprefix.length() - (sameColor ? 0 : color.length());
 
 		if (rpname.length() <= 16-color.length()) {
-			prefix_rp = prefix;
+			prefix_rp = rpprefix;
 			suffix_rp = color+rpname;
 		} else {
-			prefix_rp = prefix + (sameColor ? "" : color) + rpname.substring(0, extraspace);
-			if (rpname.length() <= (16-color.length()) + extraspace) 
-				suffix_rp = color + rpname.substring(extraspace);
+			prefix_rp = rpprefix + (sameColor ? "" : color) + rpname.substring(0, rpextraspace);
+			if (rpname.length() <= (16-color.length()) + rpextraspace) 
+				suffix_rp = color + rpname.substring(rpextraspace);
 			else {
-				suffix_rp = color + rpname.substring(extraspace, extraspace+(15-color.length())) + ELLIPSES;
+				suffix_rp = color + rpname.substring(rpextraspace, rpextraspace+(15-color.length())) + ELLIPSES;
 			}
 		}
 
 		if (mcname.length() <= 16-color.length()) {
-			prefix_mc = prefix;
+			prefix_mc = mcprefix;
 			suffix_mc = color+mcname;
 		} else {
-			prefix_mc = prefix + (sameColor ? "" : color) + mcname.substring(0, extraspace);
-			suffix_mc = color + mcname.substring(extraspace);
+			prefix_mc = mcprefix + (sameColor ? "" : color) + mcname.substring(0, mcextraspace);
+			suffix_mc = color + mcname.substring(mcextraspace);
 		}
 
 	}
