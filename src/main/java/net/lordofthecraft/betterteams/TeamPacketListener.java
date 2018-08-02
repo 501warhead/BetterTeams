@@ -79,13 +79,13 @@ public class TeamPacketListener implements Listener
 		packet.getPlayerInfoDataLists().write(0, Collections.singletonList(pid));
 		
 		ProtocolLibrary.getProtocolManager().broadcastServerPacket(packet);
-	}*/
+	}
 	
 	protected String getColor(PlayerInfoData info) {
 		Affixes a = Affixes.fromExistingTeams(info.getProfile().getUUID());
 		if (a == null || a.getColor() == null) return ChatColor.WHITE.toString();
 		else return a.getColor().toString();
-	}
+	}*/
 
 	public String getPlayerTeamCode(Player player) {
 		return playerNameMappings.get(player.getUniqueId());

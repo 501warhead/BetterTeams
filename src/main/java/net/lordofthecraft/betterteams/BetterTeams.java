@@ -13,11 +13,9 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -67,6 +65,7 @@ public class BetterTeams extends JavaPlugin implements Listener {
 		this.getCommand("status").setExecutor(handler);
 		this.getCommand("appearto").setExecutor(handler);
 		this.getCommand("tagcolor").setExecutor(handler);
+		this.getCommand("prefixtag").setExecutor(handler);
 		this.getCommand("showrpnames").setExecutor(handler);
 		this.getCommand("hidenameplates").setExecutor(handler);
 		this.getCommand("affixes").setExecutor(handler);
@@ -74,15 +73,21 @@ public class BetterTeams extends JavaPlugin implements Listener {
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
 			for (Player p : Bukkit.getOnlinePlayers()) {
-				Affixes a = Affixes.onJoin(p, null);
-				boards.createTeams(a);
+		        BetterTeams.packetListener.newPlayerNameMapping(p);
+		        Affixes a = Affixes.onJoin(p, null);
+		        boards.updateHealth(p, p.getHealth());
+		        p.setPlayerListName(a.getTabName());
 			}
 
-		});
+		}, 100l);
 	}
 
 	public void onDisable() {
 		save();
+		for (Player p : Bukkit.getOnlinePlayers()) {
+			this.boards.close(p);
+			BetterTeams.packetListener.clearPlayerMapping(p);
+		}
 		this.boards.unregister();
 	}
 

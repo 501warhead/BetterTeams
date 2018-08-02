@@ -34,8 +34,13 @@ commands:
     permission: betterteams.tagcolor
     usage: Invalid usage. Accepted arguments are 'on', 'off' or '[groupname]'.
     aliases: [tag]
+  prefixtag:
+    description: Updates the your nametag in accordance with your staff rank
+    permission: betterteams.prefix
+    usage: Invalid usage. Accepted arguments are 'on', 'off' or '[groupname]'.
+    aliases: [stafftag]
   affixes:
-    description: Shows the health of each player below their name.
+    description: Shows the breakdown of current affixes for a player
     permission: betterteams.affixes
-    usage: Invalid usage. Use /affixes <player>
+    usage: Invalid usage. Use /affixes [player]
     aliases: [aff, affix]
