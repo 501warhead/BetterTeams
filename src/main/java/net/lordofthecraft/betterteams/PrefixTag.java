@@ -8,15 +8,6 @@ public enum PrefixTag
 	
     DEV		(String.valueOf(ChatColor.GOLD 				+""+ ChatColor.BOLD), 	"T"),
     ADMIN	(String.valueOf(ChatColor.DARK_RED 			+""+ ChatColor.BOLD), 	"A"),
-    
-    WDLEAD	(String.valueOf(ChatColor.AQUA 				+""+ ChatColor.BOLD), 	"WD"),
-    GMLEAD	(String.valueOf(ChatColor.BLUE	 			+""+ ChatColor.BOLD), 	"GM"),
-    ATLEAD	(String.valueOf(ChatColor.LIGHT_PURPLE 		+""+ ChatColor.BOLD), 	"AT"),
-    LTLEAD	(String.valueOf(ChatColor.GREEN 			+""+ ChatColor.BOLD), 	"LT"),
-    FMLEAD	(String.valueOf(ChatColor.RED 				+""+ ChatColor.BOLD), 	"FM"),
-    WTLEAD	(String.valueOf(ChatColor.DARK_AQUA 		+""+ ChatColor.BOLD), 	"WT"),
-    ETLEAD	(String.valueOf(ChatColor.DARK_GREEN 		+""+ ChatColor.BOLD), 	"ET"),
-    MTLEAD	(String.valueOf(ChatColor.YELLOW			+""+ ChatColor.BOLD), 	"ET"),
     	
     WD		(String.valueOf(ChatColor.AQUA), 									"WD"),
     GM		(String.valueOf(ChatColor.BLUE), 									"GM"),
@@ -86,7 +77,7 @@ public enum PrefixTag
 
 	public static PrefixTag match(String substring) {
 		for(PrefixTag pt : PrefixTag.values()) {
-    		if(pt.toString().equals(substring)) return pt;
+    		if(pt.tag.equals(substring)) return pt;
     	}
     	return null;
 	}
