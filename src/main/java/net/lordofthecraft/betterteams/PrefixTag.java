@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 public enum PrefixTag
 {
 	
-    DEV		(String.valueOf(ChatColor.GOLD 				+""+ ChatColor.BOLD), 	"T"),
+    DEV		(String.valueOf(ChatColor.GOLD), 									"T"),
     ADMIN	(String.valueOf(ChatColor.DARK_RED 			+""+ ChatColor.BOLD), 	"A"),
     
     WDLEAD	(String.valueOf(ChatColor.AQUA 				+""+ ChatColor.BOLD), 	"WD"),
@@ -16,7 +16,7 @@ public enum PrefixTag
     FMLEAD	(String.valueOf(ChatColor.RED 				+""+ ChatColor.BOLD), 	"FM"),
     WTLEAD	(String.valueOf(ChatColor.DARK_AQUA 		+""+ ChatColor.BOLD), 	"WT"),
     ETLEAD	(String.valueOf(ChatColor.DARK_GREEN 		+""+ ChatColor.BOLD), 	"ET"),
-    MTLEAD	(String.valueOf(ChatColor.YELLOW			+""+ ChatColor.BOLD), 	"ET"),
+    MTLEAD	(String.valueOf(ChatColor.YELLOW			+""+ ChatColor.BOLD), 	"MT"),
     	
     WD		(String.valueOf(ChatColor.AQUA), 									"WD"),
     GM		(String.valueOf(ChatColor.BLUE), 									"GM"),

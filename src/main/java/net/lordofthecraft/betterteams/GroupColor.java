@@ -11,7 +11,7 @@ public enum GroupColor
    
     VIP500	(String.valueOf(ChatColor.YELLOW 			+""+ ChatColor.BOLD), 	"VIP500"),
     VIP300	(String.valueOf(ChatColor.DARK_PURPLE 		+""+ ChatColor.BOLD), 	"VIP300"),
-    VIP200	(String.valueOf(ChatColor.LIGHT_PURPLE),							"VIP200"),
+    VIP200	(String.valueOf(ChatColor.DARK_PURPLE),								"VIP200"),
     VIP100	(String.valueOf(ChatColor.AQUA), 									"VIP100"),
     VIP50	(String.valueOf(ChatColor.GOLD), 									"VIP50"),
     VIP25	(String.valueOf(ChatColor.GRAY), 									"VIP25"),
