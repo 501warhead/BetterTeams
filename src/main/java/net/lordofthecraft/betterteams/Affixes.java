@@ -100,13 +100,13 @@ public class Affixes
 		boolean hasStatus = status != null;
 
 		String mcprefix = (hasStatus ? "[" + status.toString() + ChatColor.RESET + "] " : "") +
-				(hasPrefix && !hasStatus ? color.getPrimaryColor() + "[" + prefixtag.getTag() + "] " : "");
+				(hasPrefix && !hasStatus ? prefixtag.toString() + " " : "");
 		
 		String rpprefix = (hasStatus ? "[" + status.toString() + ChatColor.RESET + "] " : "");
 
 		String color = hasColor ? this.color.toString() : "";
 
-		boolean sameColor = hasPrefix && !this.color.isStylized();
+		boolean sameColor = hasPrefix && prefixtag.getColor().equals(color);
 
 		String mcname = player.getName();
 
@@ -275,7 +275,7 @@ public class Affixes
 	}
 
 	public String getTabName() {
-		return (prefixtag == null ? "" : color.getPrimaryColor() + "[" + prefixtag.getTag() + "]" + " ") + color.toString() + this.getPlayer().getName();
+		return (prefixtag == null ? "" : prefixtag.toString() + " ") + color.toString() + this.getPlayer().getName();
 	}
 
 	private Status parseStatus() {
@@ -316,7 +316,8 @@ public class Affixes
 		String sub = prefix.substring(offset);
 
 		if (parseHasPrefixTag(sub)) {
-			this.prefixtag = PrefixTag.match(sub.substring(sub.indexOf('[')+1, sub.indexOf(']')));
+			int end = sub.indexOf(']')+1;
+			this.prefixtag = PrefixTag.match(sub.substring(0, end));
 		} else {
 			this.prefixtag = null;
 		}
