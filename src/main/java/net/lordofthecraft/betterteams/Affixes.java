@@ -335,7 +335,7 @@ public class Affixes
 				"Suffix MC: " + "'" + suffix_mc.replace(ChatColor.COLOR_CHAR, '&')+ ChatColor.RESET + "'" + "\n" + 
 				"Prefix RP: " + "'" + prefix_rp.replace(ChatColor.COLOR_CHAR, '&')+ ChatColor.RESET + "'" + "\n" + 
 				"Suffix RP: " + "'" + suffix_rp.replace(ChatColor.COLOR_CHAR, '&')+ ChatColor.RESET + "'" + "\n" + 
-				"Name Mapping: " + "'" + BetterTeams.packetListener.getPlayerTeamCode(player)+ ChatColor.RESET + "'" + "\n" + 
+				"Name Mapping: " + "'" + BetterTeams.packetListener.getPlayerTeamCode(player).replace(ChatColor.COLOR_CHAR, '&')+ ChatColor.RESET + "'" + "\n" + 
 				"Bukkit Custom: " + "'" + player.getCustomName()+ ChatColor.RESET + "'" + "\n" + 
 				"Bukkit Display: " + "'" + player.getDisplayName()+ ChatColor.RESET + "'" + "\n" + 
 				"Bukkit List: " + "'" + player.getPlayerListName()+ ChatColor.RESET + "'";
