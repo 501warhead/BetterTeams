@@ -4,6 +4,9 @@ import com.google.common.collect.Maps;
 
 import net.lordofthecraft.persistence.APIManager;
 import net.lordofthecraft.persistence.PersistenceFile;
+import net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_12_R1.PacketPlayOutNamedEntitySpawn;
+import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,6 +15,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -73,13 +77,32 @@ public class BetterTeams extends JavaPlugin implements Listener {
 
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
 			for (Player p : Bukkit.getOnlinePlayers()) {
-		        BetterTeams.packetListener.newPlayerNameMapping(p);
-		        Affixes a = Affixes.onJoin(p, null);
-		        boards.updateHealth(p, p.getHealth());
-		        p.setPlayerListName(a.getTabName());
-			}
+				BetterTeams.packetListener.newPlayerNameMapping(p);
+				Affixes a = Affixes.onJoin(p, null);
+				boards.updateHealth(p, p.getHealth());
+				p.setPlayerListName(a.getTabName());
+				CraftPlayer craftPlayer = ((CraftPlayer) p);
 
-		}, 100l);
+				for (final Player others : Bukkit.getOnlinePlayers()) {
+					if (!others.getUniqueId().equals(p.getUniqueId())) {
+						((CraftPlayer) others).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(p.getEntityId()));
+						((CraftPlayer) others).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(craftPlayer.getHandle()));
+						Bukkit.getServer().getScheduler().runTask(this, new Runnable() {
+							@Override
+							public void run() {
+								others.hidePlayer(p);
+							}
+						});
+						Bukkit.getServer().getScheduler().runTaskLater(this, new Runnable() {
+							@Override
+							public void run() {
+								others.showPlayer(p);
+							}
+						}, 5);
+					}
+				}
+			}
+		}, 40l);
 	}
 
 	public void onDisable() {

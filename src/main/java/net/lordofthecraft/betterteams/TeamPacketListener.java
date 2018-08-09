@@ -15,13 +15,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.google.common.collect.HashBiMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 
 public class TeamPacketListener implements Listener
 {
