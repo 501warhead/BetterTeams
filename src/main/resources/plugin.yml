@@ -4,6 +4,7 @@ description: Integrates all possible team functionality in a sensible way.
 version: ${project.version}
 depend: [ProtocolLib, ArcheCore]
 author: Arche
+api-version: 1.13
 
 commands:
   showhealth:
