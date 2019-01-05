@@ -9,10 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import net.lordofthecraft.persistence.APIManager;
 import net.lordofthecraft.persistence.APIManager.BoardType;
-
-import static org.bukkit.Bukkit.getLogger;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -59,6 +56,7 @@ public class TeamCommandHandler implements CommandExecutor
 		return (sb.toString());
 	}
 
+	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 		if (!(sender instanceof Player)) {
 
@@ -279,7 +277,7 @@ public class TeamCommandHandler implements CommandExecutor
 					p.sendMessage(ChatColor.DARK_AQUA + "This is not a valid status.");
 				}
 				return true;
-			}		
+			}
 		}else if (cmd.getName().equalsIgnoreCase("appearto")) {
 			if (args.length == 0) {
 				if (this.boards.isGhosting(p)) {
@@ -348,7 +346,7 @@ public class TeamCommandHandler implements CommandExecutor
 				Player target = null;
 				if (args.length == 0)
 					target = p;
-				else 
+				else
 					target = Bukkit.getServer().getPlayer(args[0]);
 				if (target != null) {
 					Affixes aff = Affixes.fromExistingTeams(target);

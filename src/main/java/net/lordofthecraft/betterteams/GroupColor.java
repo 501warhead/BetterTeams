@@ -5,18 +5,14 @@ import org.bukkit.entity.Player;
 
 public enum GroupColor
 {
-    DEV		(String.valueOf(ChatColor.GOLD 				+""+ ChatColor.BOLD), 	"Dev"),
-    ADMIN	(String.valueOf(ChatColor.DARK_RED 			+""+ ChatColor.BOLD), 	"Admin"),
-    GM		(String.valueOf(ChatColor.BLUE 				+""+ ChatColor.BOLD), 	"GM"),
-   
-    VIP500	(String.valueOf(ChatColor.YELLOW 			+""+ ChatColor.BOLD), 	"VIP500"),
-    VIP300	(String.valueOf(ChatColor.DARK_PURPLE 		+""+ ChatColor.BOLD), 	"VIP300"),
-    VIP200	(String.valueOf(ChatColor.DARK_PURPLE),								"VIP200"),
-    VIP100	(String.valueOf(ChatColor.AQUA), 									"VIP100"),
-    VIP50	(String.valueOf(ChatColor.GOLD), 									"VIP50"),
-    VIP25	(String.valueOf(ChatColor.GRAY), 									"VIP25"),
-    VIP10	(String.valueOf(ChatColor.DARK_GRAY), 								"VIP10"), 
-    NORMAL	(String.valueOf(ChatColor.WHITE), 									"Normal");
+    VIP500(ChatColor.YELLOW+""+ ChatColor.BOLD,"VIP500"),
+    VIP300(ChatColor.DARK_PURPLE+""+ ChatColor.BOLD,"VIP300"),
+    VIP200(""+(ChatColor.DARK_PURPLE),"VIP200"),
+    VIP100(""+(ChatColor.AQUA),"VIP100"),
+    VIP50	(""+(ChatColor.GOLD),"VIP50"),
+    VIP25	(""+(ChatColor.GRAY),"VIP25"),
+    VIP10	(""+(ChatColor.DARK_GRAY),"VIP10"),
+    NORMAL(""+ChatColor.WHITE,"Normal");
     
     private final String color;
     private final String group;
@@ -57,7 +53,8 @@ public enum GroupColor
     	return color.length() == 4;
     }
     
-    public String toString() {
+    @Override
+		public String toString() {
         return this.color;
     }
     
