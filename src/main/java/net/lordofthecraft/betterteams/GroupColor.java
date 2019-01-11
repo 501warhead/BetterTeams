@@ -7,7 +7,7 @@ public enum GroupColor
 {
     DEV		(String.valueOf(ChatColor.GOLD 				+""+ ChatColor.BOLD), 	"Dev"),
     ADMIN	(String.valueOf(ChatColor.DARK_RED 			+""+ ChatColor.BOLD), 	"Admin"),
-    GM		(String.valueOf(ChatColor.BLUE 				+""+ ChatColor.BOLD), 	"GM"),
+    MOD		(String.valueOf(ChatColor.BLUE 				+""+ ChatColor.BOLD), 	"Mod"),
    
     VIP500	(String.valueOf(ChatColor.YELLOW 			+""+ ChatColor.BOLD), 	"VIP500"),
     VIP300	(String.valueOf(ChatColor.DARK_PURPLE 		+""+ ChatColor.BOLD), 	"VIP300"),
