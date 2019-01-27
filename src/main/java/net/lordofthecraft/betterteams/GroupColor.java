@@ -5,25 +5,26 @@ import org.bukkit.entity.Player;
 
 public enum GroupColor
 {
-    DEV		(String.valueOf(ChatColor.GOLD 				+""+ ChatColor.BOLD), 	"Dev"),
-    ADMIN	(String.valueOf(ChatColor.DARK_RED 			+""+ ChatColor.BOLD), 	"Admin"),
-    MOD		(String.valueOf(ChatColor.BLUE 				+""+ ChatColor.BOLD), 	"Mod"),
+    DEV		(String.valueOf(ChatColor.GOLD 				+""+ ChatColor.BOLD)),
+    ADMIN	(String.valueOf(ChatColor.DARK_RED 			+""+ ChatColor.BOLD)),
+    MOD		(String.valueOf(ChatColor.BLUE 				+""+ ChatColor.BOLD)),
+    C		(String.valueOf(ChatColor.LIGHT_PURPLE 		+""+ ChatColor.BOLD)),
    
-    VIP500	(String.valueOf(ChatColor.YELLOW 			+""+ ChatColor.BOLD), 	"VIP500"),
-    VIP300	(String.valueOf(ChatColor.DARK_PURPLE 		+""+ ChatColor.BOLD), 	"VIP300"),
-    VIP200	(String.valueOf(ChatColor.DARK_PURPLE),								"VIP200"),
-    VIP100	(String.valueOf(ChatColor.AQUA), 									"VIP100"),
-    VIP50	(String.valueOf(ChatColor.GOLD), 									"VIP50"),
-    VIP25	(String.valueOf(ChatColor.GRAY), 									"VIP25"),
-    VIP10	(String.valueOf(ChatColor.DARK_GRAY), 								"VIP10"), 
-    NORMAL	(String.valueOf(ChatColor.WHITE), 									"Normal");
+    VIP500	(String.valueOf(ChatColor.YELLOW 			+""+ ChatColor.BOLD)),
+    VIP300	(String.valueOf(ChatColor.DARK_PURPLE 		+""+ ChatColor.BOLD)),
+    VIP200	(String.valueOf(ChatColor.DARK_PURPLE)							),
+    VIP100	(String.valueOf(ChatColor.AQUA) 								),
+    VIP50	(String.valueOf(ChatColor.GOLD) 								),
+    VIP25	(String.valueOf(ChatColor.GRAY)									),
+    VIP10	(String.valueOf(ChatColor.DARK_GRAY) 							), 
+    NORMAL	(String.valueOf(ChatColor.WHITE) 								);
     
     private final String color;
     private final String group;
 
-    GroupColor(final String color, final String group) {
+    GroupColor(final String color) {
         this.color = color;
-        this.group = group;
+        this.group = this.name().toLowerCase();
     }
     
     public static GroupColor getHighest(final Player p) {

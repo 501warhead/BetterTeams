@@ -10,20 +10,17 @@ public enum PrefixTag
     ADMIN	(String.valueOf(ChatColor.DARK_RED 			+""+ ChatColor.BOLD), 	"A"),
     
     WDLEAD	(String.valueOf(ChatColor.AQUA 				+""+ ChatColor.BOLD), 	"WD"),
-    ATLEAD	(String.valueOf(ChatColor.LIGHT_PURPLE 		+""+ ChatColor.BOLD), 	"AT"),
     LTLEAD	(String.valueOf(ChatColor.GREEN 			+""+ ChatColor.BOLD), 	"LT"),
     WTLEAD	(String.valueOf(ChatColor.DARK_AQUA 		+""+ ChatColor.BOLD), 	"WT"),
     ETLEAD	(String.valueOf(ChatColor.DARK_GREEN 		+""+ ChatColor.BOLD), 	"ET"),
-    MTLEAD	(String.valueOf(ChatColor.YELLOW			+""+ ChatColor.BOLD), 	"MT"),
     	
     WD		(String.valueOf(ChatColor.AQUA), 									"WD"),
     MOD		(String.valueOf(ChatColor.BLUE), 									"M"),
+    C		(String.valueOf(ChatColor.LIGHT_PURPLE), 							"C"),
     CODER	(String.valueOf(ChatColor.GOLD), 									"C"),
-    AT		(String.valueOf(ChatColor.LIGHT_PURPLE), 							"AT"),
     LT		(String.valueOf(ChatColor.GREEN), 									"LT"),
     ET		(String.valueOf(ChatColor.DARK_GREEN), 								"ET"),
-    WT		(String.valueOf(ChatColor.DARK_AQUA), 								"WT"),
-    MT		(String.valueOf(ChatColor.YELLOW), 									"MT");
+    WT		(String.valueOf(ChatColor.DARK_AQUA), 								"WT");
     
     private final String tag;
     private final String color;
