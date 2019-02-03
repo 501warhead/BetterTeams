@@ -5,8 +5,9 @@ import org.bukkit.entity.Player;
 
 public enum GroupColor
 {
-    DEV		(String.valueOf(ChatColor.GOLD 				+""+ ChatColor.BOLD)),
+    TECH	(String.valueOf(ChatColor.RED				+""+ ChatColor.BOLD)),
     ADMIN	(String.valueOf(ChatColor.DARK_RED 			+""+ ChatColor.BOLD)),
+    DEV		(String.valueOf(ChatColor.GOLD				+""+ ChatColor.BOLD)),
     MOD		(String.valueOf(ChatColor.BLUE 				+""+ ChatColor.BOLD)),
     C		(String.valueOf(ChatColor.LIGHT_PURPLE 		+""+ ChatColor.BOLD)),
    
