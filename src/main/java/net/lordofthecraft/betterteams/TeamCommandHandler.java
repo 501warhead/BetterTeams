@@ -330,7 +330,7 @@ public class TeamCommandHandler implements CommandExecutor
 				return true;
 			}
 
-			if (cmd.getName().equalsIgnoreCase("hidenameplates")) {
+			if (cmd.getName().equalsIgnoreCase("shownameplates")) {
 				boolean isNowHidingNameplates = boards.toggleHideNameplates(p);
 				if (isNowHidingNameplates) {
 					p.sendMessage(ChatColor.AQUA + "Nameplates are now hidden");

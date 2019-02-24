@@ -66,7 +66,7 @@ public class BetterTeams extends JavaPlugin implements Listener {
 		this.getCommand("tagcolor").setExecutor(handler);
 		this.getCommand("prefixtag").setExecutor(handler);
 		this.getCommand("showrpnames").setExecutor(handler);
-		this.getCommand("hidenameplates").setExecutor(handler);
+		this.getCommand("shownameplates").setExecutor(handler);
 		this.getCommand("affixes").setExecutor(handler);
 		read();
 
