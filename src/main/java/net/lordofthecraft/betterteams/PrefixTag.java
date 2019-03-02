@@ -9,17 +9,10 @@ public enum PrefixTag
 	TECH	(String.valueOf(ChatColor.RED), 									"T"),
 	ADMIN	(String.valueOf(ChatColor.DARK_RED 			+""+ ChatColor.BOLD), 	"A"),
 
-	LTLEAD	(String.valueOf(ChatColor.GREEN 			+""+ ChatColor.BOLD), 	"LT"),
-	WTLEAD	(String.valueOf(ChatColor.DARK_AQUA 		+""+ ChatColor.BOLD), 	"WT"),
-	ETLEAD	(String.valueOf(ChatColor.DARK_GREEN 		+""+ ChatColor.BOLD), 	"ET"),
-
 	DEV		(String.valueOf(ChatColor.GOLD), 									"D"),
 	MOD		(String.valueOf(ChatColor.BLUE), 									"M"),
 	C		(String.valueOf(ChatColor.LIGHT_PURPLE), 							"C"),
-	CODER	(String.valueOf(ChatColor.GOLD), 									"C"),
-	LT		(String.valueOf(ChatColor.GREEN), 									"LT"),
-	ET		(String.valueOf(ChatColor.DARK_GREEN), 								"ET"),
-	WT		(String.valueOf(ChatColor.DARK_AQUA), 								"WT");
+	S		(String.valueOf(ChatColor.GREEN), 									"S");
 
 	private final String tag;
 	private final String color;
