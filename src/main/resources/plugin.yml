@@ -4,6 +4,7 @@ description: Integrates all possible team functionality in a sensible way.
 version: ${project.version}
 depend: [ProtocolLib, ArcheCore]
 author: Arche
+api-version: 1.13
 
 commands:
   showhealth:
@@ -14,13 +15,11 @@ commands:
   showrpnames:
     description: Toggle between the showing of MC Names or RP names
     permission: betterteams.showrpnames
-    usage: Invalid usage. Use /showrpnames
-    aliases: [usernames, showusernames, showmcnames, showroleplaynames, showminecraftnames, toggleusernames, togglemcnames, mcnames, rpnames, mcn, rpn]
-  hidenameplates:
-    description: Hide the nameplates of other players
+    aliases: [showmcnames, rpnames, mcnames]
+  shownameplates:
+    description: Hide or show the nameplates of other players
     permission: betterteams.hidenameplates
-    usage: Invalid usage. Use /hidenameplates
-    aliases: [shownameplates, togglenameplates, names, nameplates, shownames, hidenames, togglenames]
+    aliases: [nameplates, names]
   status:
     description: Update your status icon
     permission: betterteams.status
@@ -38,9 +37,7 @@ commands:
     description: Updates the your nametag in accordance with your staff rank
     permission: betterteams.prefix
     usage: Invalid usage. Accepted arguments are 'on', 'off' or '[groupname]'.
-    aliases: [stafftag]
   affixes:
     description: Shows the breakdown of current affixes for a player
     permission: betterteams.affixes
     usage: Invalid usage. Use /affixes [player]
-    aliases: [aff, affix]

@@ -1,21 +1,16 @@
 package net.lordofthecraft.betterteams;
 
+import com.comphenix.packetwrapper.WrapperPlayServerEntityDestroy;
+import com.comphenix.packetwrapper.WrapperPlayServerNamedEntitySpawn;
 import com.google.common.collect.Maps;
-
-import net.lordofthecraft.persistence.APIManager;
-import net.lordofthecraft.persistence.PersistenceFile;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy;
-import net.minecraft.server.v1_12_R1.PacketPlayOutNamedEntitySpawn;
-import net.minecraft.server.v1_12_R1.PacketPlayOutPlayerInfo;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
+import net.lordofthecraft.persistence.APIManager;
+import net.lordofthecraft.persistence.PersistenceFile;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -71,7 +66,7 @@ public class BetterTeams extends JavaPlugin implements Listener {
 		this.getCommand("tagcolor").setExecutor(handler);
 		this.getCommand("prefixtag").setExecutor(handler);
 		this.getCommand("showrpnames").setExecutor(handler);
-		this.getCommand("hidenameplates").setExecutor(handler);
+		this.getCommand("shownameplates").setExecutor(handler);
 		this.getCommand("affixes").setExecutor(handler);
 		read();
 
@@ -81,28 +76,27 @@ public class BetterTeams extends JavaPlugin implements Listener {
 				Affixes a = Affixes.onJoin(p, null);
 				boards.updateHealth(p, p.getHealth());
 				p.setPlayerListName(a.getTabName());
-				CraftPlayer craftPlayer = ((CraftPlayer) p);
 
 				for (final Player others : Bukkit.getOnlinePlayers()) {
 					if (!others.getUniqueId().equals(p.getUniqueId())) {
-						((CraftPlayer) others).getHandle().playerConnection.sendPacket(new PacketPlayOutEntityDestroy(p.getEntityId()));
-						((CraftPlayer) others).getHandle().playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(craftPlayer.getHandle()));
-						Bukkit.getServer().getScheduler().runTask(this, new Runnable() {
-							@Override
-							public void run() {
-								others.hidePlayer(p);
-							}
-						});
-						Bukkit.getServer().getScheduler().runTaskLater(this, new Runnable() {
-							@Override
-							public void run() {
-								others.showPlayer(p);
-							}
-						}, 5);
+						WrapperPlayServerEntityDestroy  destroyPacket = new WrapperPlayServerEntityDestroy();
+						destroyPacket.setEntityIds(new int[]{p.getEntityId()});
+						destroyPacket.sendPacket(others);
+
+						WrapperPlayServerNamedEntitySpawn spawnPacket = new WrapperPlayServerNamedEntitySpawn();
+						spawnPacket.setPlayerUUID(p.getUniqueId());
+						spawnPacket.setEntityID(p.getEntityId());
+						spawnPacket.setPosition(p.getLocation().toVector());
+						spawnPacket.setYaw(p.getLocation().getYaw());
+						spawnPacket.setPitch(p.getLocation().getPitch());
+						spawnPacket.sendPacket(others);
+
+						Bukkit.getServer().getScheduler().runTask(this, () -> others.hidePlayer(this, p));
+						Bukkit.getServer().getScheduler().runTaskLater(this, () -> others.showPlayer(this, p), 5);
 					}
 				}
 			}
-		}, 40l);
+		}, 40L);
 	}
 
 	public void onDisable() {

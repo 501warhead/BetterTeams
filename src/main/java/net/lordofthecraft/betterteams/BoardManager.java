@@ -29,7 +29,7 @@ public class BoardManager {
 		for (int i = 0; i < this.boards.length; ++i) {
 			this.boards[i] = this.manager.getNewScoreboard();
 			if (i == 1 || i == 3) {
-				final Objective o = this.boards[i].registerNewObjective("showhealth", "dummy");
+				final Objective o = this.boards[i].registerNewObjective("showhealth", "dummy", "dummy");
 				o.setDisplaySlot(DisplaySlot.BELOW_NAME);
 				o.setDisplayName(ChatColor.DARK_RED + "\u2764");
 

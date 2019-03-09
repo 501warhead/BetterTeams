@@ -3,13 +3,14 @@ package net.lordofthecraft.betterteams;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public enum GroupColor
-{
+public enum GroupColor {
+
     TECH	(String.valueOf(ChatColor.RED				+""+ ChatColor.BOLD)),
     ADMIN	(String.valueOf(ChatColor.DARK_RED 			+""+ ChatColor.BOLD)),
     DEV		(String.valueOf(ChatColor.GOLD				+""+ ChatColor.BOLD)),
     MOD		(String.valueOf(ChatColor.BLUE 				+""+ ChatColor.BOLD)),
     C		(String.valueOf(ChatColor.LIGHT_PURPLE 		+""+ ChatColor.BOLD)),
+    S		(String.valueOf(ChatColor.GREEN		 		+""+ ChatColor.BOLD)),
    
     VIP500	(String.valueOf(ChatColor.YELLOW 			+""+ ChatColor.BOLD)),
     VIP300	(String.valueOf(ChatColor.DARK_PURPLE 		+""+ ChatColor.BOLD)),
@@ -59,7 +60,8 @@ public enum GroupColor
     	return color.length() == 4;
     }
     
-    public String toString() {
+    @Override
+		public String toString() {
         return this.color;
     }
     
