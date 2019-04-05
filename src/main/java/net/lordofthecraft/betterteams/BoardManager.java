@@ -193,11 +193,12 @@ public class BoardManager {
 			Team t = board.getTeam(p.getName());
 			if ( t != null)BetterTeams.Main.getLogger().warning("Player Teams already existed for nascent player:" + p.getName());
 			else t = board.registerNewTeam(p.getName());
+			if(p.hasPermission("archecore.mayuse")) t.setColor(ChatColor.GREEN);
 			t.addEntry(p.getName()); //This lets the player's client know which team they're supposed to be on
 
 			t.setOption(Option.NAME_TAG_VISIBILITY, boardShowsNameplates(board)?
 					Team.OptionStatus.FOR_OWN_TEAM :
-						Team.OptionStatus.NEVER	
+						Team.OptionStatus.NEVER
 					);
 			t.setOption(Option.COLLISION_RULE, OptionStatus.NEVER);
 
@@ -265,7 +266,7 @@ public class BoardManager {
 		for(Scoreboard board : boards) {
 			if( this.boardShowsHealth(board) ){
 				String playerCode = BetterTeams.packetListener.getPlayerTeamCode(p);
-				if(playerCode == null) continue;	
+				if(playerCode == null) continue;
 				Objective o = board.getObjective(DisplaySlot.BELOW_NAME);
 				Score score = o.getScore(playerCode);
 				score.setScore(intHP);
