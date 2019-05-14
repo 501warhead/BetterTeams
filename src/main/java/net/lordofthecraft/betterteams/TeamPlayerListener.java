@@ -87,7 +87,7 @@ public class TeamPlayerListener implements Listener {
 	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
 		Affixes a = Affixes.fromExistingTeams(e.getEntity());
-		if (a.getStatus() != null) {
+		if (a != null && a.getStatus() != null) {
 			a.setStatus(null);
 			this.boards.apply(a);
 			e.getEntity().sendMessage(ChatColor.AQUA + "Cleared your status due to death.");
