@@ -30,6 +30,7 @@ public class APIManager {
 		case MCNAMES:
 			list = this.keepMCNames;
 			break;
+		default: throw new IllegalArgumentException();
 		}
 		
 		boolean contains = list.contains(p.getUniqueId());
