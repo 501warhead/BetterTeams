@@ -5,15 +5,16 @@ import org.bukkit.entity.Player;
 
 public enum GroupColor {
 
-    TECH	(String.valueOf(ChatColor.RED				+""+ ChatColor.BOLD)),
-    ADMIN	(String.valueOf(ChatColor.DARK_RED 			+""+ ChatColor.BOLD)),
-    DEV		(String.valueOf(ChatColor.GOLD				+""+ ChatColor.BOLD)),
-    MOD		(String.valueOf(ChatColor.BLUE 				+""+ ChatColor.BOLD)),
-    C		(String.valueOf(ChatColor.LIGHT_PURPLE 		+""+ ChatColor.BOLD)),
-    S		(String.valueOf(ChatColor.GREEN		 		+""+ ChatColor.BOLD)),
-   
-    VIP500	(String.valueOf(ChatColor.YELLOW 			+""+ ChatColor.BOLD)),
-    VIP300	(String.valueOf(ChatColor.DARK_PURPLE 		+""+ ChatColor.BOLD)),
+    ADMIN(ChatColor.DARK_RED + "" + ChatColor.BOLD),
+    DEV(ChatColor.GOLD + "" + ChatColor.BOLD),
+    MOD(ChatColor.BLUE + "" + ChatColor.BOLD),
+    C(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD),
+    S(ChatColor.GREEN + "" + ChatColor.BOLD),
+    W(ChatColor.DARK_AQUA + "" + ChatColor.BOLD),
+
+
+    VIP500(ChatColor.YELLOW + "" + ChatColor.BOLD),
+    VIP300(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD),
     VIP200	(String.valueOf(ChatColor.DARK_PURPLE)							),
     VIP100	(String.valueOf(ChatColor.AQUA) 								),
     VIP50	(String.valueOf(ChatColor.GOLD) 								),
