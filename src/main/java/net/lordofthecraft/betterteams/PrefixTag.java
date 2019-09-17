@@ -5,12 +5,11 @@ import org.bukkit.entity.Player;
 
 public enum PrefixTag
 {
-
-	TECH	(String.valueOf(ChatColor.RED), 									"T"),
-	ADMIN	(String.valueOf(ChatColor.DARK_RED 			+""+ ChatColor.BOLD), 	"A"),
+    ADMIN(ChatColor.DARK_RED + "" + ChatColor.BOLD, "A"),
 
 	DEV		(String.valueOf(ChatColor.GOLD), 									"D"),
 	MOD		(String.valueOf(ChatColor.BLUE), 									"M"),
+    W(ChatColor.DARK_AQUA + "" + ChatColor.BOLD, "W"),
 	C		(String.valueOf(ChatColor.LIGHT_PURPLE), 							"C"),
 	S		(String.valueOf(ChatColor.GREEN), 									"S");
 
