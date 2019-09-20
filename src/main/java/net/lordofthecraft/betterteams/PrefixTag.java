@@ -9,7 +9,7 @@ public enum PrefixTag
 
 	DEV		(String.valueOf(ChatColor.GOLD), 									"D"),
 	MOD		(String.valueOf(ChatColor.BLUE), 									"M"),
-    W(ChatColor.DARK_AQUA + "" + ChatColor.BOLD, "W"),
+    W		(String.valueOf(ChatColor.DARK_AQUA),								"W"),
 	C		(String.valueOf(ChatColor.LIGHT_PURPLE), 							"C"),
 	S		(String.valueOf(ChatColor.GREEN), 									"S");
 
